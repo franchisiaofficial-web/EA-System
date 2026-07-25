@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: localdev
+      POSTGRES_DB: schoolos
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  postgres-test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: schoolos_test
+    ports:
+      - "5433:5432"
+volumes:
+  pgdata:

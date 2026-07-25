@@ -1,0 +1,105 @@
+'use server';
+
+import { auth } from '@/lib/auth';
+import { prisma } from '@/lib/prisma/client';
+import { headers } from 'next/headers';
+
+const ROLE_REDIRECTS: Record<string, string> = {
+  SUPER_ADMIN: '/dashboard/super-admin',
+  SCHOOL_ADMIN: '/dashboard/admin',
+  PRINCIPAL: '/dashboard/principal',
+  VICE_PRINCIPAL: '/dashboard/vice-principal',
+  TEACHER: '/dashboard/teacher',
+  CLASS_TEACHER: '/dashboard/teacher',
+  STUDENT: '/dashboard/student',
+  PARENT: '/dashboard/parent',
+  ACCOUNTANT: '/dashboard/accountant',
+  HR: '/dashboard/hr',
+  TRANSPORT_MANAGER: '/dashboard/transport',
+  DRIVER: '/dashboard/driver',
+  LIBRARIAN: '/dashboard/library',
+  NON_TEACHING: '/dashboard/staff',
+  CAFETERIA_STAFF: '/dashboard/staff',
+};
+
+export async function getAuthRedirect(): Promise<{
+  redirect: string;
+  error: string | null;
+}> {
+  const session = await auth.api.getSession({ headers: await headers() });
+  if (!session?.user) return { redirect: '/login', error: null };
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    include: {
+      memberships: {
+        where: { status: 'ACTIVE' },
+        include: { school: { select: { status: true } } },
+        orderBy: { joinedAt: 'desc' },
+      },
+    },
+  });
+
+  if (!user) return { redirect: '/login', error: 'Account not found' };
+  if (user.status !== 'active')
+    return { redirect: '/login', error: 'Account disabled' };
+  if (user.memberships.length === 0)
+    return { redirect: '/login', error: 'No active school membership' };
+
+  const membership = user.memberships[0];
+  if (membership.school.status === 'SUSPENDED')
+    return { redirect: '/login', error: 'School suspended' };
+  if (membership.school.status === 'ARCHIVED')
+    return { redirect: '/login', error: 'School archived' };
+
+  return {
+    redirect: ROLE_REDIRECTS[membership.role] || '/dashboard',
+    error: null,
+  };
+}
+
+export async function registerUser(data: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  const existing = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+  if (existing) return { error: 'A user with this email already exists' };
+
+  const ctx = await auth.api.signUpEmail({
+    body: { name: data.name, email: data.email, password: data.password },
+    headers: await headers(),
+  });
+
+  if (!ctx?.token) return { error: 'Registration failed' };
+  return {
+    success: true,
+    message: 'Account created. Check your email to verify.',
+  };
+}
+
+export async function requestPasswordReset(email: string) {
+  const baseUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
+  await fetch(`${baseUrl}/api/auth/forget-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  return { success: true };
+}
+
+export async function resetPassword(data: {
+  newPassword: string;
+  token: string;
+}) {
+  const baseUrl = process.env.BETTER_AUTH_URL || 'http://localhost:3000';
+  const res = await fetch(`${baseUrl}/api/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ newPassword: data.newPassword, token: data.token }),
+  });
+  if (!res.ok) return { error: 'Invalid or expired reset token' };
+  return { success: true };
+}

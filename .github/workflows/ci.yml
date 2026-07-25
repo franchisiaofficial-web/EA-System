@@ -1,0 +1,43 @@
+name: CI
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+      DIRECT_URL: ${{ secrets.TEST_DATABASE_URL }}
+      BETTER_AUTH_SECRET: test-secret-for-ci
+      BETTER_AUTH_URL: http://localhost:3000
+      TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: schoolos_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npx prisma generate
+      - run: npx prisma migrate deploy
+      - run: npx prisma db seed
+      - run: npm run build
+      - run: npm run test
