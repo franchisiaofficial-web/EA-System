@@ -88,3 +88,19 @@ None currently identified.
 | GOOGLE_CLIENT_SECRET | ❌ Missing | OAuth button non-functional                                  |
 | RESEND_API_KEY       | ❌ Missing | Email verification uses console.log                          |
 | Rate limiting bypass | Low        | x-forwarded-for can be spoofed; acceptable for current scale |
+
+---
+
+## Design System Decisions
+
+### Orphan Colour #8EF24A — RESOLVED 2026-07-26
+
+**Decision:** Option A — Replace every occurrence with existing semantic token `--cli-emerald`.
+
+**Rationale:** `#8EF24A` (lime green, `oklch(0.89 0.18 143)`) appeared 22 times across the `DashboardShell` and all four attendance pages but was not defined as a design token. The EA System specification uses emerald (`#10B981`, `oklch(0.568 0.158 155)`) as the green accent. Replacing the orphan with `cli-emerald` aligns the dashboard with the unified brand palette. The attendance "present" status indicator maps semantically to the success/emerald accent — the slight colour shift from lime to emerald improves readability against light backgrounds while maintaining the functional purpose.
+
+**Verification:** All 22 occurrences replaced with `bg-cli-emerald`, `text-cli-emerald`, `border-cli-emerald`, `fill="var(--cli-emerald)"`, `ring-cli-emerald`. Search for `#8EF24A` returns 0 matches.
+
+### Removed Token — cli-yellow (Restored)
+
+The `--cli-yellow` token was briefly removed from the `@theme inline` mapping and CSS variable definitions during the Sprint 1 palette alignment. It had zero consumers in source code or documentation. The token has been restored with value `oklch(0.71 0.17 95)` (light) / `oklch(0.62 0.15 95)` (dark) to preserve the public styling API contract.

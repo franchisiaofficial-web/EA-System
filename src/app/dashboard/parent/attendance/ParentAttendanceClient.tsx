@@ -70,7 +70,7 @@ export function ParentAttendanceClient({
           <select
             value={selectedChildIdx}
             onChange={(e) => setSelectedChildIdx(Number(e.target.value))}
-            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-[#8EF24A]/50"
+            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-cli-emerald/50"
           >
             {linkedChildren.map((c, i) => (
               <option key={c.membershipId} value={i}>
@@ -87,7 +87,7 @@ export function ParentAttendanceClient({
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
             {child.name}
           </p>
-          <p className="text-2xl font-bold text-[#8EF24A] mt-1">
+          <p className="text-2xl font-bold text-cli-emerald mt-1">
             {child.summary.percentage}%
           </p>
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
@@ -100,7 +100,7 @@ export function ParentAttendanceClient({
             label: 'Present',
             value: child.summary.present,
             icon: Check,
-            color: 'text-[#8EF24A]',
+            color: 'text-cli-emerald',
           },
           {
             label: 'Late',
@@ -153,7 +153,7 @@ export function ParentAttendanceClient({
                   className={cn(
                     'h-2 w-2 rounded-full',
                     r.status === 'PRESENT'
-                      ? 'bg-[#8EF24A]'
+                      ? 'bg-cli-emerald'
                       : r.status === 'LATE'
                         ? 'bg-amber-500'
                         : r.status === 'ABSENT'
@@ -176,7 +176,7 @@ export function ParentAttendanceClient({
                 className={cn(
                   'text-sm font-mono',
                   r.status === 'PRESENT'
-                    ? 'text-[#8EF24A]'
+                    ? 'text-cli-emerald'
                     : r.status === 'LATE'
                       ? 'text-amber-500'
                       : r.status === 'ABSENT'

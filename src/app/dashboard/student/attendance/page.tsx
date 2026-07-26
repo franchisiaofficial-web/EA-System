@@ -51,7 +51,7 @@ export default async function StudentAttendancePage() {
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
             Attendance
           </p>
-          <p className="text-2xl font-bold text-[#8EF24A] mt-1">
+          <p className="text-2xl font-bold text-cli-emerald mt-1">
             {summary.percentage}%
           </p>
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
@@ -64,7 +64,7 @@ export default async function StudentAttendancePage() {
             label: 'Present',
             value: summary.present,
             icon: Check,
-            color: 'text-[#8EF24A]',
+            color: 'text-cli-emerald',
           },
           {
             label: 'Late',
@@ -118,7 +118,7 @@ export default async function StudentAttendancePage() {
                     className={cn(
                       'h-2 w-2 rounded-full',
                       r.status === 'PRESENT'
-                        ? 'bg-[#8EF24A]'
+                        ? 'bg-cli-emerald'
                         : r.status === 'LATE'
                           ? 'bg-amber-500'
                           : r.status === 'ABSENT'
@@ -141,7 +141,7 @@ export default async function StudentAttendancePage() {
                   className={cn(
                     'text-sm font-mono',
                     r.status === 'PRESENT'
-                      ? 'text-[#8EF24A]'
+                      ? 'text-cli-emerald'
                       : r.status === 'LATE'
                         ? 'text-amber-500'
                         : r.status === 'ABSENT'

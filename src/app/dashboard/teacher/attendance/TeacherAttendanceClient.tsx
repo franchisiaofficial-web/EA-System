@@ -63,7 +63,7 @@ function getStatusIcon(status: string) {
 function getStatusColor(status: string) {
   switch (status) {
     case 'PRESENT':
-      return 'bg-[#8EF24A]/10 text-[#111827] dark:text-[#8EF24A] border-[#8EF24A]/30';
+      return 'bg-cli-emerald/10 text-[#111827] dark:text-cli-emerald border-cli-emerald/30';
     case 'LATE':
       return 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 border-amber-200 dark:border-amber-800';
     case 'ABSENT':
@@ -268,7 +268,7 @@ export function TeacherAttendanceClient({
           <select
             value={selectedClassId ?? ''}
             onChange={(e) => handleClassChange(e.target.value)}
-            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-[#8EF24A]/50"
+            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-cli-emerald/50"
             aria-label="Select class"
           >
             <option value="" disabled>
@@ -295,7 +295,7 @@ export function TeacherAttendanceClient({
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="h-10 px-4 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-[#8EF24A]/50"
+            className="h-10 px-4 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-cli-emerald/50"
             aria-label="Attendance date"
           />
         </label>
@@ -303,7 +303,7 @@ export function TeacherAttendanceClient({
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
-          { label: 'Present', count: stats.present, color: 'text-[#8EF24A]' },
+          { label: 'Present', count: stats.present, color: 'text-cli-emerald' },
           { label: 'Late', count: stats.late, color: 'text-amber-500' },
           { label: 'Absent', count: stats.absent, color: 'text-rose-500' },
           { label: 'Excused', count: stats.excused, color: 'text-slate-400' },
@@ -329,7 +329,7 @@ export function TeacherAttendanceClient({
         <div className="flex flex-wrap gap-2">
           <Button
             size="sm"
-            className="bg-[#8EF24A] hover:bg-[#8EF24A]/80 text-[#111827] font-medium"
+            className="bg-cli-emerald hover:bg-cli-emerald/80 text-[#111827] font-medium"
             onClick={() => handleBulk('PRESENT')}
             disabled={saving}
             aria-label="Mark all remaining as present"
@@ -445,7 +445,7 @@ export function TeacherAttendanceClient({
                   <Button
                     size="sm"
                     variant="ghost"
-                    className="h-8 text-xs font-mono focus-visible:ring-2 focus-visible:ring-[#8EF24A]"
+                    className="h-8 text-xs font-mono focus-visible:ring-2 focus-visible:ring-cli-emerald"
                     onClick={() =>
                       handleStatusToggle(
                         student.studentMembershipId,

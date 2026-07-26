@@ -49,7 +49,7 @@ export function PrincipalAttendanceClient({
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
             Attendance
           </p>
-          <p className="text-2xl font-bold text-[#8EF24A] mt-1">
+          <p className="text-2xl font-bold text-cli-emerald mt-1">
             {schoolPercentage}%
           </p>
           <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
@@ -59,7 +59,7 @@ export function PrincipalAttendanceClient({
 
         <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
           <div className="flex items-center gap-2">
-            <Check className="h-3 w-3 text-[#8EF24A]" />
+            <Check className="h-3 w-3 text-cli-emerald" />
             <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
               Present
             </p>
@@ -145,7 +145,11 @@ export function PrincipalAttendanceClient({
                   fontFamily: 'JetBrains Mono',
                 }}
               />
-              <Bar dataKey="percentage" fill="#8EF24A" radius={[4, 4, 0, 0]} />
+              <Bar
+                dataKey="percentage"
+                fill="var(--cli-emerald)"
+                radius={[4, 4, 0, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -178,7 +182,7 @@ export function PrincipalAttendanceClient({
               <div className="flex items-center gap-2">
                 <div className="w-32 h-2 bg-[#E5E7EB] dark:bg-[#2A2F36] rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-[#8EF24A] rounded-full transition-all"
+                    className="h-full bg-cli-emerald rounded-full transition-all"
                     style={{ width: `${c.percentage}%` }}
                   />
                 </div>
