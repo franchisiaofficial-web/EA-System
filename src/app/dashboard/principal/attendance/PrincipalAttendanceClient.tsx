@@ -36,82 +36,78 @@ export function PrincipalAttendanceClient({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA]">
+        <h1 className="text-2xl font-bold text-foreground">
           Attendance Dashboard
         </h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mt-1 font-mono">
+        <p className="text-sm text-muted-foreground mt-1 font-mono">
           overview &bull; school-wide &bull; read-only
         </p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-xs text-muted-foreground font-mono uppercase">
             Attendance
           </p>
           <p className="text-2xl font-bold text-cli-emerald mt-1">
             {schoolPercentage}%
           </p>
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
-            This month
-          </p>
+          <p className="text-xs text-muted-foreground mt-0.5">This month</p>
         </div>
 
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <Check className="h-3 w-3 text-cli-emerald" />
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+            <p className="text-xs text-muted-foreground font-mono uppercase">
               Present
             </p>
           </div>
-          <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
+          <p className="text-2xl font-bold text-foreground mt-1">
             {todayPresent}
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <Clock className="h-3 w-3 text-amber-500" />
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+            <p className="text-xs text-muted-foreground font-mono uppercase">
               Late
             </p>
           </div>
-          <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
-            {todayLate}
-          </p>
+          <p className="text-2xl font-bold text-foreground mt-1">{todayLate}</p>
         </div>
 
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <X className="h-3 w-3 text-rose-500" />
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+            <p className="text-xs text-muted-foreground font-mono uppercase">
               Absent
             </p>
           </div>
-          <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
+          <p className="text-2xl font-bold text-foreground mt-1">
             {todayAbsent}
           </p>
         </div>
 
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
+        <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
             <Minus className="h-3 w-3 text-slate-400" />
-            <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+            <p className="text-xs text-muted-foreground font-mono uppercase">
               Excused
             </p>
           </div>
-          <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
+          <p className="text-2xl font-bold text-foreground mt-1">
             {todayExcused}
           </p>
         </div>
       </div>
 
-      <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-6">
-        <h2 className="text-sm font-mono text-[#6B7280] dark:text-[#9CA3AF] uppercase mb-4">
+      <div className="rounded-xl border border-border bg-card p-6">
+        <h2 className="text-sm font-mono text-muted-foreground uppercase mb-4">
           Class Comparison — This Month
         </h2>
         {classSummaries.length === 0 ? (
-          <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+          <p className="text-sm text-muted-foreground font-mono">
             No attendance data yet this month.
           </p>
         ) : (
@@ -122,25 +118,25 @@ export function PrincipalAttendanceClient({
             >
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="#E5E7EB"
-                className="dark:stroke-[#2A2F36]"
+                stroke="var(--border)"
+                className="dark:stroke-border"
               />
               <XAxis
                 dataKey="name"
                 tick={{ fontSize: 12, fontFamily: 'JetBrains Mono' }}
-                stroke="#6B7280"
+                stroke="var(--muted-foreground)"
               />
               <YAxis
                 domain={[0, 100]}
                 tick={{ fontSize: 12, fontFamily: 'JetBrains Mono' }}
-                stroke="#6B7280"
+                stroke="var(--muted-foreground)"
                 unit="%"
               />
               <Tooltip
                 contentStyle={{
                   borderRadius: '8px',
-                  border: '1px solid #E5E7EB',
-                  background: '#FFFFFF',
+                  border: '1px solid var(--border)',
+                  background: 'var(--card)',
                   fontSize: '12px',
                   fontFamily: 'JetBrains Mono',
                 }}
@@ -155,38 +151,36 @@ export function PrincipalAttendanceClient({
         )}
       </div>
 
-      <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] overflow-hidden">
-        <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36]">
-          <h2 className="text-sm font-mono text-[#6B7280] dark:text-[#9CA3AF] uppercase">
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="px-4 py-3 border-b border-border">
+          <h2 className="text-sm font-mono text-muted-foreground uppercase">
             Class Details
           </h2>
         </div>
         {classSummaries.length === 0 ? (
-          <div className="px-4 py-8 text-center text-sm text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+          <div className="px-4 py-8 text-center text-sm text-muted-foreground font-mono">
             No classes found.
           </div>
         ) : (
           classSummaries.map((c) => (
             <div
               key={c.name}
-              className="flex items-center justify-between px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36] last:border-0"
+              className="flex items-center justify-between px-4 py-3 border-b border-border last:border-0"
             >
               <div>
-                <p className="text-sm font-medium text-[#111827] dark:text-[#FAFAFA]">
-                  {c.name}
-                </p>
-                <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+                <p className="text-sm font-medium text-foreground">{c.name}</p>
+                <p className="text-xs text-muted-foreground font-mono">
                   {c.total} students
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-32 h-2 bg-[#E5E7EB] dark:bg-[#2A2F36] rounded-full overflow-hidden">
+                <div className="w-32 h-2 bg-muted rounded-full overflow-hidden">
                   <div
                     className="h-full bg-cli-emerald rounded-full transition-all"
                     style={{ width: `${c.percentage}%` }}
                   />
                 </div>
-                <span className="text-sm font-mono font-bold text-[#111827] dark:text-[#FAFAFA] w-10 text-right">
+                <span className="text-sm font-mono font-bold text-foreground w-10 text-right">
                   {c.percentage}%
                 </span>
               </div>

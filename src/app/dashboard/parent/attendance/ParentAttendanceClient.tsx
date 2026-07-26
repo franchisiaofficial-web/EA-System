@@ -34,15 +34,15 @@ export function ParentAttendanceClient({
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA]">
+          <h1 className="text-2xl font-bold text-foreground">
             Child Attendance
           </h1>
-          <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mt-1 font-mono">
+          <p className="text-sm text-muted-foreground mt-1 font-mono">
             parent &bull; no linked children
           </p>
         </div>
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-12 text-center">
-          <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+        <div className="rounded-xl border border-border bg-card p-12 text-center">
+          <p className="text-sm text-muted-foreground font-mono">
             No children are linked to your account. Contact the school
             administrator.
           </p>
@@ -56,10 +56,8 @@ export function ParentAttendanceClient({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA]">
-          Child Attendance
-        </h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mt-1 font-mono">
+        <h1 className="text-2xl font-bold text-foreground">Child Attendance</h1>
+        <p className="text-sm text-muted-foreground mt-1 font-mono">
           parent &bull; {linkedChildren.length} child
           {linkedChildren.length > 1 ? 'ren' : ''} linked
         </p>
@@ -70,7 +68,7 @@ export function ParentAttendanceClient({
           <select
             value={selectedChildIdx}
             onChange={(e) => setSelectedChildIdx(Number(e.target.value))}
-            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] text-sm text-[#111827] dark:text-[#FAFAFA] font-mono focus:outline-none focus:ring-2 focus:ring-cli-emerald/50"
+            className="appearance-none h-10 pl-4 pr-10 rounded-lg border border-border bg-card text-sm text-foreground font-mono focus:outline-none focus:ring-2 focus:ring-cli-emerald/50"
           >
             {linkedChildren.map((c, i) => (
               <option key={c.membershipId} value={i}>
@@ -78,19 +76,19 @@ export function ParentAttendanceClient({
               </option>
             ))}
           </select>
-          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B7280] dark:text-[#9CA3AF] pointer-events-none" />
+          <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         </div>
       )}
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-xs text-muted-foreground font-mono uppercase">
             {child.name}
           </p>
           <p className="text-2xl font-bold text-cli-emerald mt-1">
             {child.summary.percentage}%
           </p>
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             Attendance this month
           </p>
         </div>
@@ -117,36 +115,34 @@ export function ParentAttendanceClient({
         ].map((s) => (
           <div
             key={s.label}
-            className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4"
+            className="rounded-xl border border-border bg-card p-4"
           >
             <div className="flex items-center gap-2">
               <s.icon className={cn('h-3 w-3', s.color)} />
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+              <p className="text-xs text-muted-foreground font-mono uppercase">
                 {s.label}
               </p>
             </div>
-            <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
-              {s.value}
-            </p>
+            <p className="text-2xl font-bold text-foreground mt-1">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] overflow-hidden">
-        <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36]">
-          <h2 className="text-sm font-mono text-[#6B7280] dark:text-[#9CA3AF] uppercase">
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="px-4 py-3 border-b border-border">
+          <h2 className="text-sm font-mono text-muted-foreground uppercase">
             Recent Attendance — {child.name}
           </h2>
         </div>
         {child.records.length === 0 ? (
-          <div className="px-4 py-12 text-center text-sm text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+          <div className="px-4 py-12 text-center text-sm text-muted-foreground font-mono">
             No attendance records yet this month.
           </div>
         ) : (
           child.records.slice(0, 20).map((r) => (
             <div
               key={r.id}
-              className="flex items-center justify-between px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36] last:border-0"
+              className="flex items-center justify-between px-4 py-3 border-b border-border last:border-0"
             >
               <div className="flex items-center gap-3">
                 <div
@@ -162,11 +158,11 @@ export function ParentAttendanceClient({
                   )}
                 />
                 <div>
-                  <p className="text-sm font-medium text-[#111827] dark:text-[#FAFAFA]">
+                  <p className="text-sm font-medium text-foreground">
                     {r.date}
                   </p>
                   {r.className && (
-                    <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+                    <p className="text-xs text-muted-foreground font-mono">
                       {r.className}
                     </p>
                   )}

@@ -1,6 +1,6 @@
 # Architectural Decisions
 
-- **Last Updated:** 2026-07-25
+- **Last Updated:** 2026-07-26
 - **Current Version:** 0.1.0
 
 ---
@@ -186,3 +186,141 @@
   - Password audit script verifies no application code exposes password hashes
   - Extending the allowlist requires an ADR update in the same PR
   - Security guidelines document (`SECURITY_GUIDELINES.md`) codifies these rules
+
+---
+
+## Decision 15: Navigation Policy — No Raw 404s via In-App Navigation
+
+- **Context:** The navigation system routes users through `NAV_ITEMS` (sidebar links visible based on role filtering) and `ROLE_REDIRECTS` (post-login dashboard redirect targets). As of Sprint 2 Objective 3 Phase A inspection, 11 routes were reachable through normal in-app navigation but produced raw Next.js 404 pages: three universal links (`/dashboard/students`, `/dashboard/academics`, `/dashboard/staff`) visible to every authenticated user, and eight role-specific dashboard targets (SUPER_ADMIN, SCHOOL_ADMIN, VICE_PRINCIPAL, ACCOUNTANT, HR, TRANSPORT_MANAGER, DRIVER, LIBRARIAN).
+- **Decision:** Routes reachable through `NAV_ITEMS` or `ROLE_REDIRECTS` must never expose users to a raw 404. Until implemented, unfinished modules render a shared `ComingSoon` experience inside `DashboardShell`. A single presentation component (`src/components/dashboard/ComingSoon.tsx`) provides the shared UI. Each missing route gets a thin `page.tsx` that imports and renders it with the appropriate page title and description.
+- **Reason:** Raw 404s break the dashboard shell, remove navigation access (sidebar, header, logout), and communicate failure rather than intentional roadmap. A Coming Soon experience retains the shell, preserves all navigation affordances, and communicates intent. The raw 404 is acceptable for completely unknown URLs — not for routes the application itself links to.
+- **Alternatives:**
+  - Hide unfinished NAV_ITEMS entries — rejected (hides product roadmap, requires role-filtering changes, prevents users from discovering planned features)
+  - Catch-all `[...slug]` route — rejected (overly broad; could mask legitimate routing errors; conflicts with explicit route definitions)
+  - Per-page custom placeholder — rejected (duplicates presentation logic across 11 files)
+- **Consequences:**
+  - 12 new files: 1 shared `ComingSoon.tsx` component + 11 per-route `page.tsx` files
+  - All files are purely additive — no existing files modified
+  - Each `page.tsx` matches the existing dashboard index page pattern: no role-specific authorization check (auth handled by `dashboard/layout.tsx`)
+  - As real modules are built, individual `page.tsx` files are replaced with full implementations
+  - The `ComingSoon.tsx` component remains available for any future modules added to NAV_ITEMS before implementation
+
+---
+
+## Decision 16: Status Colour Decision — Domain-Semantic, Not Theme Tokens
+
+- **Context:** Status indicators throughout the attendance UI use colour to communicate meaning: emerald for present, amber for late/warning, rose for absent/destructive, slate for excused/neutral. During the Sprint 2 Objective 2 semantic token migration, these were intentionally excluded from the migration scope.
+- **Decision:** Status colours (`slate`, `amber`, `rose`, and their numeric variants) remain domain-semantic colours and are intentionally outside the structural theme token system. They are applied via Tailwind utility classes (e.g., `text-amber-500`, `bg-rose-50`, `dark:text-amber-400`) directly in status-related components.
+- **Reason:** These colours carry domain meaning (status = present/late/absent/excused) rather than structural meaning (text/background/border). They are not interchangeable with theme tokens. A `--status-present`, `--status-late`, etc. architecture would be the correct abstraction, but introduces complexity (consistency across light/dark modes, future additional statuses) that is premature at this stage.
+- **Alternatives:**
+  - Migrate to theme tokens — rejected (status colours are not structural; a warning yellow is not semantic-equivalent to a border grey)
+  - Create `--status-*` tokens now — deferred (appropriate abstraction but out of scope; adds design tokens with no clear spec for all future status types)
+- **Consequences:**
+  - Status colours remain as Tailwind utility classes
+  - A future `--status-*` token architecture may replace them
+  - No migration is planned at this time
+  - Status components are visually consistent within their domain — the emerald/amber/rose/slate palette is stable
+
+---
+
+## Decision 17: Role Navigation — Current State Matrix
+
+- **Context:** Sprint 2 Objective 3 implements Coming Soon placeholders for all unfinished dashboard routes. This decision documents the complete role-to-route mapping as of implementation completion.
+- **Decision:** The following matrix defines the current state for every role. Unfinished routes render Coming Soon. Live routes render full implementations.
+
+### Super Admin
+
+| Route                                       | Status      |
+| ------------------------------------------- | ----------- |
+| `/dashboard/super-admin`                    | Coming Soon |
+| `/dashboard/principal/attendance` (via nav) | Live        |
+
+### School Admin
+
+| Route                                       | Status      |
+| ------------------------------------------- | ----------- |
+| `/dashboard/admin`                          | Coming Soon |
+| `/dashboard/principal/attendance` (via nav) | Live        |
+
+### Principal
+
+| Route                             | Status                |
+| --------------------------------- | --------------------- |
+| `/dashboard/principal`            | Redirect → attendance |
+| `/dashboard/principal/attendance` | Live                  |
+
+### Vice Principal
+
+| Route                                       | Status      |
+| ------------------------------------------- | ----------- |
+| `/dashboard/vice-principal`                 | Coming Soon |
+| `/dashboard/principal/attendance` (via nav) | Live        |
+
+### Teacher / Class Teacher
+
+| Route                           | Status                |
+| ------------------------------- | --------------------- |
+| `/dashboard/teacher`            | Redirect → attendance |
+| `/dashboard/teacher/attendance` | Live                  |
+
+### Student
+
+| Route                           | Status                |
+| ------------------------------- | --------------------- |
+| `/dashboard/student`            | Redirect → attendance |
+| `/dashboard/student/attendance` | Live                  |
+
+### Parent
+
+| Route                          | Status                |
+| ------------------------------ | --------------------- |
+| `/dashboard/parent`            | Redirect → attendance |
+| `/dashboard/parent/attendance` | Live                  |
+
+### Accountant
+
+| Route                   | Status      |
+| ----------------------- | ----------- |
+| `/dashboard/accountant` | Coming Soon |
+
+### HR
+
+| Route           | Status      |
+| --------------- | ----------- |
+| `/dashboard/hr` | Coming Soon |
+
+### Transport Manager
+
+| Route                  | Status      |
+| ---------------------- | ----------- |
+| `/dashboard/transport` | Coming Soon |
+
+### Driver
+
+| Route               | Status      |
+| ------------------- | ----------- |
+| `/dashboard/driver` | Coming Soon |
+
+### Librarian
+
+| Route                | Status      |
+| -------------------- | ----------- |
+| `/dashboard/library` | Coming Soon |
+
+### Non-Teaching / Cafeteria Staff
+
+| Route              | Status      |
+| ------------------ | ----------- |
+| `/dashboard/staff` | Coming Soon |
+
+### All Roles (universal NAV_ITEMS entries)
+
+| Route                  | Status      |
+| ---------------------- | ----------- |
+| `/dashboard/students`  | Coming Soon |
+| `/dashboard/academics` | Coming Soon |
+| `/dashboard/staff`     | Coming Soon |
+
+- **Reason:** This documents the complete navigation surface so future implementers know which routes are live, which are redirect stubs, and which are Coming Soon placeholders. It also serves as a checklist for incremental module rollout.
+- **Alternatives:** None — this is documentation, not an architectural decision. It records the state created by the architectural decision (Decision 15).
+- **Consequences:** This matrix must be updated whenever a Coming Soon placeholder is replaced with a full implementation. The list of live routes grows monotonically — routes transition from Coming Soon to Live but never in reverse.

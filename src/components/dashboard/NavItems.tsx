@@ -78,8 +78,8 @@ export function NavItems({
             className={cn(
               'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-mono transition-colors',
               isActive
-                ? 'bg-cli-emerald/10 text-[#111827] dark:text-cli-emerald font-semibold'
-                : 'text-[#6B7280] dark:text-[#9CA3AF] hover:text-[#111827] dark:hover:text-[#FAFAFA] hover:bg-[#F8FAFC] dark:hover:bg-[#09090B]/50'
+                ? 'bg-cli-emerald/10 text-foreground dark:text-cli-emerald font-semibold'
+                : 'text-muted-foreground hover:text-foreground hover:bg-hover-surface'
             )}
           >
             <item.icon className="h-4 w-4 shrink-0" />

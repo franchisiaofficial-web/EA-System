@@ -15,7 +15,7 @@ export function DashboardShell({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#09090B]">
+    <div className="min-h-screen bg-secondary-surface">
       <Sidebar
         authCtx={authCtx}
         mobileOpen={mobileOpen}

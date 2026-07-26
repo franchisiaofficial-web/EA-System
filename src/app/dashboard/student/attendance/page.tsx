@@ -38,25 +38,21 @@ export default async function StudentAttendancePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA]">
-          My Attendance
-        </h1>
-        <p className="text-sm text-[#6B7280] dark:text-[#9CA3AF] mt-1 font-mono">
+        <h1 className="text-2xl font-bold text-foreground">My Attendance</h1>
+        <p className="text-sm text-muted-foreground mt-1 font-mono">
           student &bull; {authCtx.email}
         </p>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4">
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+        <div className="rounded-xl border border-border bg-card p-4">
+          <p className="text-xs text-muted-foreground font-mono uppercase">
             Attendance
           </p>
           <p className="text-2xl font-bold text-cli-emerald mt-1">
             {summary.percentage}%
           </p>
-          <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] mt-0.5">
-            This month
-          </p>
+          <p className="text-xs text-muted-foreground mt-0.5">This month</p>
         </div>
 
         {[
@@ -81,29 +77,27 @@ export default async function StudentAttendancePage() {
         ].map((s) => (
           <div
             key={s.label}
-            className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] p-4"
+            className="rounded-xl border border-border bg-card p-4"
           >
             <div className="flex items-center gap-2">
               <s.icon className={cn('h-3 w-3', s.color)} />
-              <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono uppercase">
+              <p className="text-xs text-muted-foreground font-mono uppercase">
                 {s.label}
               </p>
             </div>
-            <p className="text-2xl font-bold text-[#111827] dark:text-[#FAFAFA] mt-1">
-              {s.value}
-            </p>
+            <p className="text-2xl font-bold text-foreground mt-1">{s.value}</p>
           </div>
         ))}
       </div>
 
-      <div className="rounded-xl border border-[#E5E7EB] dark:border-[#2A2F36] bg-white dark:bg-[#14161A] overflow-hidden">
-        <div className="px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36]">
-          <h2 className="text-sm font-mono text-[#6B7280] dark:text-[#9CA3AF] uppercase">
+      <div className="rounded-xl border border-border bg-card overflow-hidden">
+        <div className="px-4 py-3 border-b border-border">
+          <h2 className="text-sm font-mono text-muted-foreground uppercase">
             Attendance History — This Month
           </h2>
         </div>
         {records.length === 0 ? (
-          <div className="px-4 py-12 text-center text-sm text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+          <div className="px-4 py-12 text-center text-sm text-muted-foreground font-mono">
             No attendance records yet this month.
           </div>
         ) : (
@@ -111,7 +105,7 @@ export default async function StudentAttendancePage() {
             return (
               <div
                 key={r.id}
-                className="flex items-center justify-between px-4 py-3 border-b border-[#E5E7EB] dark:border-[#2A2F36] last:border-0"
+                className="flex items-center justify-between px-4 py-3 border-b border-border last:border-0"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -127,11 +121,11 @@ export default async function StudentAttendancePage() {
                     )}
                   />
                   <div>
-                    <p className="text-sm font-medium text-[#111827] dark:text-[#FAFAFA]">
+                    <p className="text-sm font-medium text-foreground">
                       {getDateStr(new Date(r.date))}
                     </p>
                     {r.class?.name && (
-                      <p className="text-xs text-[#6B7280] dark:text-[#9CA3AF] font-mono">
+                      <p className="text-xs text-muted-foreground font-mono">
                         {r.class.name}
                       </p>
                     )}
