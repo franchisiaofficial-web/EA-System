@@ -7,8 +7,23 @@
 --   - current_user_id() reads `app.current_user_id` session variable,
 --     set by Prisma middleware via SET LOCAL inside $transaction
 --   - A user can act on a school's data only if they hold an ACTIVE membership there
---   - service_role (used by Prisma for admin/cron/webhook work) bypasses RLS entirely
---     by default in Supabase — that is intentional, keep that key server-side only
+--   - service_role / DIRECT_URL (used for BetterAuth and Super Admin) bypasses RLS
+--     by default in Supabase — that is intentional, keep those keys server-side only
+--   - BetterAuth uses a dedicated auth Prisma client (DIRECT_URL) per Decision 13
+
+-- ============================================
+-- CLEANUP — remove any temporary debugging policies
+-- ============================================
+DROP POLICY IF EXISTS "insert session" ON sessions;
+DROP POLICY IF EXISTS "delete own session" ON sessions;
+DROP POLICY IF EXISTS "update own session" ON sessions;
+DROP POLICY IF EXISTS "insert account" ON accounts;
+DROP POLICY IF EXISTS "update own account" ON accounts;
+DROP POLICY IF EXISTS "delete own account" ON accounts;
+DROP POLICY IF EXISTS "insert verification" ON verifications;
+DROP POLICY IF EXISTS "select verification" ON verifications;
+DROP POLICY IF EXISTS "delete verification" ON verifications;
+DROP POLICY IF EXISTS "select user for authentication" ON users;
 
 -- ============================================
 -- Helper: read current user from session variable
@@ -211,33 +226,39 @@ on users for update
 using (id = current_user_id());
 
 -- ============================================
--- sessions (managed by BetterAuth, read-only for users)
+-- sessions
+-- BetterAuth writes via dedicated auth Prisma client (DIRECT_URL, bypasses RLS).
+-- Application reads via app_user are limited to the user's own sessions.
 -- ============================================
 alter table sessions enable row level security;
 
-create policy "select own sessions"
+create policy if not exists "select own sessions"
 on sessions for select
 using (user_id = current_user_id());
 
--- Writes: BetterAuth server-side only
+-- INSERT/UPDATE/DELETE: handled by BetterAuth via authPrisma (DIRECT_URL)
 
 -- ============================================
--- accounts (managed by BetterAuth)
+-- accounts
+-- BetterAuth writes via dedicated auth Prisma client (DIRECT_URL, bypasses RLS).
+-- Application reads via app_user are limited to the user's own accounts.
 -- ============================================
 alter table accounts enable row level security;
 
-create policy "select own accounts"
+create policy if not exists "select own accounts"
 on accounts for select
 using (user_id = current_user_id());
 
--- Writes: BetterAuth server-side only
+-- INSERT/UPDATE/DELETE: handled by BetterAuth via authPrisma (DIRECT_URL)
 
 -- ============================================
--- verifications (managed by BetterAuth)
+-- verifications
+-- BetterAuth manages this table entirely via dedicated auth Prisma client
+-- (DIRECT_URL, bypasses RLS). No application access needed.
 -- ============================================
 alter table verifications enable row level security;
 
--- No client access — BetterAuth manages these server-side
+-- All operations: handled by BetterAuth via authPrisma (DIRECT_URL)
 
 -- ============================================
 -- permissions (read-only reference data)

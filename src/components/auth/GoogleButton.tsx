@@ -29,11 +29,11 @@ export function GoogleButton() {
       onClick={handleGoogleSignIn}
       disabled={loading}
       className={cn(
-        'flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-border bg-background px-4 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-50 disabled:pointer-events-none'
+        'flex h-11 w-full items-center justify-center gap-2.5 rounded-lg border border-border/60 bg-card px-4 text-sm font-medium text-foreground transition-all duration-200 hover:bg-muted/80 hover:border-border disabled:opacity-50 disabled:pointer-events-none'
       )}
     >
       {loading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
       ) : (
         <svg className="h-4 w-4" viewBox="0 0 24 24">
           <path
@@ -54,7 +54,9 @@ export function GoogleButton() {
           />
         </svg>
       )}
-      <span>{loading ? 'Connecting...' : 'Continue with Google'}</span>
+      <span className={loading ? 'text-muted-foreground' : ''}>
+        {loading ? 'Connecting...' : 'Continue with Google'}
+      </span>
     </button>
   );
 }

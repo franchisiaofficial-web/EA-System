@@ -2,6 +2,7 @@
 
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma/client';
+import { resolveAuthUser } from '@/lib/auth/resolve-auth-user';
 import { headers } from 'next/headers';
 
 const ROLE_REDIRECTS: Record<string, string> = {
@@ -29,31 +30,22 @@ export async function getAuthRedirect(): Promise<{
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session?.user) return { redirect: '/login', error: null };
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      memberships: {
-        where: { status: 'ACTIVE' },
-        include: { school: { select: { status: true } } },
-        orderBy: { joinedAt: 'desc' },
-      },
-    },
-  });
+  const result = await resolveAuthUser(session.user.id);
 
-  if (!user) return { redirect: '/login', error: 'Account not found' };
-  if (user.status !== 'active')
-    return { redirect: '/login', error: 'Account disabled' };
-  if (user.memberships.length === 0)
-    return { redirect: '/login', error: 'No active school membership' };
+  const reasonMap: Record<string, string> = {
+    ACCOUNT_NOT_FOUND: 'Account not found',
+    ACCOUNT_DISABLED: 'Account disabled',
+    NO_ACTIVE_MEMBERSHIP: 'No active school membership',
+    SCHOOL_SUSPENDED: 'School suspended',
+    SCHOOL_ARCHIVED: 'School archived',
+  };
 
-  const membership = user.memberships[0];
-  if (membership.school.status === 'SUSPENDED')
-    return { redirect: '/login', error: 'School suspended' };
-  if (membership.school.status === 'ARCHIVED')
-    return { redirect: '/login', error: 'School archived' };
+  if (!result.ok) {
+    return { redirect: '/login', error: reasonMap[result.reason] };
+  }
 
   return {
-    redirect: ROLE_REDIRECTS[membership.role] || '/dashboard',
+    redirect: ROLE_REDIRECTS[result.membership.role] || '/dashboard',
     error: null,
   };
 }

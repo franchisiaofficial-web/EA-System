@@ -142,3 +142,47 @@
   - BetterAuth configuration
   - API route paths
   - Internal service identifiers
+
+---
+
+## Decision 13: Authentication Infrastructure Isolation
+
+- **Context:** BetterAuth (session creation, credential verification, email verification) needs to read/write `users`, `accounts`, `sessions`, and `verifications` before any authenticated request exists. The application Prisma client connects as `app_user` (RLS enforced) and requires `current_user_id()` to be set via `SET LOCAL` — which is not possible during authentication because no user is logged in yet.
+- **Decision:** BetterAuth uses a dedicated trusted Prisma client (`authPrisma`) connecting via `DIRECT_URL` (postgres superuser, RLS bypassed). The application's `getAuthContext()` also uses `authPrisma` for reading the authenticated user's own row and memberships, since RLS on the memberships table requires an already-established school context (circular dependency). All application business queries (attendance, classes, schools, etc.) continue to use the `app_user` Prisma client with `withRls()`.
+- **Reason:** Authentication is a trusted internal system operation that occurs before request-specific security context exists. It is fundamentally different from tenant-scoped business logic and must not be subject to the same RLS enforcement. Using the privileged database connection for auth infrastructure while maintaining RLS for all business operations provides defense-in-depth without crippling the authentication flow.
+- **Alternatives:**
+  - Add `current_user_id() IS NULL` bypasses to RLS policies — rejected (creates unauthenticated access paths and weakens the security model)
+  - Use `USING (true)` / `WITH CHECK (true)` on auth tables — rejected (opens auth tables to all users on the `app_user` connection)
+  - Have BetterAuth use Supabase's `service_role` API instead of direct SQL — rejected (Prisma adapter requires direct database connection)
+- **Consequences:**
+  - `authPrisma` (`DIRECT_URL`) — used exclusively by BetterAuth and `getAuthContext()` for auth infrastructure reads/writes
+  - `prisma` (`DATABASE_URL`, `app_user`) — used exclusively by application business logic via `withRls()`
+  - The two clients are never interchanged; auth infrastructure and business logic are cleanly separated at the database connection level
+  - `rls-policies.sql` is updated to include cleanup DROPs for any temporary debugging policies
+  - Temporary debugging policies (`fix-rls.ts`) are replaced with a cleanup-only script
+  - `sessions`, `accounts`, `verifications` RLS policies for `app_user` are limited to `SELECT` on own rows only — all writes go through `authPrisma`
+  - `users` RLS policies for `app_user` remain: own-row `SELECT`/`UPDATE`, and shared-school `SELECT` for application queries through `withRls()`
+
+---
+
+## Decision 14: Privileged Prisma Clients
+
+- **Context:** The project maintains two privileged Prisma clients that bypass RLS via `DIRECT_URL` (postgres superuser): `authPrisma` and the Super Admin client. Without enforcement, any developer could import these clients anywhere, silently bypassing tenant isolation.
+- **Decision:** Privileged Prisma clients are governed by architectural guardrails:
+  1. **Import restrictions** — `authPrisma` may only be imported from `src/lib/auth/`. The Super Admin client is only used in `src/services/super-admin/super-admin-service.ts`. A CI script (`lint:architecture`) enforces this.
+  2. **No new privileged clients without an ADR** — Any new Prisma client connecting via `DIRECT_URL` or bypassing RLS must first be documented in a new Decision Record, with explicit justification, import restrictions, and testing requirements.
+  3. **Testing** — All privileged client imports are verified in CI. Security integration tests verify cross-tenant isolation at the application level.
+  4. **Password exposure prevention** — A dedicated audit script (`scripts/security/check-password-exposure.ts`) scans application code for queries that could expose password hashes. Only `authPrisma` (used by BetterAuth) may access the `password` field on `accounts`.
+- **Reason:** The authentication architecture fix (Decision 13) corrected a critical defect where BetterAuth used the RLS-enforced application client, requiring temporary RLS bypass policies. Without permanent guardrails, this failure mode could recur — either through accidental imports of privileged clients into business code, or through new temporary bypass polices applied during debugging.
+- **Alternatives:**
+  - Trust code review alone — rejected (does not scale, misses refactors)
+  - Make `DIRECT_URL` RLS-enforced — rejected (breaks BetterAuth, migrations, seeds)
+  - Add runtime checks in Prisma middleware — rejected (performance overhead, late detection)
+- **Consequences:**
+  - CI fails immediately on unauthorized `authPrisma` imports or dangerous RLS patterns
+  - CI runs `lint:rls`, `lint:architecture`, and `test:security` before build
+  - SQL policy linter scans `prisma/`, `supabase/`, `migrations/` for `USING (true)`, `WITH CHECK (true)`, `current_user_id() IS NULL`
+  - Architecture guard rejects any import of `auth-client` outside `src/lib/auth/`
+  - Password audit script verifies no application code exposes password hashes
+  - Extending the allowlist requires an ADR update in the same PR
+  - Security guidelines document (`SECURITY_GUIDELINES.md`) codifies these rules

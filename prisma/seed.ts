@@ -351,12 +351,129 @@ async function main() {
   }
   console.log('Created parent:', parent.email);
 
+  // ============================================
+  // School B — for cross-tenant testing
+  // ============================================
+  const schoolB = await prisma.school.upsert({
+    where: { slug: 'school-b' },
+    update: {},
+    create: {
+      name: 'School B',
+      slug: 'school-b',
+      status: 'ACTIVE',
+      timezone: 'UTC',
+      currency: 'USD',
+    },
+  });
+  console.log('Created school:', schoolB.name);
+
+  const teacherB = await prisma.user.upsert({
+    where: { email: 'teacher-b@easystem.dev' },
+    update: {},
+    create: {
+      name: 'Jane Teacher B',
+      email: 'teacher-b@easystem.dev',
+      emailVerified: true,
+      status: 'active',
+    },
+  });
+  await prisma.account.upsert({
+    where: {
+      accountId_providerId: {
+        accountId: teacherB.id,
+        providerId: 'credential',
+      },
+    },
+    update: {},
+    create: {
+      accountId: teacherB.id,
+      providerId: 'credential',
+      userId: teacherB.id,
+      password: hashedPassword,
+    },
+  });
+  await prisma.membership.upsert({
+    where: {
+      schoolId_userId_role: {
+        schoolId: schoolB.id,
+        userId: teacherB.id,
+        role: 'TEACHER',
+      },
+    },
+    update: {},
+    create: {
+      schoolId: schoolB.id,
+      userId: teacherB.id,
+      role: 'TEACHER',
+      status: 'ACTIVE',
+    },
+  });
+  console.log('Created teacher:', teacherB.email);
+
+  const studentB = await prisma.user.upsert({
+    where: { email: 'student-b@easystem.dev' },
+    update: {},
+    create: {
+      name: 'Bob Student B',
+      email: 'student-b@easystem.dev',
+      emailVerified: true,
+      status: 'active',
+    },
+  });
+  await prisma.account.upsert({
+    where: {
+      accountId_providerId: {
+        accountId: studentB.id,
+        providerId: 'credential',
+      },
+    },
+    update: {},
+    create: {
+      accountId: studentB.id,
+      providerId: 'credential',
+      userId: studentB.id,
+      password: hashedPassword,
+    },
+  });
+  await prisma.membership.upsert({
+    where: {
+      schoolId_userId_role: {
+        schoolId: schoolB.id,
+        userId: studentB.id,
+        role: 'STUDENT',
+      },
+    },
+    update: {},
+    create: {
+      schoolId: schoolB.id,
+      userId: studentB.id,
+      role: 'STUDENT',
+      status: 'ACTIVE',
+    },
+  });
+  console.log('Created student:', studentB.email);
+
+  await prisma.schoolSettings.upsert({
+    where: { schoolId: schoolB.id },
+    update: {},
+    create: {
+      schoolId: schoolB.id,
+      attendanceStart: '09:00',
+      attendanceEnd: '16:00',
+      language: 'en',
+      gradingSystem: 'letter',
+    },
+  });
+  console.log('Created school settings for School B');
+
   console.log('\nSeed complete!');
   console.log('\nTest accounts:');
   console.log('  Super Admin: admin@easystem.dev / password123');
   console.log('  Teacher:     teacher@easystem.dev / password123');
   console.log('  Student:     student@easystem.dev / password123');
   console.log('  Parent:      parent@easystem.dev / password123');
+  console.log('  Teacher B:   teacher-b@easystem.dev / password123');
+  console.log('  Student B:   student-b@easystem.dev / password123');
 }
 
 main()

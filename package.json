@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "lint:rls": "npx tsx scripts/security/check-rls.ts",
+    "lint:architecture": "npx tsx scripts/security/check-auth-client-imports.ts",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:security": "vitest run tests/security-integration.test.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -50,6 +53,7 @@
     "prettier": "^3.9.6",
     "prisma": "^7.9.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5",
     "vitest": "^4.1.10"
   }

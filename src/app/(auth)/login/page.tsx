@@ -12,46 +12,80 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen">
-      <div className="hidden lg:flex lg:w-[45%] bg-muted/30 border-r border-border items-center justify-center p-12">
-        <AuthIllustration />
+      <div className="hidden lg:flex lg:w-[48%] bg-gradient-to-br from-muted/40 via-muted/20 to-background border-r border-border/60 items-center justify-center p-16">
+        <div className="w-full max-w-lg">
+          <Link href="/" className="inline-flex items-center gap-2 mb-12 group">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cli-blue/10 text-cli-blue font-mono font-bold text-sm group-hover:bg-cli-blue/20 transition-colors">
+              ❯
+            </span>
+            <span className="font-mono text-base font-semibold text-foreground tracking-tight">
+              EA System
+            </span>
+          </Link>
+
+          <h1 className="text-4xl font-bold tracking-tight text-foreground leading-tight">
+            Everything your
+            <br />
+            school needs,
+            <br />
+            <span className="text-cli-blue">in one place.</span>
+          </h1>
+
+          <p className="mt-5 text-base text-muted-foreground leading-relaxed max-w-md">
+            Admissions, academics, attendance, finance, transport — all
+            connected through one secure, multi-tenant platform.
+          </p>
+
+          <div className="mt-14">
+            <AuthIllustration />
+          </div>
+
+          <p className="mt-12 text-xs text-muted-foreground/60 font-mono">
+            Secure · Multi-Tenant · Real-Time
+          </p>
+        </div>
       </div>
 
-      <div className="flex flex-1 flex-col items-center justify-center px-4 py-12 lg:w-[55%]">
+      <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 lg:w-[52%] bg-background">
         <AuthCard>
-          <div className="mb-8 text-center">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 font-mono text-lg font-bold text-foreground mb-6"
-            >
-              ❯ EA System
-            </Link>
+          <div className="mb-8">
+            <div className="lg:hidden mb-6">
+              <Link href="/" className="inline-flex items-center gap-2">
+                <span className="flex h-7 w-7 items-center justify-center rounded-md bg-cli-blue/10 text-cli-blue font-mono font-bold text-xs">
+                  ❯
+                </span>
+                <span className="font-mono text-sm font-semibold text-foreground">
+                  EA System
+                </span>
+              </Link>
+            </div>
 
-            <h1 className="mt-6 text-2xl font-bold tracking-tight">
-              Welcome Back
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              Welcome back
             </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              Sign in to continue to your EA System workspace.
+              Sign in to your workspace to continue.
             </p>
           </div>
 
           <LoginForm />
         </AuthCard>
 
-        <footer className="mt-8 flex items-center gap-4 text-xs text-muted-foreground font-mono">
+        <footer className="mt-8 flex items-center gap-3 text-xs text-muted-foreground/60 font-mono">
           <Link
             href="/privacy"
-            className="hover:text-foreground transition-colors"
+            className="hover:text-muted-foreground transition-colors"
           >
-            Privacy Policy
+            Privacy
           </Link>
-          <span>·</span>
+          <span className="text-border">·</span>
           <Link
             href="/terms"
-            className="hover:text-foreground transition-colors"
+            className="hover:text-muted-foreground transition-colors"
           >
-            Terms of Service
+            Terms
           </Link>
-          <span>·</span>
+          <span className="text-border">·</span>
           <span>EA System v1.0</span>
         </footer>
       </div>

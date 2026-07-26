@@ -81,11 +81,14 @@ export function LoginForm() {
 
   return (
     <>
-      <div className="space-y-6">
+      <div className="space-y-5">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-medium">
-              Email
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="email"
+              className="text-xs font-medium text-muted-foreground uppercase tracking-wider"
+            >
+              Email address
             </Label>
             <Input
               id="email"
@@ -107,10 +110,21 @@ export function LoginForm() {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-sm font-medium">
-              Password
-            </Label>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <Label
+                htmlFor="password"
+                className="text-xs font-medium text-muted-foreground uppercase tracking-wider"
+              >
+                Password
+              </Label>
+              <a
+                href="/forgot-password"
+                className="text-xs font-medium text-cli-blue hover:underline transition-colors"
+              >
+                Forgot?
+              </a>
+            </div>
             <PasswordInput
               id="password"
               name="password"
@@ -128,26 +142,20 @@ export function LoginForm() {
             )}
           </div>
 
-          <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none">
-              <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-border accent-[var(--cli-blue)]"
-              />
-              Remember me
-            </label>
-            <a
-              href="/forgot-password"
-              className="text-sm font-medium text-[var(--cli-blue)] hover:underline"
-            >
-              Forgot password?
-            </a>
-          </div>
+          <label className="flex items-center gap-2.5 py-1 cursor-pointer select-none group">
+            <input
+              type="checkbox"
+              className="h-4 w-4 rounded border-border/60 text-cli-blue focus:ring-cli-blue/20 cursor-pointer"
+            />
+            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+              Keep me signed in
+            </span>
+          </label>
 
           <Button
             type="submit"
             disabled={loading}
-            className="h-11 w-full bg-[var(--cli-blue)] hover:bg-[var(--cli-blue)]/80 text-white font-medium"
+            className="h-11 w-full bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg transition-all duration-200 disabled:opacity-60"
           >
             {loading ? (
               <>
@@ -155,17 +163,19 @@ export function LoginForm() {
                 Signing in...
               </>
             ) : (
-              'Sign In'
+              'Sign in'
             )}
           </Button>
         </form>
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border" />
+            <span className="w-full border-t border-border/60" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">OR</span>
+          <div className="relative flex justify-center text-xs">
+            <span className="bg-card px-3 text-muted-foreground/60 font-mono uppercase tracking-wider">
+              or continue with
+            </span>
           </div>
         </div>
 
@@ -178,42 +188,47 @@ export function LoginForm() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-md"
             onClick={() => {
               setShowSuccess(false);
               router.push(redirectUrl);
             }}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: 'spring', duration: 0.5 }}
-              className="mx-4 w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
+              className="mx-4 w-full max-w-sm rounded-2xl border border-border/60 bg-card p-8 text-center shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-cli-emerald/10"
+                transition={{
+                  delay: 0.15,
+                  type: 'spring',
+                  stiffness: 200,
+                  damping: 15,
+                }}
+                className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-cli-emerald/10"
               >
-                <CheckCircle2 className="h-10 w-10 text-cli-emerald" />
+                <CheckCircle2 className="h-8 w-8 text-cli-emerald" />
               </motion.div>
-              <h2 className="mb-2 text-xl font-bold text-foreground">
-                Login Successful
+              <h2 className="mb-2 text-lg font-bold text-foreground tracking-tight">
+                Signed in
               </h2>
               <p className="mb-6 text-sm text-muted-foreground">
-                Welcome back! Redirecting to your dashboard...
+                Welcome back. Redirecting to your dashboard...
               </p>
               <Button
                 onClick={() => {
                   setShowSuccess(false);
                   router.push(redirectUrl);
                 }}
-                className="w-full bg-cli-blue hover:bg-cli-blue/80 text-white"
+                className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg"
               >
-                Continue to Dashboard
+                Continue to dashboard
               </Button>
             </motion.div>
           </motion.div>

@@ -12,11 +12,11 @@ export function AuthCard({
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
       className={cn(
-        'w-full max-w-[430px] rounded-2xl border border-border bg-card/80 p-8 shadow-xl backdrop-blur-sm',
+        'w-full max-w-[420px] rounded-2xl border border-border/60 bg-card p-8 shadow-sm',
         className
       )}
     >

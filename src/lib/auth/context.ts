@@ -1,8 +1,8 @@
 import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma/client';
 import { headers } from 'next/headers';
 import type { RequestContext } from '@/lib/prisma/rls-middleware';
 import { buildContext } from '@/lib/prisma/rls-middleware';
+import { resolveAuthUser } from '@/lib/auth/resolve-auth-user';
 
 export interface AuthContext {
   userId: string;
@@ -21,33 +21,17 @@ export async function getAuthContext(): Promise<AuthContext | null> {
   const session = await getSession();
   if (!session?.user) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      memberships: {
-        where: { status: 'ACTIVE' },
-        include: {
-          school: { select: { status: true } },
-        },
-        orderBy: { joinedAt: 'desc' },
-      },
-    },
-  });
+  const result = await resolveAuthUser(session.user.id);
 
-  if (!user || user.status !== 'active' || user.memberships.length === 0) {
-    return null;
-  }
-
-  const membership = user.memberships[0];
-  if (membership.school.status !== 'ACTIVE') return null;
+  if (!result.ok) return null;
 
   return {
-    userId: user.id,
-    email: user.email,
-    membershipId: membership.id,
-    schoolId: membership.schoolId,
-    role: membership.role,
-    schoolStatus: membership.school.status,
+    userId: result.user.id,
+    email: result.user.email,
+    membershipId: result.membership.id,
+    schoolId: result.membership.schoolId,
+    role: result.membership.role,
+    schoolStatus: result.membership.school.status,
   };
 }
 

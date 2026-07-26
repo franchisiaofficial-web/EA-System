@@ -35,9 +35,12 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
+      - run: npm run lint:rls
+      - run: npm run lint:architecture
       - run: npx tsc --noEmit
       - run: npx prisma generate
       - run: npx prisma migrate deploy
       - run: npx prisma db seed
       - run: npm run build
+      - run: npm run test:security
       - run: npm run test
