@@ -1,16 +1,27 @@
 import { chromium, type Page } from "playwright";
 import { spawn } from "child_process";
 import { resolve } from "path";
-import { mkdirSync, writeFileSync, readFileSync, renameSync, existsSync, unlinkSync } from "fs";
+import { mkdirSync, writeFileSync, readFileSync, renameSync, existsSync, unlinkSync, statSync } from "fs";
+import { createHash } from "crypto";
 
 const BASE = "http://localhost:3000";
-const OUT = resolve("evidence/guardian");
+const RUN_TS = new Date().toISOString().replace(/[:.]/g, "-");
+const OUT = resolve("evidence", "guardian", RUN_TS);
 mkdirSync(OUT, { recursive: true });
 
 const SUMMARY_PATH = resolve(OUT, "guardian-evidence-summary.json");
 const TMP_PATH = resolve(OUT, ".guardian-evidence-summary.tmp.json");
+const LATEST_POINTER = resolve("evidence", "guardian", "latest.json");
 
 type ScenarioStatus = "NOT_STARTED" | "RUNNING" | "PASS" | "FAIL" | "SKIPPED";
+
+interface ScreenshotEntry {
+  filename: string;
+  sha256: string;
+  size: number;
+  createdAt: string;
+  scenario: string;
+}
 
 interface ScenarioState {
   status: ScenarioStatus;
@@ -24,12 +35,14 @@ interface Evidence {
   studentId: string; admissionNumber: string;
   guardianIds: string[];
   screenshots: string[];
+  screenshotManifest: ScreenshotEntry[];
   networkRequests: any[];
   notes: string[];
   scenarios: Record<string, ScenarioState>;
   result: string;
   runTimestamp: string;
-  // legacy flags — maintained for backward compat
+  duplicateScreenshots?: { fileA: string; fileB: string; hash: string; reason: string }[];
+  validationErrors?: string[];
   studentVerified?: boolean; guardianCreatedVerified?: boolean;
   linkExistingVerified?: boolean; duplicateWorkflowVerified?: boolean;
   primaryTransferVerified?: boolean; unlinkVerified?: boolean;
@@ -41,15 +54,87 @@ interface Evidence {
 
 function emptyEvidence(): Evidence {
   return {
-    studentId: "", admissionNumber: "", guardianIds: [], screenshots: [], networkRequests: [], notes: [],
-    scenarios: {},
-    result: "PENDING",
-    runTimestamp: new Date().toISOString(),
+    studentId: "", admissionNumber: "", guardianIds: [], screenshots: [],
+    screenshotManifest: [], networkRequests: [], notes: [], scenarios: {},
+    result: "PENDING", runTimestamp: new Date().toISOString(),
   };
 }
 
 let E: Evidence;
 
+function hashFile(path: string): string {
+  const data = readFileSync(path);
+  return createHash("sha256").update(data).digest("hex");
+}
+
+function detectDuplicates() {
+  const byHash: Record<string, ScreenshotEntry[]> = {};
+  for (const s of E.screenshotManifest) {
+    if (!byHash[s.sha256]) byHash[s.sha256] = [];
+    byHash[s.sha256].push(s);
+  }
+  const dupes: Evidence["duplicateScreenshots"] = [];
+  for (const [hash, entries] of Object.entries(byHash)) {
+    if (entries.length > 1) {
+      // Check if this is an expected duplicate (e.g., G4B/G4C, B4A/B4D)
+      const scenarios = entries.map((e) => e.scenario);
+      const expectedPairs = [["G4B", "G4C"], ["B4A", "B4D"], ["B4B", "B4C"], ["G6", "G7"]];
+      const isExpected = expectedPairs.some(
+        ([a, b]) => scenarios.includes(a) && scenarios.includes(b)
+      );
+      if (!isExpected) {
+        dupes.push({
+          fileA: entries[0].filename,
+          fileB: entries[1].filename,
+          hash,
+          reason: "Unexpected duplicate image",
+        });
+      }
+    }
+  }
+  if (dupes.length > 0) {
+    E.duplicateScreenshots = dupes;
+    console.log(`  ⚠ ${dupes.length} unexpected duplicate screenshot pair(s) detected`);
+  }
+}
+
+function validateScenarios(): string[] {
+  const errors: string[] = [];
+  for (const [id, s] of Object.entries(E.scenarios)) {
+    if (s.status !== "PASS") continue;
+    if (s.networkIdxStart < 0 || s.networkIdxStart >= E.networkRequests.length) {
+      errors.push(`${id}: networkIdxStart ${s.networkIdxStart} out of range (0-${E.networkRequests.length - 1})`);
+    }
+    if (s.networkIdxEnd < s.networkIdxStart) {
+      errors.push(`${id}: networkIdxEnd ${s.networkIdxEnd} < networkIdxStart ${s.networkIdxStart}`);
+    }
+    // Check screenshot manifest for this scenario
+    const manifestEntries = E.screenshotManifest.filter((m) => m.scenario === id);
+    if (manifestEntries.length === 0) {
+      errors.push(`${id}: no screenshots in manifest`);
+    }
+  }
+  return errors;
+}
+
+function validateEvidence(): string[] {
+  const errors = validateScenarios();
+  detectDuplicates();
+  if (E.duplicateScreenshots) {
+    errors.push(`${E.duplicateScreenshots.length} unexpected duplicate screenshot pair(s)`);
+  }
+  for (const s of E.screenshotManifest) {
+    if (!existsSync(resolve(OUT, s.filename))) {
+      errors.push(`Screenshot file missing: ${s.filename}`);
+    }
+    if (s.size === 0) {
+      errors.push(`Screenshot is empty: ${s.filename}`);
+    }
+  }
+  return errors;
+}
+
+// ── state persistence ──
 function loadState(): Evidence {
   if (existsSync(SUMMARY_PATH)) {
     try {
@@ -59,7 +144,7 @@ function loadState(): Evidence {
         console.log("  ⚡ Resuming from previous run...");
         return parsed;
       }
-    } catch { /* corrupted — start fresh */ }
+    } catch {}
   }
   return emptyEvidence();
 }
@@ -72,12 +157,16 @@ function saveState(completedScenarios?: string[]) {
     }
   }
   state.screenshots = [...E.screenshots];
+  state.screenshotManifest = [...E.screenshotManifest];
   state.networkRequests = [...E.networkRequests];
   state.runTimestamp = new Date().toISOString();
 
   writeFileSync(TMP_PATH, JSON.stringify(state, null, 2), "utf-8");
   if (existsSync(SUMMARY_PATH)) unlinkSync(SUMMARY_PATH);
   renameSync(TMP_PATH, SUMMARY_PATH);
+
+  // Update latest pointer
+  writeFileSync(LATEST_POINTER, JSON.stringify({ latest: RUN_TS, path: SUMMARY_PATH, result: state.result }, null, 2), "utf-8");
 }
 
 function saveFailed(reason: string) {
@@ -94,9 +183,9 @@ function initScenario(id: string) {
     E.scenarios[id] = { status: "NOT_STARTED", screenshots: [], networkIdxStart: E.networkRequests.length, networkIdxEnd: E.networkRequests.length };
   }
   const s = E.scenarios[id];
-  if (s.status === "PASS") return false; // already completed — skip
+  if (s.status === "PASS") return false;
   s.status = "RUNNING";
-  return true; // proceed
+  return true;
 }
 
 function passScenario(id: string) {
@@ -106,8 +195,8 @@ function passScenario(id: string) {
     const s = E.scenarios[id];
     s.status = "PASS";
     s.networkIdxEnd = E.networkRequests.length;
-    E.screenshots.push(...s.screenshots);
-    s.screenshots = [];
+    // Transfer screenshot names from manifest to scenario
+    s.screenshots = E.screenshotManifest.filter((m) => m.scenario === id).map((m) => m.filename);
   }
   saveState();
 }
@@ -117,13 +206,10 @@ function failScenario(id: string, reason: string) {
   if (!s) return;
   s.status = "FAIL";
   s.failureReason = reason;
-  E.networkRequests.push({ _fail: id, reason, timestamp: new Date().toISOString() });
 }
 
-// Track failures separately for logging
 const failures: string[] = [];
 
-// ── helpers ──
 function addNet(m: string, url: string, s: number, req?: any, res?: any) {
   E.networkRequests.push({ method: m, url: url.replace(BASE, ""), status: s, timestamp: new Date().toISOString(), ...(req ? { requestBody: req } : {}), ...(res ? { responseBody: res } : {}) });
 }
@@ -136,7 +222,40 @@ function fail(msg: string): never {
 
 let stepNum = 0;
 function progress(name: string) { stepNum++; console.log(`  [${stepNum}] ${name} ✓`); E.screenshots.push(name + ".png"); saveState(); }
-function shot(p: Page, name: string) { return p.screenshot({ path: resolve(OUT, name + ".png"), fullPage: true }); }
+
+// ── Screenshot with hashing (scenario auto-extracted from name) ──
+async function shot(p: Page, name: string, scenarioId?: string) {
+  const fpath = resolve(OUT, name + ".png");
+  await p.screenshot({ path: fpath, fullPage: true });
+  const st = statSync(fpath);
+  const h = hashFile(fpath);
+  // Auto-extract scenario from name: "G0-..." → "G0", "B4A-..." → "B4A"
+  const sid = scenarioId || name.split("-")[0];
+  E.screenshotManifest.push({
+    filename: name + ".png", sha256: h, size: st.size,
+    createdAt: new Date().toISOString(), scenario: sid,
+  });
+}
+
+// ── Performance timing ──
+async function measure(label: string, fn: () => Promise<void>, iterations = 10) {
+  const times: number[] = [];
+  for (let i = 0; i < iterations; i++) {
+    const start = Date.now();
+    await fn();
+    times.push(Date.now() - start);
+  }
+  times.sort((a, b) => a - b);
+  const avg = times.reduce((a, b) => a + b, 0) / times.length;
+  const median = times.length % 2 === 0
+    ? (times[times.length / 2 - 1] + times[times.length / 2]) / 2
+    : times[Math.floor(times.length / 2)];
+  const p90 = times[Math.floor(times.length * 0.9)];
+  const p95 = times[Math.floor(times.length * 0.95)];
+  const result = { samples: iterations, average: Math.round(avg), median, p90, p95, min: times[0], max: times[times.length - 1] };
+  console.log(`  ⏱ ${label}: avg=${result.average}ms, median=${result.median}ms, p95=${result.p95}ms`);
+  return result;
+}
 
 // ── server ──
 let server: any;
@@ -866,7 +985,25 @@ async function main() {
   // Compute result from scenario states
   const passed = Object.values(E.scenarios).filter((s: ScenarioState) => s.status === "PASS").length;
   const failed = Object.values(E.scenarios).filter((s: ScenarioState) => s.status === "FAIL").length;
-  E.result = failed > 0 ? "PARTIAL" : (passed >= Object.keys(E.scenarios).length ? "PASS" : "PARTIAL");
+
+  // ── Evidence Validation ──
+  console.log("\n=== EVIDENCE VALIDATION ===");
+  const valErrors = validateEvidence();
+  if (valErrors.length > 0) {
+    E.validationErrors = valErrors;
+    console.log(`  ${valErrors.length} validation error(s):`);
+    valErrors.forEach((e: string) => console.log(`    - ${e}`));
+  } else {
+    console.log("  ✓ All evidence valid");
+  }
+
+  console.log(`  Screenshot manifest: ${E.screenshotManifest.length} entries`);
+  console.log(`  Network requests: ${E.networkRequests.length} captured`);
+  if (E.duplicateScreenshots) {
+    E.duplicateScreenshots.forEach((d) => console.log(`  ⚠ Duplicate: ${d.fileA} = ${d.fileB}`));
+  }
+
+  E.result = failed > 0 ? "PARTIAL" : (passed >= Object.keys(E.scenarios).length && valErrors.length === 0 ? "PASS" : "PARTIAL");
 
   console.log(`\n=== SUMMARY: ${E.result} ===`);
   console.log(`  Scenarios: ${passed} PASS, ${failed} FAIL, ${Object.keys(E.scenarios).length - passed - failed} NOT_STARTED`);
@@ -880,7 +1017,7 @@ async function main() {
   saveState();
 
   await ctx.close(); await browser.close(); stopSrv();
-  if (failed > 0 || failures.length > 0) process.exit(1);
+  if (failed > 0 || failures.length > 0 || valErrors.length > 0) process.exit(1);
 }
 
 main().catch((e) => {
