@@ -32,7 +32,9 @@ type Resource =
   | 'class_assignments'
   | 'class_enrollments'
   | 'parent_student_links'
-  | 'attendance_records';
+  | 'attendance_records'
+  | 'terms'
+  | 'subjects';
 
 type PermissionMap = Partial<Record<Action, boolean>>;
 type RolePermissions = Partial<Record<Resource, PermissionMap>>;
@@ -139,6 +141,8 @@ const SUPER_ADMIN: RolePermissions = {
   subscriptions: { manage: true, read: true, update: true },
   audit_logs: { read: true, export: true },
   academic_years: { manage: true, read: true, create: true, update: true },
+  terms: { manage: true, read: true, create: true, update: true },
+  subjects: { manage: true, read: true, create: true, update: true },
   sections: { manage: true, read: true, create: true, update: true },
   classes: {
     manage: true,
@@ -272,6 +276,8 @@ const SCHOOL_ADMIN: RolePermissions = {
   subscriptions: { read: true },
   audit_logs: { read: true, export: true },
   academic_years: { manage: true, read: true, create: true, update: true },
+  terms: { manage: true, read: true, create: true, update: true },
+  subjects: { manage: true, read: true, create: true, update: true },
   sections: { manage: true, read: true, create: true, update: true },
   classes: {
     manage: true,
@@ -332,6 +338,8 @@ const PRINCIPAL: RolePermissions = {
   invites: { read: true, create: true },
   audit_logs: { read: true },
   academic_years: { read: true, create: true, update: true },
+  terms: { read: true, create: true, update: true },
+  subjects: { read: true, create: true, update: true },
   sections: { read: true, create: true, update: true },
   classes: {
     manage: true,
@@ -377,6 +385,8 @@ const VICE_PRINCIPAL: RolePermissions = {
   reports: { read: true, export: true },
   analytics: { read: true },
   academic_years: { read: true },
+  terms: { read: true },
+  subjects: { read: true },
   sections: { read: true },
   classes: {
     manage: true,

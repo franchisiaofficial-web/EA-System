@@ -1,7 +1,7 @@
 import { prisma } from './client';
 import type { PrismaClient } from '@/generated/prisma/client';
 
-type PrismaTransactionClient = Omit<
+export type PrismaTransactionClient = Omit<
   PrismaClient,
   '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
 >;
@@ -37,7 +37,7 @@ export async function withRls<T>(
       `;
     }
     return fn(tx);
-  });
+  }, { timeout: 30000, maxWait: 15000 });
 }
 
 export async function withServiceRole<T>(
@@ -45,7 +45,7 @@ export async function withServiceRole<T>(
 ): Promise<T> {
   return prisma.$transaction(async (tx) => {
     return fn(tx);
-  });
+  }, { timeout: 30000, maxWait: 15000 });
 }
 
 export function buildContext(

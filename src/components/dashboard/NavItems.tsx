@@ -42,12 +42,12 @@ const NAV_ITEMS: NavItem[] = [
     icon: CheckSquare,
     roles: ['PARENT'],
   },
-  { label: 'Students', href: '/dashboard/students', icon: Users, roles: [] },
+  { label: 'Students', href: '/dashboard/academics/students', icon: Users, roles: ['SUPER_ADMIN', 'SCHOOL_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL', 'TEACHER', 'CLASS_TEACHER'] },
   {
     label: 'Academics',
     href: '/dashboard/academics',
     icon: BookOpen,
-    roles: [],
+    roles: ['SUPER_ADMIN', 'SCHOOL_ADMIN', 'PRINCIPAL', 'VICE_PRINCIPAL'],
   },
   { label: 'Staff', href: '/dashboard/staff', icon: GraduationCap, roles: [] },
 ];

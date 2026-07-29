@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma/client';
+import { authPrisma } from '@/lib/prisma/auth-client';
 import type { Prisma } from '@/generated/prisma/client';
 
 export interface AuditLogInput {
@@ -14,7 +14,7 @@ export interface AuditLogInput {
 }
 
 export async function auditLog(input: AuditLogInput) {
-  return prisma.auditLog.create({
+  return authPrisma.auditLog.create({
     data: {
       userId: input.userId,
       schoolId: input.schoolId,
