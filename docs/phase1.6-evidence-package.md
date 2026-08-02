@@ -668,3 +668,12 @@ Completed (Phase 1.6 for L4-DELETE, Phase 1.6B for L1-return — both in Phase 3
 - Student placement verified as **CASE A** (placement stored exclusively in `Enrollment`; legacy student placement fields intentionally null) — see "Student placement persistence (Phase 1.6C verification — CASE A)" above.
 - Count reconciliation re-verified across all locations (this Phase 7 Q2 canonical table, Phase 1.5 package line 895 and closing totals): HIGH 24 / MEDIUM 12 / LOW 0 / TOTAL 36 at every location.
 - **Integrity statement (Phase 1.6C):** During the Phase 1.6C validation pass, no additional security findings were silently absorbed. If any new security issue had been discovered while executing Tasks 1–5, this document would have stopped, produced a full Deliverable-4 evidence record for that finding, and the freeze verdict would have been withheld until remediation and re-verification completed.
+
+**Phase 1.6D build remediation (2026-08-02, post-push clean-clone verification):**
+
+Two build defects (non-security, tooling only) were discovered when verifying the pushed tag from a clean clone and were remediated:
+
+1. **`docs/evidence/*.ts` relative imports** (15 files, 33 import sites): the Phase 1.6C move of `scripts/gate-*.ts`/`scripts/tmp-*.ts` → `docs/evidence/` left imports pointing at `../src/...` (valid from `scripts/`, broken from `docs/evidence/`). `next build` failed type-check on `docs/evidence/gate-audit-rollback.ts:3`. Fixed: `'../src/'` → `'../../src/'`.
+2. **`scripts/security/apply-rls-*.ts` Prisma imports** (2 files): imported `PrismaClient` from the stub package `@prisma/client`; the project generates the client to `src/generated/prisma` (custom output). This only type-checked locally because the dev machine's `node_modules/@prisma/client` held a stale default-location generate. Fixed: `'@prisma/client'` → `'../../src/generated/prisma/client'` (two levels up from `scripts/security/`).
+
+No audit evidence content, security fixes, or counts were altered. Both fixes verified by `next build` in a fresh clean clone of the retagged commit; `v0.9-academics-complete` re-pointed at the resulting commit.
