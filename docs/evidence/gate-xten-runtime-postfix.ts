@@ -1,11 +1,11 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { getExamResults, getStudentResults, upsertResult } from '../src/services/exam.service';
-import { createInvoice, createFeeStructure, createFeeCategory, recordPayment } from '../src/services/fee.service';
-import { runPromotionBatch } from '../src/services/promotion/promotion-service';
-import { bulkMarkAttendance } from '../src/services/attendance/attendance-service';
-import { withRls, buildContext, type RequestContext } from '../src/lib/prisma/rls-middleware';
+import { PrismaClient } from '../../src/generated/prisma/client';
+import { getExamResults, getStudentResults, upsertResult } from '../../src/services/exam.service';
+import { createInvoice, createFeeStructure, createFeeCategory, recordPayment } from '../../src/services/fee.service';
+import { runPromotionBatch } from '../../src/services/promotion/promotion-service';
+import { bulkMarkAttendance } from '../../src/services/attendance/attendance-service';
+import { withRls, buildContext, type RequestContext } from '../../src/lib/prisma/rls-middleware';
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL });
 const p = new PrismaClient({ adapter });
@@ -33,7 +33,7 @@ async function q<T = Array<Record<string, unknown>>>(sql: string, ...args: unkno
 }
 
 async function main() {
-  // ── cleanup pre-fix pollution ──
+  // â”€â”€ cleanup pre-fix pollution â”€â”€
   await p.$executeRawUnsafe(`update exam_results set marks_obtained = 88, grade = 'A' where id = 'fixture_res_b1'`);
   await p.$executeRawUnsafe(`delete from fee_payments where invoice_id = 'fixture_inv_b1'`);
   await p.$executeRawUnsafe(`update fee_invoices set paid_amount = 0, status = 'PENDING' where id = 'fixture_inv_b1'`);
@@ -45,7 +45,7 @@ async function main() {
   await p.$executeRawUnsafe(`delete from audit_logs where entity = 'attendance_record' and school_id = 'fixture_school_b'`);
   console.log('Pre-fix pollution removed.\n');
 
-  console.log('=== PHASE 1.5 RUNTIME — POST-FIX (School A admin against School B data) ===\n');
+  console.log('=== PHASE 1.5 RUNTIME â€” POST-FIX (School A admin against School B data) ===\n');
 
   // H1
   try {
@@ -102,7 +102,7 @@ async function main() {
       { schoolId: B, classId: 'fixture_cls_b_g01', date: DATE, records: [{ studentMembershipId: 'fixture_mem_b_stu', status: 'PRESENT' }] },
       authCtx, ctx
     );
-    console.log(`H6 bulkMarkAttendance(schoolId=B via client) -> OK, wrote ${res.length} (UNEXPECTED — action layer now overrides schoolId, service-level cannot)`);
+    console.log(`H6 bulkMarkAttendance(schoolId=B via client) -> OK, wrote ${res.length} (UNEXPECTED â€” action layer now overrides schoolId, service-level cannot)`);
   } catch (e) {
     console.log(`H6 bulkMarkAttendance(schoolId=B via client) -> REJECTED: ${(e as Error).message}`);
   }

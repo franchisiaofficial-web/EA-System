@@ -1,12 +1,12 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import { writeFileSync } from 'fs';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { getExamResults, getStudentResults, upsertResult } from '../src/services/exam.service';
-import { createInvoice, createFeeStructure, createFeeCategory, recordPayment } from '../src/services/fee.service';
-import { runPromotionBatch } from '../src/services/promotion/promotion-service';
-import { bulkMarkAttendance } from '../src/services/attendance/attendance-service';
-import { withRls, buildContext, type RequestContext } from '../src/lib/prisma/rls-middleware';
+import { PrismaClient } from '../../src/generated/prisma/client';
+import { getExamResults, getStudentResults, upsertResult } from '../../src/services/exam.service';
+import { createInvoice, createFeeStructure, createFeeCategory, recordPayment } from '../../src/services/fee.service';
+import { runPromotionBatch } from '../../src/services/promotion/promotion-service';
+import { bulkMarkAttendance } from '../../src/services/attendance/attendance-service';
+import { withRls, buildContext, type RequestContext } from '../../src/lib/prisma/rls-middleware';
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL });
 const p = new PrismaClient({ adapter });
@@ -41,13 +41,13 @@ async function main() {
   log('Run: 2026-08-02  Actor: School A admin  Target: School B fixture data');
   log('');
 
-  // ════════════════ BEFORE — literal SQL the PRE-FIX code executed ════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• BEFORE â€” literal SQL the PRE-FIX code executed â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   log('====================================================================');
-  log('SECTION 1: BEFORE — literal vulnerable SQL (no school predicate)');
+  log('SECTION 1: BEFORE â€” literal vulnerable SQL (no school predicate)');
   log('====================================================================');
   log('');
 
-  log('--- H1 BEFORE: getExamResults(examId) — pre-fix Prisma query had NO school filter ---');
+  log('--- H1 BEFORE: getExamResults(examId) â€” pre-fix Prisma query had NO school filter ---');
   log('SQL: SELECT er.id, er.school_id, er.exam_id, er.marks_obtained, er.grade, s.first_name, s.last_name, s.admission_number');
   log('     FROM exam_results er LEFT JOIN students s ON s.id = er.student_id');
   log("     WHERE er.exam_id = 'fixture_exam_b'  [NO school predicate]");
@@ -59,7 +59,7 @@ async function main() {
   for (const r of h1b) log('  ' + JSON.stringify(r));
   log('');
 
-  log('--- H2 BEFORE: getStudentResults(studentId) — pre-fix Prisma query had NO school filter ---');
+  log('--- H2 BEFORE: getStudentResults(studentId) â€” pre-fix Prisma query had NO school filter ---');
   log('SQL: SELECT er.id, er.school_id, er.exam_id, er.marks_obtained, e.name AS exam_name');
   log('     FROM exam_results er LEFT JOIN exams e ON e.id = er.exam_id');
   log("     WHERE er.student_id = 'fixture_stu_b1'  [NO school predicate]");
@@ -70,7 +70,7 @@ async function main() {
   for (const r of h2b) log('  ' + JSON.stringify(r));
   log('');
 
-  log('--- H3 BEFORE: upsertResult() — pre-fix UPDATE had NO school predicate (transactional repro, ROLLBACK) ---');
+  log('--- H3 BEFORE: upsertResult() â€” pre-fix UPDATE had NO school predicate (transactional repro, ROLLBACK) ---');
   log("SQL: BEGIN;");
   log("     UPDATE exam_results SET marks_obtained = 99, grade = 'A+' WHERE id = 'fixture_res_b1';");
   log("     SELECT marks_obtained, grade FROM exam_results WHERE id = 'fixture_res_b1';");
@@ -85,7 +85,7 @@ async function main() {
   log('ROW AFTER ROLLBACK: ' + JSON.stringify(h3after[0]));
   log('');
 
-  log('--- H4 BEFORE: recordPayment() — pre-fix created a School A payment on a School B invoice and mutated it (transactional repro, ROLLBACK) ---');
+  log('--- H4 BEFORE: recordPayment() â€” pre-fix created a School A payment on a School B invoice and mutated it (transactional repro, ROLLBACK) ---');
   log('SQL: BEGIN;');
   log("     INSERT INTO fee_payments (id, school_id, invoice_id, amount, method, paid_at, received_by, created_at)");
   log("       VALUES ('evid_pay_h4', 'seed_school_ea', 'fixture_inv_b1', 2000, 'CASH', now(), 'seed_user_admin', now());");
@@ -107,7 +107,7 @@ async function main() {
   log(`PAYMENTS AFTER ROLLBACK: ${h4payAfter[0].n}`);
   log('');
 
-  log('--- H5 BEFORE: PATCH session — pre-fix update had NO school predicate (transactional repro, ROLLBACK) ---');
+  log('--- H5 BEFORE: PATCH session â€” pre-fix update had NO school predicate (transactional repro, ROLLBACK) ---');
   log('SQL: BEGIN;');
   log("     UPDATE attendance_sessions SET status = 'CLOSED', closed_at = now(), updated_by = 'seed_user_admin' WHERE id = 'fixture_sess_b1';");
   log("     SELECT id, status FROM attendance_sessions WHERE id = 'fixture_sess_b1';");
@@ -170,7 +170,7 @@ async function main() {
   log(`ROW AFTER ROLLBACK: ${m2after[0].n}`);
   log('');
 
-  log('--- M3 BEFORE: promotion failure detail — pre-fix detail query had NO school filter ---');
+  log('--- M3 BEFORE: promotion failure detail â€” pre-fix detail query had NO school filter ---');
   log('SQL: SELECT id, first_name, last_name, admission_number FROM students');
   log("     WHERE id IN ('fixture_stu_b1')  [NO school predicate]");
   const m3b = await q(`select id, first_name, last_name, admission_number from students where id = 'fixture_stu_b1'`);
@@ -178,17 +178,17 @@ async function main() {
   for (const r of m3b) log('  ' + JSON.stringify(r));
   log('');
 
-  // ════════════════ AFTER — current fixed code, identical requests ════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• AFTER â€” current fixed code, identical requests â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   log('====================================================================');
-  log('SECTION 2: AFTER — identical requests against FIXED code');
+  log('SECTION 2: AFTER â€” identical requests against FIXED code');
   log('====================================================================');
   log('');
 
   log('--- H1 AFTER: getExamResults(fixture_exam_b, ctx) ---');
   try {
     const rows = await getExamResults('fixture_exam_b', ctx);
-    log(`RESULT: OK — returned ${rows.length} row(s)`);
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+    log(`RESULT: OK â€” returned ${rows.length} row(s)`);
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   log('Fixed guard SQL: SELECT id FROM exams WHERE id = $1 AND school_id = $2');
   const h1g = await q(`select id from exams where id = 'fixture_exam_b' and school_id = 'seed_school_ea'`);
   log(`GUARD SQL ROWS: ${h1g.length}`);
@@ -197,8 +197,8 @@ async function main() {
   log('--- H2 AFTER: getStudentResults(fixture_stu_b1, ctx) ---');
   try {
     const rows = await getStudentResults('fixture_stu_b1', ctx);
-    log(`RESULT: OK — returned ${rows.length} row(s)`);
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+    log(`RESULT: OK â€” returned ${rows.length} row(s)`);
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   log('Fixed guard SQL: SELECT id FROM students WHERE id = $1 AND school_id = $2');
   const h2g = await q(`select id from students where id = 'fixture_stu_b1' and school_id = 'seed_school_ea'`);
   log(`GUARD SQL ROWS: ${h2g.length}`);
@@ -208,7 +208,7 @@ async function main() {
   try {
     await upsertResult(A, { examId: 'fixture_exam_b', studentId: 'fixture_stu_b1', marksObtained: 99 }, ctx);
     log('RESULT: OK (UNEXPECTED)');
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   const h3v = await q(`select marks_obtained, grade from exam_results where id = 'fixture_res_b1'`);
   log('FOREIGN ROW UNCHANGED: ' + JSON.stringify(h3v[0]));
   log('');
@@ -217,16 +217,16 @@ async function main() {
   try {
     await recordPayment(A, { invoiceId: 'fixture_inv_b1', amount: 2000, method: 'CASH' }, ctx);
     log('RESULT: OK (UNEXPECTED)');
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   const h4v = await q(`select id, paid_amount, status from fee_invoices where id = 'fixture_inv_b1'`);
   const h4p = await q(`select count(*)::int as n from fee_payments where invoice_id = 'fixture_inv_b1'`);
   log(`FOREIGN INVOICE UNCHANGED: ${JSON.stringify(h4v[0])}; payments: ${h4p[0].n}`);
   log('');
 
-  log('--- H5 AFTER: fixed route guard — findFirst scoped by school ---');
+  log('--- H5 AFTER: fixed route guard â€” findFirst scoped by school ---');
   log('Fixed guard SQL: SELECT id FROM attendance_sessions WHERE id = $1 AND school_id = $2');
   const h5g = await q(`select id from attendance_sessions where id = 'fixture_sess_b1' and school_id = 'seed_school_ea'`);
-  log(`GUARD SQL ROWS: ${h5g.length} (0 → PATCH aborts with error)`);
+  log(`GUARD SQL ROWS: ${h5g.length} (0 â†’ PATCH aborts with error)`);
   const h5v = await q(`select id, status from attendance_sessions where id = 'fixture_sess_b1'`);
   log('FOREIGN SESSION UNCHANGED: ' + JSON.stringify(h5v[0]));
   log('');
@@ -237,8 +237,8 @@ async function main() {
       { schoolId: B, classId: 'fixture_cls_b_g01', date: DATE, records: [{ studentMembershipId: 'fixture_mem_b_stu', status: 'PRESENT' }] },
       authCtx, ctx
     );
-    log(`RESULT: OK — wrote ${res.length} row(s) (UNEXPECTED)`);
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+    log(`RESULT: OK â€” wrote ${res.length} row(s) (UNEXPECTED)`);
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   const h6v = await q(`select count(*)::int as n from attendance_records where school_id = 'fixture_school_b'`);
   log(`SCHOOL B ATTENDANCE ROWS: ${h6v[0].n}`);
   log('');
@@ -247,7 +247,7 @@ async function main() {
   try {
     const inv = await createInvoice(A, { studentId: 'fixture_stu_b1', totalAmount: 2500, dueDate: '2026-09-15' }, ctx);
     log('RESULT: OK (UNEXPECTED): ' + inv.id);
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   const m1v = await q(`select count(*)::int as n from fee_invoices where student_id = 'fixture_stu_b1' and school_id = 'seed_school_ea'`);
   log(`SCHOOL A INVOICES ON FOREIGN STUDENT: ${m1v[0].n}`);
   log('');
@@ -260,7 +260,7 @@ async function main() {
     log(`School A category created: ${cat.id} (for test setup)`);
     await createFeeStructure(A, { categoryId: cat.id, classId: 'fixture_cls_b_g01', amount: 1000 }, ctx);
     log('RESULT: OK (UNEXPECTED)');
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   if (catId) await p.$executeRawUnsafe(`delete from fee_categories where id = '${catId}'`);
   const m2v = await q(`select count(*)::int as n from fee_structures where class_id = 'fixture_cls_b_g01'`);
   log(`FEE STRUCTURES ON FOREIGN CLASS: ${m2v[0].n}`);
@@ -274,13 +274,13 @@ async function main() {
     );
     const failed = res.failed && res.failed.length > 0 ? res.failed[0] : null;
     log(`FAILURE DETAIL: ${JSON.stringify(failed)}`);
-    log(`LEAKED FIELDS PRESENT: ${failed ? JSON.stringify({ hasName: typeof failed.studentName === 'string' && failed.studentName !== '—', hasAdmission: failed.admissionNumber && failed.admissionNumber !== '—' }) : 'n/a'}`);
-  } catch (e) { log(`RESULT: REJECTED — ${(e as Error).message}`); }
+    log(`LEAKED FIELDS PRESENT: ${failed ? JSON.stringify({ hasName: typeof failed.studentName === 'string' && failed.studentName !== 'â€”', hasAdmission: failed.admissionNumber && failed.admissionNumber !== 'â€”' }) : 'n/a'}`);
+  } catch (e) { log(`RESULT: REJECTED â€” ${(e as Error).message}`); }
   const m3g = await q(`select id from students where id = 'fixture_stu_b1' and school_id = 'seed_school_ea'`);
-  log(`Fixed detail SQL (WHERE student_id AND school_id): rows = ${m3g.length} → details render '—'`);
+  log(`Fixed detail SQL (WHERE student_id AND school_id): rows = ${m3g.length} â†’ details render 'â€”'`);
   log('');
 
-  // ════════════════ Final DB state ════════════════
+  // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• Final DB state â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
   log('====================================================================');
   log('SECTION 3: FINAL DB STATE');
   log('====================================================================');

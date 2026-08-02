@@ -1,8 +1,8 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { markAttendance, bulkMarkAttendance, updateAttendanceRecord, getClassAttendance } from '../src/services/attendance/attendance-service';
-import { buildContext, type RequestContext } from '../src/lib/prisma/rls-middleware';
+import { PrismaClient } from '../../src/generated/prisma/client';
+import { markAttendance, bulkMarkAttendance, updateAttendanceRecord, getClassAttendance } from '../../src/services/attendance/attendance-service';
+import { buildContext, type RequestContext } from '../../src/lib/prisma/rls-middleware';
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL });
 const p = new PrismaClient({ adapter });
@@ -66,7 +66,7 @@ async function main() {
   }
   await countRows('after T1-B');
 
-  // T1-C: read path — GET attendance for foreign classId
+  // T1-C: read path â€” GET attendance for foreign classId
   try {
     const recs = await getClassAttendance(CLASS_B, DATE, ctx);
     console.log(`T1-C getClassAttendance(foreign class) -> OK, returned ${recs.length} record(s): ${JSON.stringify(recs.map(r => ({ id: r.id, schoolId: r.schoolId, mid: r.studentMembershipId })))}`);
@@ -105,7 +105,7 @@ async function main() {
 
   // T1-F: direct raw SQL INSERT with foreign school_id inside withRls (defense-in-depth probe)
   try {
-    await import('../src/lib/prisma/rls-middleware').then(async ({ withRls }) => {
+    await import('../../src/lib/prisma/rls-middleware').then(async ({ withRls }) => {
       const res = await withRls(ctx, (tx) =>
         tx.$queryRawUnsafe(
           `insert into attendance_records (id, school_id, class_id, student_membership_id, date, status, marked_by_membership_id, created_by, updated_at)

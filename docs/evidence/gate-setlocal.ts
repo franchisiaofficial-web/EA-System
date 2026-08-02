@@ -1,7 +1,7 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { withRls, buildContext, type RequestContext } from '../src/lib/prisma/rls-middleware';
+import { PrismaClient } from '../../src/generated/prisma/client';
+import { withRls, buildContext, type RequestContext } from '../../src/lib/prisma/rls-middleware';
 import { createId, isCuid } from '@paralleldrive/cuid2';
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL });
@@ -31,7 +31,7 @@ async function main() {
   await p.$executeRawUnsafe(`delete from attendance_records where id = $1`, 'fixture_raw_bypass2');
   console.log('Cleaned T1-F row.');
 
-  console.log('\n=== TASK 2 — SET LOCAL / current_setting verification (same raw SQL path) ===\n');
+  console.log('\n=== TASK 2 â€” SET LOCAL / current_setting verification (same raw SQL path) ===\n');
 
   const school = await p.school.findUnique({ where: { id: SCHOOL_A }, select: { id: true } });
   console.log(`Authenticated user's schoolId (authCtx.schoolId): ${authCtx.schoolId}`);

@@ -1,8 +1,8 @@
-import 'dotenv/config';
+﻿import 'dotenv/config';
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../src/generated/prisma/client';
-import { bulkMarkAttendance, AttendanceConflictError } from '../src/services/attendance/attendance-service';
-import { buildContext, type RequestContext } from '../src/lib/prisma/rls-middleware';
+import { PrismaClient } from '../../src/generated/prisma/client';
+import { bulkMarkAttendance, AttendanceConflictError } from '../../src/services/attendance/attendance-service';
+import { buildContext, type RequestContext } from '../../src/lib/prisma/rls-middleware';
 import { isCuid } from '@paralleldrive/cuid2';
 
 const adapter = new PrismaPg({ connectionString: process.env.DIRECT_URL });
@@ -54,8 +54,8 @@ async function main() {
   );
   console.log(`\nBaseline: attendance rows for ${CLASS_G1} ${dateStr} = ${attendanceBefore}; bulk_create audit rows = ${auditBefore}`);
 
-  // ── TASK 4: rollback (4 valid + 1 invalid in ONE request) ──
-  console.log('\n=== TASK 4 — ROLLBACK: 4 valid + 1 invalid ===');
+  // â”€â”€ TASK 4: rollback (4 valid + 1 invalid in ONE request) â”€â”€
+  console.log('\n=== TASK 4 â€” ROLLBACK: 4 valid + 1 invalid ===');
   try {
     await bulkMarkAttendance(
       {
@@ -85,8 +85,8 @@ async function main() {
   console.log(`  before=${auditBefore}  after rollback=${auditAfterRollback}  -> audit rows = ${auditAfterRollback - auditBefore}`);
   console.log(`ROLLBACK VERIFIED: ${attendanceAfterRollback === attendanceBefore && auditAfterRollback === auditBefore ? 'YES (0 rows, 0 audit, no partial writes)' : 'NO'}`);
 
-  // ── TASK 3: audit verification on a successful request ──
-  console.log('\n=== TASK 3 — AUDIT: successful request ===');
+  // â”€â”€ TASK 3: audit verification on a successful request â”€â”€
+  console.log('\n=== TASK 3 â€” AUDIT: successful request ===');
   const res = await bulkMarkAttendance(
     {
       schoolId: SCHOOL_A,
@@ -122,7 +122,7 @@ async function main() {
   console.log(`Audit fields correct (actor, school, count, classId): ${check ? 'YES' : 'NO'}`);
   console.log(`recordId == first inserted attendance id: ${latest.record_id === res[0].id ? 'YES' : 'NO'}`);
 
-  // ── duplicate protection (service level) ──
+  // â”€â”€ duplicate protection (service level) â”€â”€
   console.log('\n=== Duplicate protection (service level) ===');
   try {
     await bulkMarkAttendance(
