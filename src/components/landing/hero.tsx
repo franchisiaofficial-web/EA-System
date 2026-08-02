@@ -202,10 +202,10 @@ export function Hero({ headline = 'primary' }: HeroProps) {
         </p>
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button size="lg" className="px-8 py-3 text-base">
+          <Button size="lg" className="px-8 py-3 text-base bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
             Start Free Trial
           </Button>
-          <Button variant="outline" size="lg" className="px-8 py-3 text-base">
+          <Button variant="outline" size="lg" className="px-8 py-3 text-base border-border text-foreground/80 hover:text-foreground hover:bg-muted/50">
             Book a Live Demo
           </Button>
         </div>

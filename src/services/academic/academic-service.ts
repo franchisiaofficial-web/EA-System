@@ -140,7 +140,7 @@ export async function getAcademicYears(schoolId: string, ctx: RequestContext) {
 // ============================================
 
 export async function createSection(
-  input: { schoolId: string; name: string; description?: string },
+  input: { schoolId: string; classId: string; name: string; description?: string },
   authCtx: AuthContext,
   ctx: RequestContext
 ) {
@@ -148,6 +148,7 @@ export async function createSection(
     const section = await tx.section.create({
       data: {
         schoolId: input.schoolId,
+        classId: input.classId,
         name: input.name,
         description: input.description,
       },
@@ -207,7 +208,6 @@ export async function createClass(
   input: {
     schoolId: string;
     academicYearId: string;
-    sectionId: string;
     name: string;
     gradeLevel?: string;
   },
@@ -219,12 +219,11 @@ export async function createClass(
       data: {
         schoolId: input.schoolId,
         academicYearId: input.academicYearId,
-        sectionId: input.sectionId,
         name: input.name,
         gradeLevel: input.gradeLevel,
         createdBy: authCtx.userId,
       },
-      include: { section: true, academicYear: true },
+      include: { sections: true, academicYear: true },
     });
 
     await tx.auditLog.create({
@@ -303,9 +302,9 @@ export async function getClass(id: string, ctx: RequestContext) {
     tx.class.findUnique({
       where: { id },
       include: {
-        section: true,
+        sections: true,
         academicYear: true,
-        _count: { select: { enrollments: true, assignments: true } },
+        _count: { select: { enrollmentRecords: { where: { status: 'ACTIVE' } }, assignments: true } },
       },
     })
   );
@@ -324,9 +323,9 @@ export async function listClasses(
         ...(academicYearId ? { academicYearId } : {}),
       },
       include: {
-        section: true,
+        sections: true,
         academicYear: true,
-        _count: { select: { enrollments: true, assignments: true } },
+        _count: { select: { enrollmentRecords: { where: { status: 'ACTIVE' } }, assignments: true } },
       },
       orderBy: { name: 'asc' },
     })
@@ -543,14 +542,38 @@ export async function archiveEnrollment(
 }
 
 export async function getEnrollments(classId: string, ctx: RequestContext) {
-  return withRls(ctx, (tx) =>
-    tx.classEnrollment.findMany({
-      where: { classId, isDeleted: false, status: 'ACTIVE' },
-      include: {
-        studentMembership: {
-          include: { user: { select: { name: true, email: true } } },
+  // Roster source: Category A (Enrollment, ACTIVE) — resolution of the Phase 1A
+  // roster gate (2026-08-01). Category C (class_enrollments) has no producer;
+  // Category A is the single source of truth (one ACTIVE row per school+student,
+  // DB-enforced). Historical statuses (PROMOTED/PASSED_OUT/...) are excluded.
+  return withRls(ctx, async (tx) => {
+    const rows = await tx.enrollment.findMany({
+      where: { classId, status: 'ACTIVE' },
+      select: {
+        id: true,
+        student: {
+          select: {
+            user: {
+              select: {
+                name: true,
+                memberships: {
+                  where: { schoolId: ctx.schoolId ?? '', role: 'STUDENT', status: 'ACTIVE' },
+                  select: { id: true },
+                  take: 1,
+                },
+              },
+            },
+          },
         },
       },
-    })
-  );
+      orderBy: { createdAt: 'asc' },
+    });
+    return rows.map((e) => ({
+      id: e.id,
+      studentMembershipId: e.student.user?.memberships?.[0]?.id ?? '',
+      studentMembership: {
+        user: { name: e.student.user?.name ?? 'Unknown' },
+      },
+    }));
+  });
 }

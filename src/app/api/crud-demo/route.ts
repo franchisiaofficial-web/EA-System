@@ -45,7 +45,8 @@ export async function GET(req: NextRequest) {
     });
   } catch (e) {
     if (e instanceof AuthorizationError) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: e.message } }, { status: 403 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('GET /api/crud-demo error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -76,7 +77,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: { id: result.data!.id, title: result.data!.title, category: result.data!.category } }, { status: 201 });
   } catch (e) {
     if (e instanceof z.ZodError) return NextResponse.json({ success: false, error: { code: 'VALIDATION', message: e.message } }, { status: 400 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('POST /api/crud-demo error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -90,8 +92,12 @@ export async function DELETE(req: NextRequest) {
       resource: 'schools',
       action: 'archive',
       input: id,
-      execute: async (entityId, { requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.crudDemo.update({ where: { id: entityId }, data: { isActive: false } }));
+      execute: async (entityId, { authCtx: ac, requestCtx: rc }) => {
+        return withRls(rc, async (tx) => {
+          const existing = await tx.crudDemo.findFirst({ where: { id: entityId, schoolId: ac.schoolId }, select: { id: true } });
+          if (!existing) throw new AuthorizationError('Crud demo not found in this school');
+          return tx.crudDemo.update({ where: { id: entityId }, data: { isActive: false } });
+        });
       },
       getEntityId: () => id,
       buildAfter: (r) => ({ title: r.title, isActive: false }),
@@ -102,6 +108,7 @@ export async function DELETE(req: NextRequest) {
     }
     return NextResponse.json({ success: true, data: { id } });
   } catch (e) {
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('DELETE /api/crud-demo error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }

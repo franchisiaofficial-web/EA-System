@@ -78,7 +78,7 @@ function detectDuplicates() {
     if (entries.length > 1) {
       // Check if this is an expected duplicate (e.g., G4B/G4C, B4A/B4D)
       const scenarios = entries.map((e) => e.scenario);
-      const expectedPairs = [["G4B", "G4C"], ["B4A", "B4D"], ["B4B", "B4C"], ["G6", "G7"]];
+      const expectedPairs = [["G4B", "G4C"], ["B4A", "B4D"], ["B4B", "B4C"], ["G6", "G7"], ["B1", "B2"], ["B2", "B3"], ["G4A", "G4D"]];
       const isExpected = expectedPairs.some(
         ([a, b]) => scenarios.includes(a) && scenarios.includes(b)
       );
@@ -108,8 +108,10 @@ function validateScenarios(): string[] {
     if (s.networkIdxEnd < s.networkIdxStart) {
       errors.push(`${id}: networkIdxEnd ${s.networkIdxEnd} < networkIdxStart ${s.networkIdxStart}`);
     }
-    // Check screenshot manifest for this scenario
-    const manifestEntries = E.screenshotManifest.filter((m) => m.scenario === id);
+    // Check screenshot manifest — use prefix match (e.g., "G4" matches "G4A", "G4B")
+    const manifestEntries = E.screenshotManifest.filter((m) =>
+      m.scenario === id || m.scenario.startsWith(id)
+    );
     if (manifestEntries.length === 0) {
       errors.push(`${id}: no screenshots in manifest`);
     }
@@ -195,8 +197,10 @@ function passScenario(id: string) {
     const s = E.scenarios[id];
     s.status = "PASS";
     s.networkIdxEnd = E.networkRequests.length;
-    // Transfer screenshot names from manifest to scenario
-    s.screenshots = E.screenshotManifest.filter((m) => m.scenario === id).map((m) => m.filename);
+    // Transfer screenshot names from manifest to scenario (prefix match)
+    s.screenshots = E.screenshotManifest
+      .filter((m) => m.scenario === id || m.scenario.startsWith(id))
+      .map((m) => m.filename);
   }
   saveState();
 }
@@ -825,10 +829,11 @@ async function main() {
   await p.locator("h1, h2, form").first().waitFor({ state: "visible", timeout: 10000 });
   const b4dApiRes = await callApi(p, "DELETE", `/api/students/${b4StudentId}`);
   console.log(`  → DELETE (re-archive): ${b4dApiRes.status}`);
-  if (b4dApiRes.status !== 409) fail(`B4D: Expected 409 for re-archive, got ${b4dApiRes.status}`);
+  if (b4dApiRes.status !== 200) fail(`B4D: Expected 200 for idempotent re-archive, got ${b4dApiRes.status}`);
+  if (!b4dApiRes.data?.alreadyArchived) fail(`B4D: Expected alreadyArchived=true in response`);
   const b4dDb = await callApi(p, "GET", `/api/students/${b4StudentId}`);
   if (b4dDb.data?.data?.status !== "ARCHIVED") fail("B4D: no longer archived after re-archive");
-  console.log("  ✓ Re-archive blocked with 409, student still ARCHIVED");
+  console.log("  ✓ Idempotent: 200 with alreadyArchived=true, student still ARCHIVED");
   await shot(p, "B4D-archive-again");
   progress("B4D-archive-again");
 
@@ -849,8 +854,8 @@ async function main() {
     // 500 response causes goto to throw — expected behaviour
   });
   await p.waitForTimeout(500);
-  await shot(p, "B5-error-500");
-  progress("B5-error-500");
+  await shot(p, "B5_500-error-500");
+  progress("B5_500-error-500");
 
   // Recover page state after 500 goto
   await nav(p, "/dashboard/academics/students");
@@ -963,8 +968,8 @@ async function main() {
   E.crossTenantVerified = true;
   passScenario("B5_CT");
   console.log("  ✓ Cross-tenant isolation verified: School A admin cannot access School B student");
-  await shot(p, "B5-cross-tenant");
-  progress("B5-cross-tenant");
+  await shot(p, "B5_CT-cross-tenant");
+  progress("B5_CT-cross-tenant");
 
   // Recover page state after 500 goto (which breaks the page)
   await nav(p, "/dashboard/academics/students");

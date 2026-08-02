@@ -1,0 +1,49 @@
+EA SYSTEM - PHASE 1.5 EVIDENCE PACKAGE - L1-L4 AFTER FIX (identical replays)
+Run: 2026-08-02  Auth: schooladmin@easystem.dev (School A)  Target: School B ids
+login: HTTP 200
+
+============================================================
+SECTION 1: L1-L4 AFTER FIX - identical request replays (expect rejection)
+============================================================
+
+--- L1 borrow AFTER: POST /api/library?action=borrow (foreign bookId + studentId) ---
+REQUEST: POST /api/library?action=borrow body={bookId:fixture_book_b1,studentId:fixture_stu_b1,dueDate:2026-09-01}
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Book not found in this school"}}
+
+--- L1 return AFTER: POST /api/library?action=return (foreign borrowingId fixture_brw_b1) ---
+REQUEST: POST /api/library?action=return body={borrowingId:fixture_brw_b1}
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Borrowing not found in this school"}}
+
+--- L2 AFTER: POST /api/timetable (foreign classId + subjectId) ---
+REQUEST: POST /api/timetable body={classId:fixture_cls_b_g01,subjectId:fixture_sub_b_math,dayOfWeek:1,startTime:09:00,endTime:09:40}
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+--- L3 AFTER: POST /api/transport?action=assignment (foreign studentId) ---
+REQUEST: POST /api/transport?action=assignment body={studentId:fixture_stu_b1}
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Student not found in this school"}}
+
+--- L4 POST AFTER: POST /api/class-assignments (foreign classId + teacherMembershipId) ---
+REQUEST: POST /api/class-assignments body={classId:fixture_cls_b_g01,teacherMembershipId:fixture_mem_b_stu,role:PRIMARY}
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+--- L4 DELETE AFTER: DELETE /api/class-assignments?id=fixture_ca_b1 (foreign assignment) ---
+REQUEST: DELETE /api/class-assignments?id=fixture_ca_b1
+RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Assignment not found in this school"}}
+
+============================================================
+SECTION 2: POSITIVE CONTROL - legitimate School A writes still work
+============================================================
+
+REQUEST: POST /api/library (create book, own school)
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbj6y59000c0wu8pw2w4jit","schoolId":"seed_school_ea","title":"L14 Positive Evidence","author":"Evidence Author","isbn":"EVD-002","category":"Textbook","quantity":1,"available":1,"createdAt":"2026-08-02T08:21:20.349Z","updatedAt":"2026-08-02T08:21:20.349Z"}}
+
+REQUEST: GET /api/students (first School A student id=seed_stu_001296)
+RESPONSE: HTTP 200
+
+--- positive borrow: bookId=cmsbj6y59000c0wu8pw2w4jit studentId=seed_stu_001296 ---
+REQUEST: POST /api/library?action=borrow body={bookId:cmsbj6y59000c0wu8pw2w4jit,studentId:seed_stu_001296,dueDate:2026-09-01}
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbj70lf000d0wu8z4v8gmmk","schoolId":"seed_school_ea","bookId":"cmsbj6y59000c0wu8pw2w4jit","studentId":"seed_stu_001296","borrowedAt":"2026-08-02T08:21:23.523Z","dueDate":"2026-09-01T00:00:00.000Z","returnedAt":null,"status":"BORROWED","createdAt":"2026-08-02T08:21:23.523Z"}}
+
+--- positive return: borrowingId=cmsbj70lf000d0wu8z4v8gmmk ---
+REQUEST: POST /api/library?action=return body={borrowingId:cmsbj70lf000d0wu8z4v8gmmk}
+RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbj70lf000d0wu8z4v8gmmk","schoolId":"seed_school_ea","bookId":"cmsbj6y59000c0wu8pw2w4jit","studentId":"seed_stu_001296","borrowedAt":"2026-08-02T08:21:23.523Z","dueDate":"2026-09-01T00:00:00.000Z","returnedAt":"2026-08-02T08:21:24.749Z","status":"RETURNED","createdAt":"2026-08-02T08:21:23.523Z"}}

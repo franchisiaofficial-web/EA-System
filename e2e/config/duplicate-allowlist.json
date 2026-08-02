@@ -1,0 +1,8 @@
+{
+  "allowList": [
+    ["G4B-after-cancel.png", "G4C-form-preserved.png"],
+    ["B4A-edit-archived.png", "B4D-archive-again.png"],
+    ["B4B-add-guardian-archived.png", "B4C-replace-primary-archived.png"],
+    ["G6-after-unlink.png", "G7-final-state.png"]
+  ]
+}

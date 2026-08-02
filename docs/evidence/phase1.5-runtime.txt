@@ -1,0 +1,139 @@
+EA SYSTEM - PHASE 1.5 EVIDENCE PACKAGE - SERVICE-LEVEL RUNTIME
+Run: 2026-08-02  Actor: School A admin  Target: School B fixture data
+
+====================================================================
+SECTION 1: BEFORE — literal vulnerable SQL (no school predicate)
+====================================================================
+
+--- H1 BEFORE: getExamResults(examId) — pre-fix Prisma query had NO school filter ---
+SQL: SELECT er.id, er.school_id, er.exam_id, er.marks_obtained, er.grade, s.first_name, s.last_name, s.admission_number
+     FROM exam_results er LEFT JOIN students s ON s.id = er.student_id
+     WHERE er.exam_id = 'fixture_exam_b'  [NO school predicate]
+ROWS RETURNED: 1
+  {"id":"fixture_res_b1","school_id":"fixture_school_b","exam_id":"fixture_exam_b","marks_obtained":88,"grade":"A","first_name":"Bharat","last_name":"Vasan","admission_number":"FIXADM0001"}
+
+--- H2 BEFORE: getStudentResults(studentId) — pre-fix Prisma query had NO school filter ---
+SQL: SELECT er.id, er.school_id, er.exam_id, er.marks_obtained, e.name AS exam_name
+     FROM exam_results er LEFT JOIN exams e ON e.id = er.exam_id
+     WHERE er.student_id = 'fixture_stu_b1'  [NO school predicate]
+ROWS RETURNED: 1
+  {"id":"fixture_res_b1","school_id":"fixture_school_b","exam_id":"fixture_exam_b","marks_obtained":88,"exam_name":"Unit Test 1"}
+
+--- H3 BEFORE: upsertResult() — pre-fix UPDATE had NO school predicate (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     UPDATE exam_results SET marks_obtained = 99, grade = 'A+' WHERE id = 'fixture_res_b1';
+     SELECT marks_obtained, grade FROM exam_results WHERE id = 'fixture_res_b1';
+     ROLLBACK;
+UPDATE affected rows: 1
+ROW INSIDE TRANSACTION (mutation visible): {"marks_obtained":99,"grade":"A+"}
+ROW AFTER ROLLBACK: {"marks_obtained":88,"grade":"A"}
+
+--- H4 BEFORE: recordPayment() — pre-fix created a School A payment on a School B invoice and mutated it (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     INSERT INTO fee_payments (id, school_id, invoice_id, amount, method, paid_at, received_by, created_at)
+       VALUES ('evid_pay_h4', 'seed_school_ea', 'fixture_inv_b1', 2000, 'CASH', now(), 'seed_user_admin', now());
+     UPDATE fee_invoices SET paid_amount = paid_amount + 2000, status = 'PARTIAL' WHERE id = 'fixture_inv_b1';
+     SELECT * FROM fee_payments WHERE invoice_id = 'fixture_inv_b1';
+     ROLLBACK;
+PAYMENT ROW INSIDE TRANSACTION: {"id":"evid_pay_h4","school_id":"seed_school_ea","invoice_id":"fixture_inv_b1","amount":2000,"method":"CASH"}
+INVOICE INSIDE TRANSACTION: {"id":"fixture_inv_b1","paid_amount":2000,"status":"PARTIAL"}
+INVOICE AFTER ROLLBACK: {"id":"fixture_inv_b1","paid_amount":0,"status":"PENDING"}
+PAYMENTS AFTER ROLLBACK: 0
+
+--- H5 BEFORE: PATCH session — pre-fix update had NO school predicate (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     UPDATE attendance_sessions SET status = 'CLOSED', closed_at = now(), updated_by = 'seed_user_admin' WHERE id = 'fixture_sess_b1';
+     SELECT id, status FROM attendance_sessions WHERE id = 'fixture_sess_b1';
+     ROLLBACK;
+UPDATE affected rows: 1
+ROW INSIDE TRANSACTION: {"id":"fixture_sess_b1","status":"CLOSED"}
+ROW AFTER ROLLBACK: {"id":"fixture_sess_b1","status":"ACTIVE"}
+
+--- H6 BEFORE: bulkMarkAttendance with client-supplied schoolId=fixture_school_b (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     INSERT INTO attendance_records (id, school_id, class_id, student_membership_id, date, status, marked_by_membership_id, marked_at, is_deleted, created_by, created_at, updated_at)
+       VALUES ('evid_att_h6', 'fixture_school_b', 'fixture_cls_b_g01', 'fixture_mem_b_stu', '2026-08-01', 'PRESENT', 'seed_mem_admin', now(), false, 'seed_user_admin', now(), now());
+     SELECT count(*) FROM attendance_records WHERE school_id = 'fixture_school_b';
+     ROLLBACK;
+ATTENDANCE ROWS FOR School B INSIDE TRANSACTION: 1
+ATTENDANCE ROWS FOR School B AFTER ROLLBACK: 0
+
+--- M1 BEFORE: createInvoice(schoolId=A, foreign studentId) (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     INSERT INTO fee_invoices (id, school_id, student_id, invoice_no, total_amount, due_date, status, created_at, updated_at)
+       VALUES ('evid_inv_m1', 'seed_school_ea', 'fixture_stu_b1', 'INV-EVID-M1', 2500, '2026-09-15', 'PENDING', now(), now());
+     SELECT id, school_id, student_id, invoice_no FROM fee_invoices WHERE id = 'evid_inv_m1';
+     ROLLBACK;
+ROW INSIDE TRANSACTION (invoice in School A, student in School B): {"id":"evid_inv_m1","school_id":"seed_school_ea","student_id":"fixture_stu_b1","invoice_no":"INV-EVID-M1"}
+ROW AFTER ROLLBACK: 0
+
+--- M2 BEFORE: createFeeStructure(schoolId=A, foreign classId) (transactional repro, ROLLBACK) ---
+SQL: BEGIN;
+     INSERT INTO fee_structures (id, school_id, category_id, class_id, amount, frequency, is_active, created_at, updated_at)
+       VALUES ('evid_fs_m2', 'seed_school_ea', 'fixture_cat_b1', 'fixture_cls_b_g01', 1000, 'MONTHLY', true, now(), now());
+     SELECT id, school_id, category_id, class_id, amount FROM fee_structures WHERE id = 'evid_fs_m2';
+     ROLLBACK;
+ROW INSIDE TRANSACTION (structure in School A, category+class in School B): {"id":"evid_fs_m2","school_id":"seed_school_ea","category_id":"fixture_cat_b1","class_id":"fixture_cls_b_g01","amount":1000}
+ROW AFTER ROLLBACK: 0
+
+--- M3 BEFORE: promotion failure detail — pre-fix detail query had NO school filter ---
+SQL: SELECT id, first_name, last_name, admission_number FROM students
+     WHERE id IN ('fixture_stu_b1')  [NO school predicate]
+LEAKED ROWS RETURNED: 1
+  {"id":"fixture_stu_b1","first_name":"Bharat","last_name":"Vasan","admission_number":"FIXADM0001"}
+
+====================================================================
+SECTION 2: AFTER — identical requests against FIXED code
+====================================================================
+
+--- H1 AFTER: getExamResults(fixture_exam_b, ctx) ---
+RESULT: REJECTED — Exam not found
+Fixed guard SQL: SELECT id FROM exams WHERE id = $1 AND school_id = $2
+GUARD SQL ROWS: 0
+
+--- H2 AFTER: getStudentResults(fixture_stu_b1, ctx) ---
+RESULT: REJECTED — Student not found
+Fixed guard SQL: SELECT id FROM students WHERE id = $1 AND school_id = $2
+GUARD SQL ROWS: 0
+
+--- H3 AFTER: upsertResult(seed_school_ea, { examId: fixture_exam_b, studentId: fixture_stu_b1, marksObtained: 99 }, ctx) ---
+RESULT: REJECTED — Exam not found
+FOREIGN ROW UNCHANGED: {"marks_obtained":88,"grade":"A"}
+
+--- H4 AFTER: recordPayment(seed_school_ea, { invoiceId: fixture_inv_b1, amount: 2000, method: CASH }, ctx) ---
+RESULT: REJECTED — Invoice not found
+FOREIGN INVOICE UNCHANGED: {"id":"fixture_inv_b1","paid_amount":0,"status":"PENDING"}; payments: 0
+
+--- H5 AFTER: fixed route guard — findFirst scoped by school ---
+Fixed guard SQL: SELECT id FROM attendance_sessions WHERE id = $1 AND school_id = $2
+GUARD SQL ROWS: 0 (0 → PATCH aborts with error)
+FOREIGN SESSION UNCHANGED: {"id":"fixture_sess_b1","status":"ACTIVE"}
+
+--- H6 AFTER: bulkMarkAttendance({ schoolId: fixture_school_b, classId: fixture_cls_b_g01, ... }, authCtx=School A, ctx) ---
+RESULT: REJECTED — School mismatch: operation scoped to authenticated school only
+SCHOOL B ATTENDANCE ROWS: 0
+
+--- M1 AFTER: createInvoice(seed_school_ea, { studentId: fixture_stu_b1, totalAmount: 2500, dueDate: 2026-09-15 }, ctx) ---
+RESULT: REJECTED — Student not found
+SCHOOL A INVOICES ON FOREIGN STUDENT: 0
+
+--- M2 AFTER: createFeeStructure(seed_school_ea, { categoryId: <School A cat>, classId: fixture_cls_b_g01, amount: 1000 }, ctx) ---
+School A category created: cmsbipfp10000lku8hwqysldj (for test setup)
+RESULT: REJECTED — Class not found
+FEE STRUCTURES ON FOREIGN CLASS: 0
+
+--- M3 AFTER: runPromotionBatch with foreign studentId in items ---
+FAILURE DETAIL: {"studentId":"fixture_stu_b1","studentName":"—","admissionNumber":"—","currentClass":"—","currentSection":"—","reason":"No active enrollment in the selected academic year","action":"RETRY","attemptedAction":"PROMOTE"}
+LEAKED FIELDS PRESENT: {"hasName":false,"hasAdmission":false}
+Fixed detail SQL (WHERE student_id AND school_id): rows = 0 → details render '—'
+
+====================================================================
+SECTION 3: FINAL DB STATE
+====================================================================
+attendance_records where school_id=fixture_school_b: [{"n":0}]
+fee_payments total: [{"n":0}]
+fee_invoices where school_id=seed_school_ea AND student_id=fixture_stu_b1: [{"n":0}]
+fee_structures where class_id=fixture_cls_b_g01: [{"n":0}]
+exam_results fixture_res_b1: [{"marks_obtained":88,"grade":"A"}]
+attendance_sessions fixture_sess_b1: [{"status":"ACTIVE","closed_at":null}]
+fee_invoices fixture_inv_b1: [{"paid_amount":0,"status":"PENDING"}]

@@ -1,0 +1,69 @@
+EA SYSTEM - PHASE 1.5 EVIDENCE PACKAGE - HTTP ROUTE-LEVEL
+Run: 2026-08-02  Auth: schooladmin@easystem.dev (School A)  Target: School B ids
+login: HTTP 200
+
+============================================================
+SECTION 1: FIXED FINDINGS - route-level re-verification (expect rejection)
+============================================================
+
+--- H5 AFTER: PATCH /api/attendance/sessions/fixture_sess_b1 (foreign session) ---
+REQUEST: PATCH /api/attendance/sessions/fixture_sess_b1  body={status:CLOSED}
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+REQUEST: GET /api/exams?examId=fixture_exam_b
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+--- H2 AFTER: GET /api/exams?studentId=fixture_stu_b1 (foreign student) ---
+REQUEST: GET /api/exams?studentId=fixture_stu_b1
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+--- M1 AFTER: POST /api/fees (invoice, foreign studentId) ---
+REQUEST: POST /api/fees body={studentId:fixture_stu_b1,totalAmount:2500,dueDate:2026-09-15}
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+--- M2 AFTER: POST /api/attendance/sessions (foreign classId) ---
+REQUEST: POST /api/attendance/sessions body={classId:fixture_cls_b_g01,type:MORNING}
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+--- H4 AFTER: POST /api/fees?action=payment (foreign invoiceId) ---
+REQUEST: POST /api/fees?action=payment body={invoiceId:fixture_inv_b1,amount:2000,method:CASH}
+RESPONSE: HTTP 500 body={"success":false,"error":{"code":"INTERNAL","message":"An unexpected error occurred"}}
+
+============================================================
+SECTION 2: NEW CANDIDATES IDENTIFIED DURING EVIDENCE ASSEMBLY (same defect class)
+============================================================
+
+--- L1: POST /api/library?action=borrow (foreign bookId + studentId) ---
+REQUEST: POST /api/library?action=borrow body={bookId:fixture_book_b1,studentId:fixture_stu_b1,dueDate:2026-09-01}
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbitvud00050wu887gs95ra","schoolId":"seed_school_ea","bookId":"fixture_book_b1","studentId":"fixture_stu_b1","borrowedAt":"2026-08-02T08:11:10.837Z","dueDate":"2026-09-01T00:00:00.000Z","returnedAt":null,"status":"BORROWED","createdAt":"2026-08-02T08:11:10.837Z"}}
+
+--- L2: POST /api/timetable (foreign classId + subjectId) ---
+REQUEST: POST /api/timetable body={classId:fixture_cls_b_g01,subjectId:fixture_sub_b_math,dayOfWeek:1,startTime:09:00,endTime:09:40}
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbitwp500060wu84o228aoi","schoolId":"seed_school_ea","classId":"fixture_cls_b_g01","sectionId":null,"subjectId":"fixture_sub_b_math","teacherId":null,"dayOfWeek":1,"startTime":"09:00","endTime":"09:40","roomNo":null,"createdAt":"2026-08-02T08:11:11.945Z","updatedAt":"2026-08-02T08:11:11.945Z"}}
+
+--- L3: POST /api/transport?action=assignment (foreign studentId) ---
+REQUEST: POST /api/transport?action=assignment body={studentId:fixture_stu_b1}
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbity8000070wu8h58dlssr","schoolId":"seed_school_ea","studentId":"fixture_stu_b1","routeId":null,"vehicleId":null,"pickupPoint":null,"fee":0,"isActive":true,"createdAt":"2026-08-02T08:11:13.920Z"}}
+
+REQUEST: POST /api/class-assignments body={classId:fixture_cls_b_g01,teacherMembershipId:fixture_mem_b_stu,role:PRIMARY}
+RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbitz6400080wu8dgz6jyob","schoolId":"seed_school_ea","classId":"fixture_cls_b_g01","teacherMembershipId":"fixture_mem_b_stu","role":"PRIMARY","status":"ACTIVE","createdAt":"2026-08-02T08:11:15.148Z","updatedAt":"2026-08-02T08:11:15.148Z"}}
+
+============================================================
+SECTION 3: LOW-RISK RUNTIME SPOT CHECKS (Deliverable 7)
+============================================================
+
+--- LOW-1: GET /api/students/fixture_stu_b1 (foreign student by id) ---
+REQUEST: GET /api/students/fixture_stu_b1
+RESPONSE: HTTP 404 body={"success":false,"error":{"code":"NOT_FOUND","message":"Student not found"}}
+
+--- LOW-2: GET /api/attendance?classId=fixture_cls_b_g01&date=2026-08-01 (foreign class) ---
+REQUEST: GET /api/attendance?classId=fixture_cls_b_g01&date=2026-08-01
+RESPONSE: HTTP 200 body={"success":true,"data":[]}
+
+--- LOW-3: GET /api/attendance/sessions?classId=fixture_cls_b_g01 (foreign class sessions) ---
+REQUEST: GET /api/attendance/sessions?classId=fixture_cls_b_g01
+RESPONSE: HTTP 200 body={"success":true,"data":[]}
+
+--- LOW-4: GET /api/students?schoolId=fixture_school_b (param spoof) ---
+REQUEST: GET /api/students?schoolId=fixture_school_b
+RESPONSE: HTTP 200 firstItem.schoolId=seed_school_ea (must be seed_school_ea, not fixture_school_b)

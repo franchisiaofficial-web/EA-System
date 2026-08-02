@@ -35,7 +35,7 @@ export function PasswordInput({
         autoComplete="current-password"
         className={cn(
           'h-11 pr-10',
-          error && 'border-destructive focus-visible:ring-destructive',
+          error && 'border-destructive/50 focus-visible:ring-destructive/20',
           className
         )}
         {...register(name)}
@@ -43,7 +43,7 @@ export function PasswordInput({
       <button
         type="button"
         onClick={() => setVisible(!visible)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-muted-foreground transition-colors"
         tabIndex={-1}
         aria-label={visible ? 'Hide password' : 'Show password'}
       >

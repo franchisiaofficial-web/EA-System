@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { DataTable, type Column } from '@/components/crud/DataTable';
+import { PageHeader } from '@/components/ui/ea/layout';
 import { EntityActionBar } from '@/components/crud/EntityActionBar';
 import { ConfirmDialog } from '@/components/crud/ConfirmDialog';
 import { Button } from '@/components/ui/button';
@@ -53,18 +54,20 @@ export function TermList({ canCreate, canUpdate, canArchive }: { canCreate: bool
   ];
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Terms</h1>
-      <EntityActionBar entityLabel="Term" createHref={canCreate ? '/dashboard/academics/terms/create' : undefined} onRefresh={() => void load(page, search)} />
-      <DataTable columns={columns} data={items} total={total} page={page} pageSize={10} totalPages={totalPages}
-        searchPlaceholder="Search terms..." onSearch={setSearch} onPageChange={setPage}
-        renderActions={(row) => (
-          <div className="flex items-center gap-1 justify-end">
-            {canUpdate && <Button variant="ghost" size="xs" onClick={() => router.push(`/dashboard/academics/terms/${row.id}/edit`)}><Pencil className="h-3.5 w-3.5" /></Button>}
-            {canArchive && <Button variant="ghost" size="xs" onClick={() => setDeleteConfirm(row.id)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>}
-          </div>
-        )} />
-      <ConfirmDialog open={!!deleteConfirm} title="Archive Term" message="Archive this term?" confirmLabel="Archive" onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)} onCancel={() => setDeleteConfirm(null)} />
-    </div>
+    <>
+      <PageHeader title="Terms" />
+      <div className="space-y-6 w-full">
+        <EntityActionBar entityLabel="Term" createHref={canCreate ? '/dashboard/academics/terms/create' : undefined} onRefresh={() => void load(page, search)} />
+        <DataTable columns={columns} data={items} total={total} page={page} pageSize={10} totalPages={totalPages}
+          searchPlaceholder="Search terms..." onSearch={setSearch} onPageChange={setPage}
+          renderActions={(row) => (
+            <div className="flex items-center gap-1 justify-end">
+              {canUpdate && <Button variant="ghost" size="xs" onClick={() => router.push(`/dashboard/academics/terms/${row.id}/edit`)}><Pencil className="h-3.5 w-3.5" /></Button>}
+              {canArchive && <Button variant="ghost" size="xs" onClick={() => setDeleteConfirm(row.id)}><Trash2 className="h-3.5 w-3.5 text-foreground" /></Button>}
+            </div>
+          )} />
+        <ConfirmDialog open={!!deleteConfirm} title="Archive Term" message="Archive this term?" confirmLabel="Archive" onConfirm={() => deleteConfirm && handleDelete(deleteConfirm)} onCancel={() => setDeleteConfirm(null)} />
+      </div>
+    </>
   );
 }

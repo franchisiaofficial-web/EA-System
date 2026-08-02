@@ -120,7 +120,7 @@ export function LoginForm() {
               </Label>
               <a
                 href="/forgot-password"
-                className="text-xs font-medium text-cli-blue hover:underline transition-colors"
+                className="text-xs font-medium text-foreground hover:underline transition-colors"
               >
                 Forgot?
               </a>
@@ -145,7 +145,7 @@ export function LoginForm() {
           <label className="flex items-center gap-2.5 py-1 cursor-pointer select-none group">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-border/60 text-cli-blue focus:ring-cli-blue/20 cursor-pointer"
+              className="h-4 w-4 rounded border-muted-foreground/30 bg-muted/50  cursor-pointer"
             />
             <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
               Keep me signed in
@@ -155,7 +155,7 @@ export function LoginForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="h-11 w-full bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg transition-all duration-200 disabled:opacity-60"
+            className="h-11 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl transition-all duration-200  disabled:opacity-60"
           >
             {loading ? (
               <>
@@ -170,10 +170,10 @@ export function LoginForm() {
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-border/60" />
+            <span className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-card px-3 text-muted-foreground/60 font-mono uppercase tracking-wider">
+            <span className="bg-card px-3 text-muted-foreground font-mono uppercase tracking-wider">
               or continue with
             </span>
           </div>
@@ -199,37 +199,22 @@ export function LoginForm() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: 'spring', duration: 0.5, bounce: 0.2 }}
-              className="mx-4 w-full max-w-sm rounded-2xl border border-border/60 bg-card p-8 text-center shadow-2xl"
+              className="mx-4 w-full max-w-sm rounded-2xl border border-border bg-card p-8 text-center shadow-xl"
               onClick={(e) => e.stopPropagation()}
             >
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{
-                  delay: 0.15,
-                  type: 'spring',
-                  stiffness: 200,
-                  damping: 15,
-                }}
-                className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-cli-emerald/10"
+                transition={{ delay: 0.15, type: 'spring', stiffness: 200, damping: 15 }}
+                className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-muted/60"
               >
-                <CheckCircle2 className="h-8 w-8 text-cli-emerald" />
+                <CheckCircle2 className="h-8 w-8 text-foreground" />
               </motion.div>
-              <h2 className="mb-2 text-lg font-bold text-foreground tracking-tight">
-                Signed in
-              </h2>
-              <p className="mb-6 text-sm text-muted-foreground">
-                Welcome back. Redirecting to your dashboard...
-              </p>
-              <Button
-                onClick={() => {
-                  setShowSuccess(false);
-                  router.push(redirectUrl);
-                }}
-                className="w-full bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg"
-              >
-                Continue to dashboard
-              </Button>
+              <h2 className="mb-2 text-lg font-bold text-foreground tracking-tight">Signed in</h2>
+              <p className="mb-6 text-sm text-muted-foreground">Welcome back. Redirecting to your dashboard...</p>
+              <Button onClick={() => { setShowSuccess(false); router.push(redirectUrl); }}
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl "
+              >Continue to dashboard</Button>
             </motion.div>
           </motion.div>
         )}

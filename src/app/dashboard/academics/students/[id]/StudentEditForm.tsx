@@ -1,81 +1,221 @@
-'use client';
+"use client";
+import { useState, useEffect } from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Loader2, User } from "lucide-react";
+import { PageHeader, PageCard, FormGrid, FormField, EAInput, EATextarea, FooterActions, FormSelect } from "@/components/ui/ea/layout";
+import { EAButton } from "@/components/ui/ea";
+import { toUpperCase, toTitleCase, toLowerCase } from "@/lib/format-input";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import { Loader2 } from 'lucide-react';
-import { TextField, SelectField, DateField } from '@/components/crud/fields';
-import { Button } from '@/components/ui/button';
+const phoneRegex = /^[6-9]\d{9}$/;
+const phoneSchema = z.string().regex(phoneRegex, "Enter valid 10-digit mobile").or(z.literal("")).optional();
 
 const schema = z.object({
-  firstName: z.string().min(1, 'First name is required'),
-  lastName: z.string().min(1, 'Last name is required'),
-  admissionNumber: z.string().min(1),
-  dateOfBirth: z.string().optional(),
-  gender: z.string().optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
+  firstName: z.string().min(1), lastName: z.string().min(1),
+  admissionNumber: z.string().min(1), admissionDate: z.string().optional(),
+  dateOfBirth: z.string().optional(), gender: z.string().optional(),
+  phone: phoneSchema, address: z.string().optional(), bloodGroup: z.string().optional(), studentStatus: z.string().optional(),
+  academicYearId: z.string().optional(), classId: z.string().optional(), sectionId: z.string().optional(), rollNumber: z.string().optional(),
+  fatherName: z.string().optional(), fatherPhone: phoneSchema, fatherOccupation: z.string().optional(), fatherEmail: z.string().optional(),
+  motherName: z.string().optional(), motherPhone: phoneSchema, motherOccupation: z.string().optional(), motherEmail: z.string().optional(),
+  guardianName: z.string().optional(), guardianPhone: phoneSchema, guardianRelationship: z.string().optional(),
+  emergencyContactName: z.string().optional(), emergencyRelationship: z.string().optional(), emergencyPhone: phoneSchema,
+  siblingName: z.string().optional(), siblingAdmissionNo: z.string().optional(), siblingAge: z.string().optional(),
+  siblingGender: z.string().optional(), siblingRelationship: z.string().optional(), siblingSchoolName: z.string().optional(), siblingNotes: z.string().optional(), siblingReason: z.string().optional(),
 });
-
 type FormData = z.infer<typeof schema>;
 
-export function StudentEditForm({ data }: { data: FormData & { id: string } }) {
+const genderOpts = [{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }];
+const bloodOpts = [...["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(v => ({ value: v, label: v })), { value: "Other", label: "Other" }];
+const relationOpts = [{ value: "Father", label: "Father" }, { value: "Mother", label: "Mother" }, { value: "Guardian", label: "Guardian" }];
+const siblingRelationOpts = [{ value: "Brother", label: "Brother" }, { value: "Sister", label: "Sister" }, { value: "Other", label: "Other" }];
+const STANDARD_BLOOD = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+
+export function StudentEditForm({ initialData }: { initialData: FormData & { id: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [years, setYears] = useState<{ value: string; label: string }[]>([]);
+  const [classes, setClasses] = useState<{ value: string; label: string }[]>([]);
+  const [sections, setSections] = useState<{ value: string; label: string }[]>([]);
+  const storedBlood = initialData.bloodGroup ?? "";
+  const isCustomBlood = storedBlood !== "" && !STANDARD_BLOOD.includes(storedBlood);
+  const [hasSibling, setHasSibling] = useState(Boolean(initialData.siblingName));
+  const [customBlood, setCustomBlood] = useState(isCustomBlood ? storedBlood : "");
 
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+  const methods = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: data,
+    defaultValues: { ...initialData, bloodGroup: isCustomBlood ? "Other" : initialData.bloodGroup },
   });
+  const { register, handleSubmit, watch, formState: { errors } } = methods;
+  const watchedClassId = watch("classId");
+  const watchedBloodGroup = watch("bloodGroup");
+  const watchedFirstName = watch("firstName");
+  const watchedLastName = watch("lastName");
+  const watchedAdmission = watch("admissionNumber");
+  const watchedYear = watch("academicYearId");
+  const watchedSection = watch("sectionId");
+  const watchedRoll = watch("rollNumber");
+  const watchedStatus = watch("studentStatus");
+  const watchedAddress = watch("address");
+
+  const yearLabel = (id?: string) => years.find(y => y.value === id)?.label || "—";
+  const classLabel = (id?: string) => classes.find(c => c.value === id)?.label || "—";
+  const sectionLabel = (id?: string) => sections.find(s => s.value === id)?.label || "—";
+
+  useEffect(() => {
+    fetch("/api/academic-years?pageSize=100").then(r => r.json()).then(d => { if (d.success) setYears(d.data.items.map((y: any) => ({ value: y.id, label: y.name }))); }).catch(() => {});
+    fetch("/api/classes?pageSize=100").then(r => r.json()).then(d => { if (d.success) setClasses(d.data.items.map((c: any) => ({ value: c.id, label: c.name }))); }).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (!watchedClassId) { setSections([]); return; }
+    fetch(`/api/sections?pageSize=100&classId=${watchedClassId}`).then(r => r.json()).then(d => {
+      if (d.success) setSections(d.data.items.map((s: any) => ({ value: s.id, label: s.name })));
+    }).catch(() => {});
+  }, [watchedClassId]);
 
   const onSubmit = async (formData: FormData) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/students/${data.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const payload = {
+        ...formData,
+        bloodGroup: formData.bloodGroup === "Other" ? (customBlood || "Other") : formData.bloodGroup,
+        siblings: hasSibling && formData.siblingName ? [{
+          name: formData.siblingName,
+          admissionNo: formData.siblingAdmissionNo || undefined,
+          age: formData.siblingAge ? Number(formData.siblingAge) : undefined,
+          gender: formData.siblingGender || undefined,
+          relationship: formData.siblingRelationship || undefined,
+          schoolName: formData.siblingSchoolName || undefined,
+          notes: formData.siblingNotes || undefined,
+          reason: formData.siblingReason || undefined,
+        }] : [],
+      };
+      const res = await fetch(`/api/students/${initialData.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       const r = await res.json();
-      if (r.success) {
-        toast.success('Student updated');
-        router.push(`/dashboard/academics/students/${data.id}`);
-        router.refresh();
-      } else {
-        toast.error(r.error?.message || 'Failed to update');
-      }
-    } catch {
-      toast.error('Network error');
-    } finally {
-      setLoading(false);
-    }
+      if (r.success) { toast.success("Student updated"); router.push(`/dashboard/academics/students/${initialData.id}`); router.refresh(); }
+      else toast.error(r.error?.message || "Failed");
+    } catch { toast.error("Network error"); } finally { setLoading(false); }
   };
 
-  return (
-    <div className="max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold text-foreground">Edit Student</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 rounded-xl border border-border bg-card p-6">
-        <h2 className="text-sm font-mono text-muted-foreground uppercase">Personal Information</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <TextField label="First Name" registration={register('firstName')} error={errors.firstName} required />
-          <TextField label="Last Name" registration={register('lastName')} error={errors.lastName} required />
-          <TextField label="Admission Number" registration={register('admissionNumber')} error={errors.admissionNumber} required />
-          <DateField label="Date of Birth" registration={register('dateOfBirth')} error={errors.dateOfBirth} />
-          <SelectField label="Gender" registration={register('gender')} error={errors.gender} options={[{ value: 'Male', label: 'Male' }, { value: 'Female', label: 'Female' }]} placeholder="Select..." />
-          <TextField label="Phone" registration={register('phone')} error={errors.phone} />
-        </div>
-        <TextField label="Address" registration={register('address')} error={errors.address} />
+  const ph = (errors: any, field: string) => errors[field] ? <p className="text-xs text-foreground mb-1">{errors[field]?.message}</p> : null;
 
-        <div className="flex gap-3 pt-2">
-          <Button type="submit" disabled={loading} className="bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium">
-            {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : null}Save Changes
-          </Button>
-          <Button variant="outline" onClick={() => router.back()}>Cancel</Button>
-        </div>
-      </form>
+  return (
+    <div className="space-y-6 w-full">
+      <PageHeader title="Edit Student" subtitle="Update student information." back />
+      <FormProvider {...methods}>
+        <PageCard>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">1. Personal Information</h3>
+            <FormGrid cols={2}>
+              <FormField label="Admission No" required><EAInput placeholder="e.g. ADM-2025-001" {...register("admissionNumber")} /></FormField>
+              <FormField label="Admission Date"><EAInput type="date" {...register("admissionDate")} /></FormField>
+              <FormField label="First Name" required><EAInput placeholder="First name" format={toUpperCase} {...register("firstName")} /></FormField>
+              <FormField label="Last Name" required><EAInput placeholder="Last name" format={toUpperCase} {...register("lastName")} /></FormField>
+              <FormField label="Gender"><FormSelect name="gender" options={genderOpts} placeholder="Select..." /></FormField>
+              <FormField label="Date of Birth"><EAInput type="date" {...register("dateOfBirth")} /></FormField>
+              <FormField label="Blood Group"><FormSelect name="bloodGroup" options={bloodOpts} placeholder="Select..." /></FormField>
+              {watchedBloodGroup === "Other" && (
+                <FormField label="Specify Blood Group"><EAInput placeholder="e.g. Bombay Blood" value={customBlood} onChange={e => setCustomBlood(e.target.value)} /></FormField>
+              )}
+              <FormField label="Phone">{ph(errors, "phone")}<EAInput placeholder="10-digit mobile" {...register("phone")} /></FormField>
+            </FormGrid>
+            <div className="mt-3"><FormField label="Address"><EATextarea rows={3} placeholder="Full address" {...register("address")} /></FormField></div>
+            <div className="mt-3"><FormField label="Status"><FormSelect name="studentStatus" options={[{value:"ACTIVE",label:"Active"},{value:"INACTIVE",label:"Inactive"},{value:"SUSPENDED",label:"Suspended"},{value:"TRANSFERRED",label:"Transferred"},{value:"GRADUATED",label:"Graduated"},{value:"WITHDRAWN",label:"Withdrawn"}]} placeholder="Select status..." /></FormField></div>
+
+            <div className="mt-8 mb-4 border-t border-border" />
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">2. Academic Information</h3>
+            <FormGrid cols={2}>
+              <FormField label="Academic Year"><FormSelect name="academicYearId" options={years} placeholder="Select year..." /></FormField>
+              <FormField label="Class"><FormSelect name="classId" options={classes} placeholder="Select class..." /></FormField>
+              <FormField label="Section">
+                {watchedClassId ? <FormSelect name="sectionId" options={sections} placeholder="Select section..." /> : <div className="h-11 flex items-center px-4 rounded-xl border border-border bg-muted/50"><span className="text-xs text-muted-foreground/70 font-mono">Select a class first</span></div>}
+              </FormField>
+              <FormField label="Roll Number"><EAInput placeholder="e.g. 01" {...register("rollNumber")} /></FormField>
+            </FormGrid>
+
+            <div className="mt-8 mb-4 border-t border-border" />
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">6. Preview</h3>
+            <div className="rounded-xl border border-border bg-muted/20 p-5 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cli-blue/10"><User className="h-5 w-5 text-cli-blue" /></div>
+                <div>
+                  <p className="text-sm font-semibold text-foreground">{[watchedFirstName, watchedLastName].filter(Boolean).join(" ") || "Student Name"}</p>
+                  <p className="text-xs font-mono text-muted-foreground">{watchedAdmission || "Admission #"}</p>
+                </div>
+              </div>
+              <dl className="grid grid-cols-2 gap-x-4 gap-y-2">
+                {[["Academic Year", yearLabel(watchedYear)], ["Class", classLabel(watchedClassId)], ["Section", sectionLabel(watchedSection)], ["Roll Number", watchedRoll || "—"]].map(([label, value]) => (
+                  <div key={label} className="flex justify-between gap-2"><dt className="text-xs text-muted-foreground">{label}</dt><dd className="text-xs font-mono text-foreground text-right">{value}</dd></div>
+                ))}
+              </dl>
+              <div className="flex justify-between gap-2"><dt className="text-xs text-muted-foreground">Status</dt><dd className="text-xs font-mono text-cli-emerald">{watchedStatus || "ACTIVE"}</dd></div>
+              {watchedAddress && <p className="text-xs text-muted-foreground whitespace-pre-line border-t border-border pt-3">{watchedAddress}</p>}
+            </div>
+
+            <div className="mt-8 mb-4 border-t border-border" />
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">3. Parent Information</h3>
+
+            <h4 className="text-[11px] font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-3">Father Details</h4>
+            <FormGrid cols={2}>
+              <FormField label="Father Name"><EAInput placeholder="Full name" format={toTitleCase} {...register("fatherName")} /></FormField>
+              <FormField label="Mobile Number">{ph(errors, "fatherPhone")}<EAInput placeholder="10-digit mobile" {...register("fatherPhone")} /></FormField>
+              <FormField label="Occupation"><EAInput placeholder="Occupation" {...register("fatherOccupation")} /></FormField>
+              <FormField label="Email"><EAInput type="email" placeholder="email@example.com" format={toLowerCase} {...register("fatherEmail")} /></FormField>
+            </FormGrid>
+
+            <h4 className="text-[11px] font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-3 mt-5">Mother Details</h4>
+            <FormGrid cols={2}>
+              <FormField label="Mother Name"><EAInput placeholder="Full name" format={toTitleCase} {...register("motherName")} /></FormField>
+              <FormField label="Mobile Number">{ph(errors, "motherPhone")}<EAInput placeholder="10-digit mobile" {...register("motherPhone")} /></FormField>
+              <FormField label="Occupation"><EAInput placeholder="Occupation" {...register("motherOccupation")} /></FormField>
+              <FormField label="Email"><EAInput type="email" placeholder="email@example.com" format={toLowerCase} {...register("motherEmail")} /></FormField>
+            </FormGrid>
+
+            <h4 className="text-[11px] font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-3 mt-5">Guardian (Optional)</h4>
+            <FormGrid cols={2}>
+              <FormField label="Guardian Name"><EAInput placeholder="Full name" format={toTitleCase} {...register("guardianName")} /></FormField>
+              <FormField label="Relationship"><FormSelect name="guardianRelationship" options={relationOpts} placeholder="Select..." /></FormField>
+              <FormField label="Mobile Number">{ph(errors, "guardianPhone")}<EAInput placeholder="10-digit mobile" {...register("guardianPhone")} /></FormField>
+            </FormGrid>
+
+            <div className="mt-8 mb-4 border-t border-border" />
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">4. Sibling Information</h3>
+            <label className="flex items-center gap-3 mb-4 cursor-pointer">
+              <input type="checkbox" checked={hasSibling} onChange={e => { setHasSibling(e.target.checked); if (!e.target.checked) { ["siblingName", "siblingAdmissionNo", "siblingAge", "siblingGender", "siblingRelationship", "siblingSchoolName", "siblingNotes", "siblingReason"].forEach(f => methods.setValue(f as any, "")); } }} className="rounded border-muted-foreground/30 bg-muted/50 accent-ea-green scale-110" />
+              <span className="text-sm text-muted-foreground">Has a sibling?</span>
+            </label>
+            {hasSibling && (
+              <FormGrid cols={2}>
+                <FormField label="Sibling Name" required><EAInput placeholder="Full name" format={toTitleCase} {...register("siblingName")} /></FormField>
+                <FormField label="Relationship"><FormSelect name="siblingRelationship" options={siblingRelationOpts} placeholder="Select..." /></FormField>
+                <FormField label="Age (optional)"><EAInput type="number" min={1} max={30} placeholder="e.g. 12" {...register("siblingAge")} /></FormField>
+                <FormField label="Gender"><FormSelect name="siblingGender" options={genderOpts} placeholder="Select..." /></FormField>
+                <FormField label="Admission Number (optional)"><EAInput placeholder="e.g. ADM-2025-002" {...register("siblingAdmissionNo")} /></FormField>
+                <FormField label="School Name (optional)"><EAInput placeholder="e.g. EA Public School" {...register("siblingSchoolName")} /></FormField>
+                <FormField label="Notes (optional)"><EAInput placeholder="e.g. Studying in Grade 3, same school" {...register("siblingNotes")} /></FormField>
+                <FormField label="Reason (optional)"><EAInput placeholder="e.g. Will join next term" {...register("siblingReason")} /></FormField>
+              </FormGrid>
+            )}
+
+            <div className="mt-8 mb-4 border-t border-border" />
+            <h3 className="text-xs font-mono font-bold text-muted-foreground uppercase tracking-[0.12em] mb-4">5. Emergency Contact</h3>
+            <FormGrid cols={2}>
+              <FormField label="Contact Name"><EAInput placeholder="Emergency contact name" format={toTitleCase} {...register("emergencyContactName")} /></FormField>
+              <FormField label="Relationship"><EAInput placeholder="e.g. Parent" {...register("emergencyRelationship")} /></FormField>
+              <FormField label="Phone">{ph(errors, "emergencyPhone")}<EAInput placeholder="10-digit mobile" {...register("emergencyPhone")} /></FormField>
+            </FormGrid>
+
+            <FooterActions>
+              <EAButton variant="secondary" type="button" onClick={() => router.back()}>Cancel</EAButton>
+              <EAButton type="submit" disabled={loading}>{loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}Save Changes</EAButton>
+            </FooterActions>
+          </form>
+        </PageCard>
+      </FormProvider>
     </div>
   );
 }

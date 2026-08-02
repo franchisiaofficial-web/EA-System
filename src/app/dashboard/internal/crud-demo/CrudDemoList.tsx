@@ -86,7 +86,7 @@ export function CrudDemoList() {
           <div className="flex items-center gap-1 justify-end">
             <Button variant="ghost" size="xs" onClick={() => router.push(`/dashboard/internal/crud-demo/${row.id}`)} aria-label="View"><Eye className="h-3.5 w-3.5" /></Button>
             <Button variant="ghost" size="xs" onClick={() => router.push(`/dashboard/internal/crud-demo/${row.id}/edit`)} aria-label="Edit"><Pencil className="h-3.5 w-3.5" /></Button>
-            <Button variant="ghost" size="xs" onClick={() => setDeleteConfirm(row.id)} aria-label="Delete"><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
+            <Button variant="ghost" size="xs" onClick={() => setDeleteConfirm(row.id)} aria-label="Delete"><Trash2 className="h-3.5 w-3.5 text-foreground" /></Button>
           </div>
         )}
       />

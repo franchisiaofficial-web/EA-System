@@ -1,0 +1,227 @@
+EA SYSTEM - PHASE 1.6B POSITIVE-CONTROL EVIDENCE (same-school replays, every N-guard)
+Run: 2026-08-02  Auth: schooladmin@easystem.dev (School A, seed_school_ea)  All rows created/updated by School A for School A
+login: HTTP 200
+
+========================================================
+PC-Y Create own academic year (basis for N6a/N6b/N10a/N10b/N12/N13)
+========================================================
+[PC-Y] REQUEST: POST /api/academic-years body={
+    "startDate":  "2026-08-01",
+    "name":  "Evidence PC Y1",
+    "endDate":  "2027-03-31",
+    "isActive":  false
+}
+[PC-Y] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw8xne000r1gu83qyn9gva","schoolId":"seed_school_ea","name":"Evidence PC Y1","startDate":"2026-08-01T00:00:00.000Z","endDate":"2027-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"ACTIVE","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:26:48.026Z","updatedAt":"2026-08-02T14:26:48.026Z"}}
+Y1=cmsbw8xne000r1gu83qyn9gva
+
+========================================================
+N10a POST /api/classes own year (positive)
+========================================================
+[N10a-PC] REQUEST: POST /api/classes body={
+    "name":  "Evidence PC C1",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva"
+}
+[N10a-PC] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw8yzl000t1gu8rwwnszht","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C1","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ACTIVE","isDeleted":false,"createdAt":"2026-08-02T14:26:49.761Z","updatedAt":"2026-08-02T14:26:49.761Z","createdBy":"seed_user_admin","updatedBy":null}}
+C1=cmsbw8yzl000t1gu8rwwnszht
+
+========================================================
+N10b POST /api/terms own year (positive)
+========================================================
+[N10b-PC] REQUEST: POST /api/terms body={
+    "startDate":  "2026-08-01",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva",
+    "name":  "Evidence PC T1",
+    "endDate":  "2026-12-31"
+}
+[N10b-PC] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw9093000v1gu8qb699prb","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC T1","startDate":"2026-08-01T00:00:00.000Z","endDate":"2026-12-31T00:00:00.000Z","status":"ACTIVE","createdAt":"2026-08-02T14:26:51.399Z","updatedAt":"2026-08-02T14:26:51.399Z"}}
+T1=cmsbw9093000v1gu8qb699prb
+
+========================================================
+N11 POST /api/sections own class (positive)
+========================================================
+[N11-PC] REQUEST: POST /api/sections body={
+    "name":  "Evidence PC S1",
+    "classId":  "cmsbw8yzl000t1gu8rwwnszht"
+}
+[N11-PC] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw91fr000x1gu8t99omsha","schoolId":"seed_school_ea","classId":"cmsbw8yzl000t1gu8rwwnszht","name":"Evidence PC S1","description":null,"capacity":40,"room":null,"status":"ACTIVE","createdAt":"2026-08-02T14:26:52.935Z","updatedAt":"2026-08-02T14:26:52.935Z"}}
+S1=cmsbw91fr000x1gu8t99omsha
+
+========================================================
+N12a POST /api/students own refs (positive)
+========================================================
+[N12a-PC] REQUEST: POST /api/students body={
+    "sectionId":  "cmsbw91fr000x1gu8t99omsha",
+    "admissionNumber":  "EVID-PC-0001",
+    "lastName":  "PC",
+    "classId":  "cmsbw8yzl000t1gu8rwwnszht",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva",
+    "firstName":  "Evidence"
+}
+[N12a-PC] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw92jl000z1gu858rizr93","schoolId":"seed_school_ea","userId":null,"admissionNumber":"EVID-PC-0001","firstName":"Evidence","lastName":"PC","dateOfBirth":null,"gender":null,"bloodGroup":null,"admissionDate":null,"photoUrl":null,"phone":null,"address":null,"siblings":[],"status":"ACTIVE","isDeleted":false,"academicYearId":null,"classId":null,"sectionId":null,"createdAt":"2026-08-02T14:26:54.369Z","updatedAt":"2026-08-02T14:26:54.369Z"}}
+ST1=cmsbw92jl000z1gu858rizr93
+
+========================================================
+N12b PATCH /api/students own refs (positive)
+========================================================
+[N12b-PC] REQUEST: PATCH /api/students/cmsbw92jl000z1gu858rizr93 body={
+    "rollNumber":  "7",
+    "classId":  "cmsbw8yzl000t1gu8rwwnszht",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva",
+    "sectionId":  "cmsbw91fr000x1gu8t99omsha"
+}
+[N12b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw92jl000z1gu858rizr93","schoolId":"seed_school_ea","userId":null,"admissionNumber":"EVID-PC-0001","firstName":"Evidence","lastName":"PC","dateOfBirth":null,"gender":null,"bloodGroup":null,"admissionDate":null,"photoUrl":null,"phone":null,"address":null,"siblings":[],"status":"ACTIVE","isDeleted":false,"academicYearId":null,"classId":null,"sectionId":null,"createdAt":"2026-08-02T14:26:54.369Z","updatedAt":"2026-08-02T14:26:57.441Z"}}
+
+========================================================
+N8 DELETE /api/students own student (positive archive)
+========================================================
+[N8-PC] REQUEST: DELETE /api/students/cmsbw92jl000z1gu858rizr93 body=
+[N8-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw92jl000z1gu858rizr93","schoolId":"seed_school_ea","userId":null,"admissionNumber":"EVID-PC-0001","firstName":"Evidence","lastName":"PC","dateOfBirth":null,"gender":null,"bloodGroup":null,"admissionDate":null,"photoUrl":null,"phone":null,"address":null,"siblings":[],"status":"ARCHIVED","isDeleted":true,"academicYearId":null,"classId":null,"sectionId":null,"createdAt":"2026-08-02T14:26:54.369Z","updatedAt":"2026-08-02T14:27:00.922Z"}}
+
+========================================================
+N1a PATCH /api/terms own term (positive)
+========================================================
+[N1a-PC] REQUEST: PATCH /api/terms?id=cmsbw9093000v1gu8qb699prb body={
+    "name":  "Evidence PC T1 Renamed"
+}
+[N1a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9093000v1gu8qb699prb","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC T1 Renamed","startDate":"2026-08-01T00:00:00.000Z","endDate":"2026-12-31T00:00:00.000Z","status":"ACTIVE","createdAt":"2026-08-02T14:26:51.399Z","updatedAt":"2026-08-02T14:27:02.254Z"}}
+
+========================================================
+N1b DELETE /api/terms own term (positive archive)
+========================================================
+[N1b-PC] REQUEST: DELETE /api/terms?id=cmsbw9093000v1gu8qb699prb body=
+[N1b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9093000v1gu8qb699prb","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC T1 Renamed","startDate":"2026-08-01T00:00:00.000Z","endDate":"2026-12-31T00:00:00.000Z","status":"INACTIVE","createdAt":"2026-08-02T14:26:51.399Z","updatedAt":"2026-08-02T14:27:03.581Z"}}
+
+========================================================
+N4a PATCH /api/sections own section (positive)
+========================================================
+[N4a-PC] REQUEST: PATCH /api/sections?id=cmsbw91fr000x1gu8t99omsha body={
+    "name":  "Evidence PC S1 Renamed"
+}
+[N4a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw91fr000x1gu8t99omsha","schoolId":"seed_school_ea","classId":"cmsbw8yzl000t1gu8rwwnszht","name":"Evidence PC S1 Renamed","description":null,"capacity":40,"room":null,"status":"ACTIVE","createdAt":"2026-08-02T14:26:52.935Z","updatedAt":"2026-08-02T14:27:05.019Z"}}
+
+========================================================
+N4b DELETE /api/sections own section (positive archive)
+========================================================
+[N4b-PC] REQUEST: DELETE /api/sections?id=cmsbw91fr000x1gu8t99omsha body=
+[N4b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw91fr000x1gu8t99omsha","schoolId":"seed_school_ea","classId":"cmsbw8yzl000t1gu8rwwnszht","name":"Evidence PC S1 Renamed","description":null,"capacity":40,"room":null,"status":"INACTIVE","createdAt":"2026-08-02T14:26:52.935Z","updatedAt":"2026-08-02T14:27:06.248Z"}}
+
+========================================================
+N2a PATCH /api/classes own class (positive)
+========================================================
+[N2a-PC] REQUEST: PATCH /api/classes?id=cmsbw8yzl000t1gu8rwwnszht body={
+    "name":  "Evidence PC C1 Renamed"
+}
+[N2a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw8yzl000t1gu8rwwnszht","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C1 Renamed","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ACTIVE","isDeleted":false,"createdAt":"2026-08-02T14:26:49.761Z","updatedAt":"2026-08-02T14:27:07.578Z","createdBy":"seed_user_admin","updatedBy":null}}
+
+========================================================
+N2b DELETE /api/classes own class (positive archive)
+========================================================
+[N2b-PC] REQUEST: DELETE /api/classes?id=cmsbw8yzl000t1gu8rwwnszht body=
+[N2b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw8yzl000t1gu8rwwnszht","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C1 Renamed","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ARCHIVED","isDeleted":true,"createdAt":"2026-08-02T14:26:49.761Z","updatedAt":"2026-08-02T14:27:09.012Z","createdBy":"seed_user_admin","updatedBy":null}}
+
+========================================================
+PC-C2 Create second own class (for N3 [id] path)
+========================================================
+[PC-C2] REQUEST: POST /api/classes body={
+    "name":  "Evidence PC C2",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva"
+}
+[PC-C2] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw9f10001a1gu852rrse5h","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C2","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ACTIVE","isDeleted":false,"createdAt":"2026-08-02T14:27:10.548Z","updatedAt":"2026-08-02T14:27:10.548Z","createdBy":"seed_user_admin","updatedBy":null}}
+C2=cmsbw9f10001a1gu852rrse5h
+
+========================================================
+N3a PATCH /api/classes/[id] own class (positive)
+========================================================
+[N3a-PC] REQUEST: PATCH /api/classes/cmsbw9f10001a1gu852rrse5h body={
+    "name":  "Evidence PC C2 Renamed"
+}
+[N3a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9f10001a1gu852rrse5h","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C2 Renamed","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ACTIVE","isDeleted":false,"createdAt":"2026-08-02T14:27:10.548Z","updatedAt":"2026-08-02T14:27:11.982Z","createdBy":"seed_user_admin","updatedBy":null}}
+
+========================================================
+N3b DELETE /api/classes/[id] own empty class (positive archive)
+========================================================
+[N3b-PC] REQUEST: DELETE /api/classes/cmsbw9f10001a1gu852rrse5h body=
+[N3b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9f10001a1gu852rrse5h","schoolId":"seed_school_ea","academicYearId":"cmsbw8xne000r1gu83qyn9gva","name":"Evidence PC C2 Renamed","displayName":null,"gradeLevel":null,"description":null,"sortOrder":0,"status":"ARCHIVED","isDeleted":true,"createdAt":"2026-08-02T14:27:10.548Z","updatedAt":"2026-08-02T14:27:13.622Z","createdBy":"seed_user_admin","updatedBy":"seed_user_admin"}}
+
+========================================================
+PC-Y2 Create second own empty year (for N7 [id] path)
+========================================================
+[PC-Y2] REQUEST: POST /api/academic-years body={
+    "startDate":  "2027-06-01",
+    "name":  "Evidence PC Y2",
+    "endDate":  "2028-03-31",
+    "isActive":  false
+}
+[PC-Y2] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw9ich001e1gu8gd7qrcvf","schoolId":"seed_school_ea","name":"Evidence PC Y2","startDate":"2027-06-01T00:00:00.000Z","endDate":"2028-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"ACTIVE","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:27:14.849Z","updatedAt":"2026-08-02T14:27:14.849Z"}}
+Y2=cmsbw9ich001e1gu8gd7qrcvf
+
+========================================================
+N6a PATCH /api/academic-years own year (positive)
+========================================================
+[N6a-PC] REQUEST: PATCH /api/academic-years?id=cmsbw8xne000r1gu83qyn9gva body={
+    "name":  "Evidence PC Y1 Renamed"
+}
+[N6a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw8xne000r1gu83qyn9gva","schoolId":"seed_school_ea","name":"Evidence PC Y1 Renamed","startDate":"2026-08-01T00:00:00.000Z","endDate":"2027-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"ACTIVE","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:26:48.026Z","updatedAt":"2026-08-02T14:27:16.385Z"}}
+
+========================================================
+N6b DELETE /api/academic-years own year (positive archive)
+========================================================
+[N6b-PC] REQUEST: DELETE /api/academic-years?id=cmsbw8xne000r1gu83qyn9gva body=
+[N6b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw8xne000r1gu83qyn9gva","schoolId":"seed_school_ea","name":"Evidence PC Y1 Renamed","startDate":"2026-08-01T00:00:00.000Z","endDate":"2027-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"COMPLETED","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:26:48.026Z","updatedAt":"2026-08-02T14:27:18.331Z"}}
+
+========================================================
+N7a PATCH /api/academic-years/[id] own year (positive)
+========================================================
+[N7a-PC] REQUEST: PATCH /api/academic-years/cmsbw9ich001e1gu8gd7qrcvf body={
+    "name":  "Evidence PC Y2 Renamed"
+}
+[N7a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9ich001e1gu8gd7qrcvf","schoolId":"seed_school_ea","name":"Evidence PC Y2 Renamed","startDate":"2027-06-01T00:00:00.000Z","endDate":"2028-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"ACTIVE","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:27:14.849Z","updatedAt":"2026-08-02T14:27:19.764Z"}}
+
+========================================================
+N7b DELETE /api/academic-years/[id] own empty year (positive archive)
+========================================================
+[N7b-PC] REQUEST: DELETE /api/academic-years/cmsbw9ich001e1gu8gd7qrcvf body=
+[N7b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9ich001e1gu8gd7qrcvf","schoolId":"seed_school_ea","name":"Evidence PC Y2 Renamed","startDate":"2027-06-01T00:00:00.000Z","endDate":"2028-03-31T00:00:00.000Z","isActive":false,"isCurrent":false,"status":"COMPLETED","createdBy":"seed_user_admin","updatedBy":null,"createdAt":"2026-08-02T14:27:14.849Z","updatedAt":"2026-08-02T14:27:21.505Z"}}
+
+========================================================
+PC-SUB Create own subject (for N5)
+========================================================
+[PC-SUB] REQUEST: POST /api/subjects body={
+    "code":  "EVIDPC",
+    "name":  "Evidence PC Subject"
+}
+[PC-SUB] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw9ofj001k1gu8vl5m09wy","schoolId":"seed_school_ea","name":"Evidence PC Subject","code":"EVIDPC","description":null,"isActive":true,"createdAt":"2026-08-02T14:27:22.735Z","updatedAt":"2026-08-02T14:27:22.735Z"}}
+SUB1=cmsbw9ofj001k1gu8vl5m09wy
+
+========================================================
+N5a PATCH /api/subjects own subject (positive)
+========================================================
+[N5a-PC] REQUEST: PATCH /api/subjects?id=cmsbw9ofj001k1gu8vl5m09wy body={
+    "name":  "Evidence PC Subject Renamed"
+}
+[N5a-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9ofj001k1gu8vl5m09wy","schoolId":"seed_school_ea","name":"Evidence PC Subject Renamed","code":"EVIDPC","description":null,"isActive":true,"createdAt":"2026-08-02T14:27:22.735Z","updatedAt":"2026-08-02T14:27:24.066Z"}}
+
+========================================================
+N5b DELETE /api/subjects own subject (positive archive)
+========================================================
+[N5b-PC] REQUEST: DELETE /api/subjects?id=cmsbw9ofj001k1gu8vl5m09wy body=
+[N5b-PC] RESPONSE: HTTP 200 body={"success":true,"data":{"id":"cmsbw9ofj001k1gu8vl5m09wy","schoolId":"seed_school_ea","name":"Evidence PC Subject Renamed","code":"EVIDPC","description":null,"isActive":false,"createdAt":"2026-08-02T14:27:22.735Z","updatedAt":"2026-08-02T14:27:25.192Z"}}
+
+========================================================
+N13 PATCH /api/subjects/[id] assign with own refs (positive)
+========================================================
+[N13-PC] REQUEST: PATCH /api/subjects/seed_sub_mat body={
+    "teacherMembershipId":  "seed_mem_admin",
+    "classId":  "cmsbw8yzl000t1gu8rwwnszht",
+    "academicYearId":  "cmsbw8xne000r1gu83qyn9gva",
+    "action":  "assign",
+    "sectionId":  "cmsbw91fr000x1gu8t99omsha"
+}
+[N13-PC] RESPONSE: HTTP 201 body={"success":true,"data":{"id":"cmsbw9s7z001o1gu8mxu1h14p","schoolId":"seed_school_ea","subjectId":"seed_sub_mat","academicYearId":"cmsbw8xne000r1gu83qyn9gva","classId":"cmsbw8yzl000t1gu8rwwnszht","sectionId":"cmsbw91fr000x1gu8t99omsha","teacherMembershipId":"seed_mem_admin","status":"ACTIVE","assignedAt":"2026-08-02T14:27:27.647Z","removedAt":null,"createdAt":"2026-08-02T14:27:27.647Z","updatedAt":"2026-08-02T14:27:27.647Z"}}
+
+========================================================
+N9 NOTE
+========================================================
+N9 (crud-demo DELETE) has no positive control: SCHOOL_ADMIN is not granted schools:delete, so the permission gate blocks every tenant role before the (now school-scoped) archive closure is reached. The hardened guard is dead code for tenant roles; verified by code inspection only.
+
+DONE

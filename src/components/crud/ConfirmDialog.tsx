@@ -22,18 +22,18 @@ export function ConfirmDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onClick={onCancel}>
-      <div className="mx-4 w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div className="mx-4 w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
         <div className={cn(
           'mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full',
-          variant === 'destructive' ? 'bg-rose-100 dark:bg-rose-900/20' : 'bg-cli-emerald/10'
+          variant === 'destructive' ? 'bg-muted/60' : 'bg-muted/60'
         )}>
-          <AlertTriangle className={cn('h-6 w-6', variant === 'destructive' ? 'text-rose-600 dark:text-rose-400' : 'text-cli-emerald')} />
+          <AlertTriangle className={cn('h-6 w-6', variant === 'destructive' ? 'text-foreground' : 'text-foreground')} />
         </div>
         <h3 className="text-lg font-bold text-center text-foreground">{title}</h3>
         <p className="mt-2 text-sm text-center text-muted-foreground">{message}</p>
         <div className="mt-6 flex gap-3">
           <Button variant="outline" className="flex-1" onClick={onCancel}>Cancel</Button>
-          <Button className={cn('flex-1', variant === 'destructive' ? 'bg-rose-600 hover:bg-rose-700 text-white' : 'bg-cli-emerald hover:bg-cli-emerald/80 text-foreground')} onClick={onConfirm}>
+          <Button className={cn('flex-1', variant === 'destructive' ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-primary text-primary-foreground hover:bg-primary/90')} onClick={onConfirm}>
             {confirmLabel}
           </Button>
         </div>

@@ -104,13 +104,13 @@ export function ParentAttendanceClient({
             label: 'Late',
             value: child.summary.late,
             icon: Clock,
-            color: 'text-amber-500',
+            color: 'text-muted-foreground',
           },
           {
             label: 'Absent',
             value: child.summary.absent,
             icon: X,
-            color: 'text-rose-500',
+            color: 'text-foreground',
           },
         ].map((s) => (
           <div
@@ -151,10 +151,10 @@ export function ParentAttendanceClient({
                     r.status === 'PRESENT'
                       ? 'bg-cli-emerald'
                       : r.status === 'LATE'
-                        ? 'bg-amber-500'
+                        ? 'bg-muted-foreground'
                         : r.status === 'ABSENT'
-                          ? 'bg-rose-500'
-                          : 'bg-slate-400'
+                          ? 'bg-foreground'
+                          : 'bg-muted-foreground'
                   )}
                 />
                 <div>
@@ -174,10 +174,10 @@ export function ParentAttendanceClient({
                   r.status === 'PRESENT'
                     ? 'text-cli-emerald'
                     : r.status === 'LATE'
-                      ? 'text-amber-500'
+                      ? 'text-muted-foreground'
                       : r.status === 'ABSENT'
-                        ? 'text-rose-500'
-                        : 'text-slate-400'
+                        ? 'text-foreground'
+                        : 'text-muted-foreground'
                 )}
               >
                 {r.status}

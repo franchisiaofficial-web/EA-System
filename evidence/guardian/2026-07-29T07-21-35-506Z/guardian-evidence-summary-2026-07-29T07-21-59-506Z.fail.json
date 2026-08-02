@@ -1,0 +1,15 @@
+{
+  "studentId": "",
+  "admissionNumber": "",
+  "guardianIds": [],
+  "screenshots": [],
+  "screenshotManifest": [],
+  "networkRequests": [],
+  "notes": [],
+  "scenarios": {},
+  "result": "PARTIAL",
+  "runTimestamp": "2026-07-29T07:21:59.506Z",
+  "failures": [
+    "locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: /continue to dashboard/i }) to be visible\u001b[22m\n"
+  ]
+}

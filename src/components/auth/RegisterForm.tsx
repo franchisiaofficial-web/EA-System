@@ -169,7 +169,7 @@ export function RegisterForm() {
       <Button
         type="submit"
         disabled={loading}
-        className="h-11 w-full bg-cli-blue hover:bg-cli-blue/80 text-white font-medium"
+        className="h-11 w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
       >
         {loading ? (
           <>

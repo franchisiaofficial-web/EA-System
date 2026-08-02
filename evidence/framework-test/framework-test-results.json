@@ -1,0 +1,21 @@
+{
+  "passed": 14,
+  "failed": 0,
+  "overall": "PASS",
+  "results": [
+    "  ✓ A1a: no duplicates in normal run",
+    "  ✓ A1b: unexpected duplicate detected",
+    "  ✓ A1b: reason is 'Unexpected duplicate image'",
+    "  ✓ A1c: restored — no duplicates",
+    "  ✓ A2a: detected invalid index range (end < start)",
+    "  ✓ A2b: detected out-of-range index",
+    "  ✓ A3a: missing file detected",
+    "  ✓ A4a: empty file size = 0",
+    "  ✓ A5a: hash changes after modification",
+    "  ✓ A6a: expected duplicate PASSes (allow-listed G4B/G4C)",
+    "  ✓ A6a: reason is 'Allow-listed duplicate'",
+    "  ✓ A6b: unexpected duplicate FAILs (not on allow-list)",
+    "  ✓ A6c: invalid allow-list entry (fake files don't exist)",
+    "  ✓ A6d: hash mismatch — files no longer identical, not detected as duplicate"
+  ]
+}

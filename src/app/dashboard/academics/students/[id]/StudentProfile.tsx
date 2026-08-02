@@ -2,10 +2,19 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Pencil, Trash2, ArrowLeft, Search, Plus, Star, Link, UserPlus, AlertTriangle } from "lucide-react";
+import { Pencil, Trash2, ArrowLeft, Search, Plus, Star, Link, UserPlus, AlertTriangle, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const STATUS_CHIP: Record<string, string> = {
+  ACTIVE: "text-cli-emerald bg-cli-emerald/10",
+  PROMOTED: "text-cli-blue bg-cli-blue/10",
+  PASSED_OUT: "text-cli-amber bg-cli-amber/10",
+  TRANSFERRED: "text-cli-cyan bg-cli-cyan/10",
+  GRADUATED: "text-cli-purple bg-cli-purple/10",
+  WITHDRAWN: "text-muted-foreground bg-muted/40",
+};
 
 interface GuardianLink {
   id: string;
@@ -25,15 +34,39 @@ interface ProfileData {
   gender: string | null;
   phone: string | null;
   address: string | null;
+  bloodGroup: string | null;
+  admissionDate: string | null;
   status: string;
+  siblings: {
+    name: string;
+    admissionNo?: string;
+    age?: number;
+    gender?: string;
+    className?: string;
+    relationship?: string;
+    schoolName?: string;
+    notes?: string;
+    reason?: string;
+  }[];
   enrollments: {
     id: string;
-    rollNumber: string;
+    rollNumber: string | null;
     status: string;
     enrolledAt: string;
     academicYear: string;
     className: string;
     sectionName: string;
+    classTeacher: string | null;
+  }[];
+  passedOut: {
+    id: string;
+    batch: string;
+    passedOutDate: string;
+    graduationReason: string | null;
+    finalAcademicYear: string;
+    finalClassName: string | null;
+    finalSectionName: string | null;
+    finalRollNumber: string | null;
   }[];
   guardians: GuardianLink[];
 }
@@ -270,6 +303,11 @@ export function StudentProfile({
             </h1>
             <p className="text-sm font-mono text-muted-foreground">
               {data.admissionNumber} &bull; {data.status}
+              {data.status === "PASSED_OUT" && (
+                <span className="ml-2 inline-flex items-center gap-1 text-[10px] font-mono text-cli-amber bg-cli-amber/10 px-2 py-0.5 rounded-md">
+                  <GraduationCap className="h-3 w-3" />Passed Out
+                </span>
+              )}
             </p>
           </div>
         </div>
@@ -281,7 +319,7 @@ export function StudentProfile({
           )}
           {canArchive && (
             <Button variant="ghost" size="sm" onClick={() => setDeleteConfirm(true)}>
-              <Trash2 className="h-4 w-4 mr-1 text-rose-500" />Archive
+              <Trash2 className="h-4 w-4 mr-1 text-foreground" />Archive
             </Button>
           )}
         </div>
@@ -292,24 +330,86 @@ export function StudentProfile({
         <div className="rounded-xl border border-border bg-card p-6">
           <h2 className="text-sm font-mono text-muted-foreground uppercase mb-4">Personal Information</h2>
           <dl className="space-y-3">
-            {[["Name", `${data.firstName} ${data.lastName}`], ["Admission #", data.admissionNumber], ["Date of Birth", data.dateOfBirth || "—"], ["Gender", data.gender || "—"], ["Phone", data.phone || "—"], ["Address", data.address || "—"]].map(([label, value]) => (
-              <div key={label} className="flex justify-between"><dt className="text-sm text-muted-foreground">{label}</dt><dd className="text-sm font-medium text-foreground">{value}</dd></div>
+            {[["Name", `${data.firstName} ${data.lastName}`], ["Admission #", data.admissionNumber], ["Admission Date", data.admissionDate || "—"], ["Date of Birth", data.dateOfBirth || "—"], ["Gender", data.gender || "—"], ["Blood Group", data.bloodGroup || "—"], ["Phone", data.phone || "—"]].map(([label, value]) => (
+              <div key={label} className="flex justify-between gap-3"><dt className="text-sm text-muted-foreground shrink-0">{label}</dt><dd className="text-sm font-medium text-foreground text-right">{value}</dd></div>
             ))}
+            {data.address ? (
+              <div className="pt-2 border-t border-border">
+                <dt className="text-sm text-muted-foreground mb-1">Address</dt>
+                <dd className="text-sm font-medium text-foreground whitespace-pre-line break-words">{data.address}</dd>
+              </div>
+            ) : (
+              <div className="flex justify-between"><dt className="text-sm text-muted-foreground">Address</dt><dd className="text-sm font-medium text-foreground">—</dd></div>
+            )}
           </dl>
         </div>
         <div className="rounded-xl border border-border bg-card p-6">
-          <h2 className="text-sm font-mono text-muted-foreground uppercase mb-4">Enrollments</h2>
-          {data.enrollments.length === 0 ? <p className="text-sm text-muted-foreground">No enrollments yet.</p> : (
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-mono text-muted-foreground uppercase">Academic Information</h2>
+            {data.status === "PASSED_OUT" && (
+              <span className="inline-flex items-center gap-1 text-[10px] font-mono text-cli-amber bg-cli-amber/10 px-2 py-0.5 rounded-md"><GraduationCap className="h-3 w-3" />Passed Out</span>
+            )}
+          </div>
+          {data.enrollments.length === 0 ? (
             <div className="space-y-3">
-              {data.enrollments.map((e) => (
-                <div key={e.id} className="flex justify-between items-start border-b border-border pb-2 last:border-0">
-                  <div><p className="text-sm font-medium text-foreground">{e.academicYear} — {e.className} ({e.sectionName})</p><p className="text-xs text-muted-foreground font-mono">Roll: {e.rollNumber} &bull; {e.status}</p></div>
+              <p className="text-sm font-medium text-foreground">No Academic Assignment</p>
+              <p className="text-xs text-muted-foreground">This student is not assigned to any grade or section.</p>
+              {canEdit && (
+                <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/academics/students/${data.id}/edit`)}>
+                  Assign Enrollment
+                </Button>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {(() => {
+                const active = data.enrollments.find(e => e.status === "ACTIVE");
+                return active ? (
+                  <div className="space-y-2.5 rounded-lg border border-cli-emerald/20 bg-cli-emerald/5 p-4">
+                    <dl className="space-y-2">
+                      {[["Academic Year", active.academicYear], ["Class", active.className], ["Section", active.sectionName || "—"], ["Roll Number", active.rollNumber || "—"], ["Class Teacher", active.classTeacher || "—"], ["Enrollment Status", active.status]].map(([label, value]) => (
+                        <div key={label} className="flex justify-between gap-3"><dt className="text-xs text-muted-foreground shrink-0">{label}</dt><dd className="text-sm font-medium text-foreground text-right">{value}</dd></div>
+                      ))}
+                    </dl>
+                  </div>
+                ) : null;
+              })()}
+              <div>
+                <h3 className="text-[11px] font-mono font-semibold text-muted-foreground uppercase tracking-wider mb-2">Promotion History</h3>
+                <div className="space-y-2">
+                  {data.enrollments.map((e) => (
+                    <div key={e.id} className="flex items-center justify-between gap-2 border-b border-border pb-2 last:border-0">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground">{e.academicYear} — {e.className} ({e.sectionName})</p>
+                        <p className="text-xs text-muted-foreground font-mono">Roll: {e.rollNumber ?? "—"} &bull; Joined {new Date(e.enrolledAt).toLocaleDateString()}</p>
+                      </div>
+                      <span className={cn("inline-flex shrink-0 items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono", STATUS_CHIP[e.status] ?? "bg-muted/40 text-muted-foreground")}>{e.status}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           )}
         </div>
       </div>
+
+      {/* Passed Out Record */}
+      {data.passedOut.length > 0 && (
+        <div className="rounded-xl border border-border bg-card p-6">
+          <h2 className="text-sm font-mono text-muted-foreground uppercase mb-4">Passed Out Record</h2>
+          <div className="space-y-3">
+            {data.passedOut.map((p) => (
+              <div key={p.id} className="border-b border-border pb-2 last:border-0 space-y-1.5">
+                <p className="text-sm font-medium text-foreground">Batch {p.batch} — {new Date(p.passedOutDate).toLocaleDateString()}</p>
+                <p className="text-xs text-muted-foreground font-mono">
+                  Final: {p.finalAcademicYear} &bull; {p.finalClassName ?? "—"} {p.finalSectionName ? `(${p.finalSectionName})` : ""} &bull; Roll {p.finalRollNumber ?? "—"}
+                </p>
+                {p.graduationReason && <p className="text-xs text-muted-foreground">{p.graduationReason}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Guardians */}
       <div className="rounded-xl border border-border bg-card p-6">
@@ -349,7 +449,7 @@ export function StudentProfile({
                       </Button>
                     )}
                     <Button variant="ghost" size="xs" onClick={() => setUnlinkGuardian({ id: g.id, name: `${g.firstName} ${g.lastName}` })} title="Remove">
-                      <Trash2 className="h-3.5 w-3.5 text-rose-500" />
+                      <Trash2 className="h-3.5 w-3.5 text-foreground" />
                     </Button>
                   </div>
                 )}
@@ -432,7 +532,7 @@ export function StudentProfile({
               </div>
               <div className="flex gap-2 mt-3">
                 <Button size="sm" onClick={() => createAndLinkGuardian(false)} disabled={creating}
-                  className="bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium">
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
                   <UserPlus className="h-3.5 w-3.5 mr-1" />
                   {creating ? "Adding..." : "Add Guardian"}
                 </Button>
@@ -443,6 +543,28 @@ export function StudentProfile({
                 )}
               </div>
             </div>
+          </div>
+        )}
+      </div>
+
+      {/* Siblings */}
+      <div className="rounded-xl border border-border bg-card p-6">
+        <h2 className="text-sm font-mono text-muted-foreground uppercase mb-4">Siblings</h2>
+        {data.siblings.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No siblings recorded.</p>
+        ) : (
+          <div className="space-y-3">
+            {data.siblings.map((s, i) => (
+              <div key={i} className="flex justify-between items-center border-b border-border pb-2 last:border-0">
+                <div>
+                  <p className="text-sm font-medium text-foreground">{s.name}{s.relationship ? ` · ${s.relationship}` : ""}</p>
+                  <p className="text-xs text-muted-foreground font-mono">
+                    {[s.admissionNo ? `Adm ${s.admissionNo}` : null, s.schoolName, s.age != null ? `Age ${s.age}` : null, s.gender, s.reason].filter(Boolean).join(" · ") || "—"}
+                  </p>
+                  {s.notes && <p className="text-xs text-muted-foreground mt-0.5">{s.notes}</p>}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>
@@ -468,7 +590,7 @@ export function StudentProfile({
             </div>
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1" onClick={cancelDuplicate}>Cancel</Button>
-              <Button className="flex-1 bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium" onClick={confirmDuplicateLink}>
+              <Button className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" onClick={confirmDuplicateLink}>
                 <Link className="h-3.5 w-3.5 mr-1" />Link Existing
               </Button>
             </div>
@@ -489,7 +611,7 @@ export function StudentProfile({
             <p className="text-sm text-muted-foreground mb-5">This student already has a Primary Guardian. The current Primary Guardian will become a secondary guardian. Do you want to continue?</p>
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1" onClick={() => setReplacePrimary(null)}>Cancel</Button>
-              <Button className="flex-1 bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium" onClick={handleReplacePrimary}>Replace Primary</Button>
+              <Button className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" onClick={handleReplacePrimary}>Replace Primary</Button>
             </div>
           </div>
         </div>
@@ -500,15 +622,15 @@ export function StudentProfile({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
           <div className="mx-4 w-full max-w-sm rounded-2xl border border-border/60 bg-card p-6 shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-rose-500/10">
-                <Trash2 className="h-5 w-5 text-rose-500" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/60">
+                <Trash2 className="h-5 w-5 text-foreground" />
               </div>
               <h3 className="font-semibold text-foreground">Remove Guardian?</h3>
             </div>
             <p className="text-sm text-muted-foreground mb-5">This removes the relationship only. {unlinkGuardian.name}&apos;s record will remain in the system.</p>
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1" onClick={() => setUnlinkGuardian(null)}>Cancel</Button>
-              <Button className="flex-1 bg-rose-500 hover:bg-rose-600 text-white font-medium" onClick={handleUnlink}>Remove Guardian</Button>
+              <Button className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" onClick={handleUnlink}>Remove Guardian</Button>
             </div>
           </div>
         </div>
@@ -527,7 +649,7 @@ export function StudentProfile({
             <p className="text-sm text-muted-foreground mb-5">Archive this student? Their record will be preserved but hidden from default lists.</p>
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1" onClick={() => setDeleteConfirm(false)}>Cancel</Button>
-              <Button className="flex-1 bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium" onClick={handleArchive}>Archive</Button>
+              <Button className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground font-medium" onClick={handleArchive}>Archive</Button>
             </div>
           </div>
         </div>

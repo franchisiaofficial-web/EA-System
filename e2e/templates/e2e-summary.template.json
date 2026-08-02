@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "generatedAt": null,
+  "overall": "NOT_EXECUTED",
+  "scenarios": {},
+  "screenshots": [],
+  "network": [],
+  "validationErrors": [],
+  "duplicateScreenshots": [],
+  "accessibility": { "executed": false, "reason": "Not yet executed" },
+  "performance": {}
+}

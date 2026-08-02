@@ -65,11 +65,11 @@ function getStatusColor(status: string) {
     case 'PRESENT':
       return 'bg-cli-emerald/10 text-foreground dark:text-cli-emerald border-cli-emerald/30';
     case 'LATE':
-      return 'bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 border-amber-200 dark:border-amber-800';
+      return 'bg-muted/40 text-muted-foreground border-border';
     case 'ABSENT':
-      return 'bg-rose-50 text-rose-700 dark:bg-rose-900/20 dark:text-rose-400 border-rose-200 dark:border-rose-800';
+      return 'bg-muted/40 text-foreground border-border';
     case 'EXCUSED':
-      return 'bg-slate-50 text-slate-500 dark:bg-slate-900/20 dark:text-slate-400 border-slate-200 dark:border-slate-800';
+      return 'bg-muted/40 text-muted-foreground border-border';
     default:
       return '';
   }
@@ -84,17 +84,19 @@ function getDateStr(): string {
 export function TeacherAttendanceClient({
   schoolId,
   initialClassId,
+  initialDate,
   initialData,
 }: {
   schoolId: string;
   initialClassId: string | null;
+  initialDate?: string;
   initialData: InitialData;
 }) {
   const router = useRouter();
   const [selectedClassId, setSelectedClassId] = useState<string | null>(
     initialClassId
   );
-  const [selectedDate, setSelectedDate] = useState(getDateStr());
+  const [selectedDate, setSelectedDate] = useState(initialDate ?? getDateStr());
   const [saving, setSaving] = useState(false);
 
   const [optimisticRecords, addOptimistic] = useOptimistic<OptimisticRecord[]>(
@@ -300,9 +302,9 @@ export function TeacherAttendanceClient({
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         {[
           { label: 'Present', count: stats.present, color: 'text-cli-emerald' },
-          { label: 'Late', count: stats.late, color: 'text-amber-500' },
-          { label: 'Absent', count: stats.absent, color: 'text-rose-500' },
-          { label: 'Excused', count: stats.excused, color: 'text-slate-400' },
+          { label: 'Late', count: stats.late, color: 'text-muted-foreground' },
+          { label: 'Absent', count: stats.absent, color: 'text-foreground' },
+          { label: 'Excused', count: stats.excused, color: 'text-muted-foreground' },
           {
             label: 'Unmarked',
             count: stats.unmarked,
@@ -325,7 +327,7 @@ export function TeacherAttendanceClient({
         <div className="flex flex-wrap gap-2">
           <Button
             size="sm"
-            className="bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
             onClick={() => handleBulk('PRESENT')}
             disabled={saving}
             aria-label="Mark all remaining as present"
@@ -335,7 +337,7 @@ export function TeacherAttendanceClient({
           </Button>
           <Button
             size="sm"
-            className="bg-amber-500 hover:bg-amber-600 text-white font-medium"
+            className="bg-muted-foreground hover:bg-primary/90 text-primary-foreground font-medium"
             onClick={() => handleBulk('LATE')}
             disabled={saving}
             aria-label="Mark all remaining as late"
@@ -344,7 +346,7 @@ export function TeacherAttendanceClient({
           </Button>
           <Button
             size="sm"
-            className="bg-rose-500 hover:bg-rose-600 text-white font-medium"
+            className="bg-foreground hover:bg-primary/90 text-primary-foreground font-medium"
             onClick={() => handleBulk('ABSENT')}
             disabled={saving}
             aria-label="Mark all remaining as absent"
@@ -404,7 +406,7 @@ export function TeacherAttendanceClient({
                   optRec?.pending ? 'opacity-60' : '',
                   status
                     ? 'bg-transparent'
-                    : 'bg-amber-50/30 dark:bg-amber-900/5'
+                    : 'bg-muted/30'
                 )}
                 role="row"
               >
@@ -432,7 +434,7 @@ export function TeacherAttendanceClient({
                       {status}
                     </span>
                   ) : (
-                    <span className="text-xs text-amber-600 dark:text-amber-400 font-mono">
+                    <span className="text-xs text-muted-foreground font-mono">
                       Unmarked
                     </span>
                   )}

@@ -30,7 +30,9 @@ export async function markAttendanceAction(data: {
   const authCtx = await getCtx();
   await requirePermission(authCtx, 'attendance_records', 'create');
   const ctx = toRequestContext(authCtx);
-  const result = await markAttendance(data, authCtx, ctx);
+  // Phase 1.5 tenant isolation: schoolId is NEVER client-supplied; it is
+  // derived from the authenticated session.
+  const result = await markAttendance({ ...data, schoolId: authCtx.schoolId }, authCtx, ctx);
   revalidatePath('/dashboard/teacher/attendance');
   return result;
 }
@@ -48,7 +50,9 @@ export async function bulkMarkAttendanceAction(data: {
   const authCtx = await getCtx();
   await requirePermission(authCtx, 'attendance_records', 'create');
   const ctx = toRequestContext(authCtx);
-  await bulkMarkAttendance(data, authCtx, ctx);
+  // Phase 1.5 tenant isolation: schoolId is NEVER client-supplied; it is
+  // derived from the authenticated session.
+  await bulkMarkAttendance({ ...data, schoolId: authCtx.schoolId }, authCtx, ctx);
   revalidatePath('/dashboard/teacher/attendance');
 }
 

@@ -31,7 +31,7 @@ export function HeaderUserMenu({ authCtx }: { authCtx: AuthContext }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="h-7 w-7 rounded-full bg-cli-emerald/20 flex items-center justify-center text-xs font-mono font-bold text-foreground hover:bg-cli-emerald/30 transition-colors"
+        className="h-7 w-7 rounded-lg bg-muted flex items-center justify-center text-xs font-mono font-bold text-foreground hover:bg-foreground/[0.2] transition-colors"
         aria-label="User menu"
         aria-expanded={open}
       >
@@ -39,10 +39,10 @@ export function HeaderUserMenu({ authCtx }: { authCtx: AuthContext }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-2 w-56 rounded-lg border border-border bg-card shadow-lg z-50">
-          <div className="px-3 py-2.5">
+        <div className="absolute right-0 top-full mt-2 w-56 rounded-xl border border-border bg-card shadow-2xl shadow-black/40 z-50">
+          <div className="px-4 py-3 border-b border-border">
             <div className="flex items-center gap-2">
-              <div className="h-7 w-7 rounded-full bg-cli-emerald/20 flex items-center justify-center text-xs font-mono font-bold text-foreground shrink-0">
+              <div className="h-7 w-7 rounded-lg bg-muted flex items-center justify-center text-xs font-mono font-bold text-foreground shrink-0">
                 {authCtx.email.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0">
@@ -50,14 +50,11 @@ export function HeaderUserMenu({ authCtx }: { authCtx: AuthContext }) {
                   {authCtx.email}
                 </p>
                 <p className="text-[10px] text-muted-foreground font-mono uppercase">
-                  {authCtx.role.replace(/_/g, ' ')}
+                  {authCtx.role.replace(/_/g, " ")}
                 </p>
               </div>
             </div>
           </div>
-
-          <div className="border-t border-border" />
-
           <div className="p-1.5">
             <LogoutButton />
           </div>

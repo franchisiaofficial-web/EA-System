@@ -87,7 +87,7 @@ export function CrudDemoForm() {
         />
 
         <div className="flex gap-3 pt-2">
-          <Button type="submit" disabled={loading} className="bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium">
+          <Button type="submit" disabled={loading} className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium">
             {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1.5" /> : null}
             Create Item
           </Button>

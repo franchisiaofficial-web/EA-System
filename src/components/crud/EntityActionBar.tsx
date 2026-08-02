@@ -22,7 +22,7 @@ export function EntityActionBar({
       <div className="flex items-center gap-2">
         {createHref && (
           <Link href={createHref}>
-            <Button className="bg-cli-emerald hover:bg-cli-emerald/80 text-foreground font-medium gap-1.5">
+            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium gap-1.5">
               <Plus className="h-4 w-4" />New {entityLabel}
             </Button>
           </Link>

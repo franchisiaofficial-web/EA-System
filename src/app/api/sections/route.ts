@@ -7,7 +7,10 @@ import type { Section, Prisma } from '@/generated/prisma/client';
 import { z } from 'zod';
 
 const createSchema = z.object({
+  classId: z.string().min(1),
   name: z.string().min(1),
+  capacity: z.number().int().optional(),
+  room: z.string().optional(),
   description: z.string().optional(),
 });
 
@@ -19,16 +22,24 @@ export async function GET(req: NextRequest) {
     const sp = req.nextUrl.searchParams;
     const page = Math.max(1, parseInt(sp.get('page') || '1'));
     const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('pageSize') || '10')));
-    const search = sp.get('search') || '';
+    const search = sp.get("search") || "";
+    const classId = sp.get("classId") || undefined;
     const requestCtx = toRequestContext(authCtx);
 
     const result = await withRls(requestCtx, async (tx) => {
       const where: Prisma.SectionWhereInput = {
         schoolId: authCtx.schoolId,
-        ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
+        ...(search ? {
+          OR: [
+            { name: { contains: search, mode: "insensitive" as const } },
+            { class: { name: { contains: search, mode: "insensitive" as const } } },
+            { class: { academicYear: { name: { contains: search, mode: "insensitive" as const } } } },
+          ],
+        } : {}),
+        ...(classId ? { classId } : {}),
       };
       const [items, total] = await Promise.all([
-        tx.section.findMany({ where, skip: (page - 1) * pageSize, take: pageSize, orderBy: { name: 'asc' } }),
+        tx.section.findMany({ where, skip: (page - 1) * pageSize, take: pageSize, orderBy: { name: "asc" }, include: { class: { select: { id: true, name: true, displayName: true } }, _count: { select: { studentEnrollments: true } } } }),
         tx.section.count({ where }),
       ]);
       return { items, total };
@@ -37,7 +48,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: { items: result.items, total: result.total, page, pageSize, totalPages: Math.ceil(result.total / pageSize) } });
   } catch (e) {
     if (e instanceof AuthorizationError) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: e.message } }, { status: 403 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('GET /api/sections error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -49,19 +61,24 @@ export async function POST(req: NextRequest) {
     const result = await runSimpleMutation<typeof parsed, Section>({
       resource: 'sections', action: 'create', input: parsed,
       execute: async (data, { authCtx: ac, requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.section.create({
-          data: { schoolId: ac.schoolId, name: data.name, description: data.description ?? null },
-        }));
+        return withRls(rc, async (tx) => {
+          const cls = await tx.class.findFirst({ where: { id: data.classId, schoolId: ac.schoolId }, select: { id: true } });
+          if (!cls) throw new AuthorizationError('Class not found in this school');
+          return tx.section.create({
+            data: { schoolId: ac.schoolId, classId: data.classId, name: data.name, capacity: data.capacity ?? 40, room: data.room ?? null, description: data.description ?? null },
+          });
+        });
       },
       getEntityId: (r) => r.id,
-      buildAfter: (r) => ({ name: r.name }),
+      buildAfter: (r) => ({ name: r.name, classId: r.classId }),
     });
 
     if (!result.success) return NextResponse.json(result, { status: result.error?.code === 'FORBIDDEN' ? 403 : 400 });
     return NextResponse.json({ success: true, data: result.data }, { status: 201 });
   } catch (e) {
     if (e instanceof z.ZodError) return NextResponse.json({ success: false, error: { code: 'VALIDATION', message: e.message } }, { status: 400 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('POST /api/sections error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -74,8 +91,12 @@ export async function PATCH(req: NextRequest) {
 
     const result = await runSimpleMutation<typeof parsed, Section>({
       resource: 'sections', action: 'update', input: parsed,
-      execute: async (data, { requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.section.update({ where: { id }, data }));
+      execute: async (data, { authCtx: ac, requestCtx: rc }) => {
+        return withRls(rc, async (tx) => {
+          const existing = await tx.section.findFirst({ where: { id, schoolId: ac.schoolId }, select: { id: true } });
+          if (!existing) throw new AuthorizationError('Section not found in this school');
+          return tx.section.update({ where: { id }, data });
+        });
       },
       getEntityId: () => id,
       buildAfter: (r) => ({ name: r.name }),
@@ -85,7 +106,8 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(result);
   } catch (e) {
     if (e instanceof z.ZodError) return NextResponse.json({ success: false, error: { code: 'VALIDATION', message: e.message } }, { status: 400 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('PATCH /api/sections error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -96,8 +118,12 @@ export async function DELETE(req: NextRequest) {
 
     const result = await runSimpleMutation<string, Section>({
       resource: 'sections', action: 'archive', input: id,
-      execute: async (entityId, { requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.section.update({ where: { id: entityId }, data: { status: 'INACTIVE' } }));
+      execute: async (entityId, { authCtx: ac, requestCtx: rc }) => {
+        return withRls(rc, async (tx) => {
+          const existing = await tx.section.findFirst({ where: { id: entityId, schoolId: ac.schoolId }, select: { id: true } });
+          if (!existing) throw new AuthorizationError('Section not found in this school');
+          return tx.section.update({ where: { id: entityId }, data: { status: 'INACTIVE' } });
+        });
       },
       getEntityId: () => id,
       buildAfter: () => ({ status: 'INACTIVE' }),
@@ -106,6 +132,7 @@ export async function DELETE(req: NextRequest) {
     if (!result.success) return NextResponse.json(result, { status: result.error?.code === 'FORBIDDEN' ? 403 : 400 });
     return NextResponse.json(result);
   } catch (e) {
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('DELETE /api/sections error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }

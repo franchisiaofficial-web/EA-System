@@ -1,0 +1,10 @@
+{
+  "E1": { "name": "Student Lifecycle", "enabled": false },
+  "E2": { "name": "Guardian Lifecycle", "enabled": false },
+  "E3": { "name": "Cross Tenant", "enabled": false },
+  "E4": { "name": "Search", "enabled": false },
+  "E5": { "name": "Validation", "enabled": false },
+  "E6": { "name": "Error Handling", "enabled": false },
+  "E7": { "name": "Accessibility", "enabled": false },
+  "E8": { "name": "Performance", "enabled": false }
+}

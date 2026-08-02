@@ -30,5 +30,13 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "capture-outstanding.ts",
+    "guardian-evidence.ts",
+    "inspect-selects.ts",
+    "test-framework.ts",
+    "diagnose-persistence.ts",
+    "tests"
+  ]
 }

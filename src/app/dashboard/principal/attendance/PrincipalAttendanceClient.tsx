@@ -69,7 +69,7 @@ export function PrincipalAttendanceClient({
 
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
-            <Clock className="h-3 w-3 text-amber-500" />
+            <Clock className="h-3 w-3 text-muted-foreground" />
             <p className="text-xs text-muted-foreground font-mono uppercase">
               Late
             </p>
@@ -79,7 +79,7 @@ export function PrincipalAttendanceClient({
 
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
-            <X className="h-3 w-3 text-rose-500" />
+            <X className="h-3 w-3 text-foreground" />
             <p className="text-xs text-muted-foreground font-mono uppercase">
               Absent
             </p>
@@ -91,7 +91,7 @@ export function PrincipalAttendanceClient({
 
         <div className="rounded-xl border border-border bg-card p-4">
           <div className="flex items-center gap-2">
-            <Minus className="h-3 w-3 text-slate-400" />
+            <Minus className="h-3 w-3 text-muted-foreground" />
             <p className="text-xs text-muted-foreground font-mono uppercase">
               Excused
             </p>

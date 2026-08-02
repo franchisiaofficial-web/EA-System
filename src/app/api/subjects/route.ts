@@ -38,7 +38,8 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ success: true, data: { items: result.items, total: result.total, page, pageSize, totalPages: Math.ceil(result.total / pageSize) } });
   } catch (e) {
     if (e instanceof AuthorizationError) return NextResponse.json({ success: false, error: { code: 'FORBIDDEN', message: e.message } }, { status: 403 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('GET /api/subjects error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -62,7 +63,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: result.data }, { status: 201 });
   } catch (e) {
     if (e instanceof z.ZodError) return NextResponse.json({ success: false, error: { code: 'VALIDATION', message: e.message } }, { status: 400 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('POST /api/subjects error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -75,8 +77,12 @@ export async function PATCH(req: NextRequest) {
 
     const result = await runSimpleMutation<typeof parsed, Subject>({
       resource: 'subjects', action: 'update', input: parsed,
-      execute: async (data, { requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.subject.update({ where: { id }, data }));
+      execute: async (data, { authCtx: ac, requestCtx: rc }) => {
+        return withRls(rc, async (tx) => {
+          const existing = await tx.subject.findFirst({ where: { id, schoolId: ac.schoolId }, select: { id: true } });
+          if (!existing) throw new AuthorizationError('Subject not found in this school');
+          return tx.subject.update({ where: { id }, data });
+        });
       },
       getEntityId: () => id,
       buildAfter: (r) => ({ name: r.name, code: r.code }),
@@ -86,7 +92,8 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json(result);
   } catch (e) {
     if (e instanceof z.ZodError) return NextResponse.json({ success: false, error: { code: 'VALIDATION', message: e.message } }, { status: 400 });
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('PATCH /api/subjects error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }
 
@@ -97,8 +104,12 @@ export async function DELETE(req: NextRequest) {
 
     const result = await runSimpleMutation<string, Subject>({
       resource: 'subjects', action: 'archive', input: id,
-      execute: async (entityId, { requestCtx: rc }) => {
-        return withRls(rc, async (tx) => tx.subject.update({ where: { id: entityId }, data: { isActive: false } }));
+      execute: async (entityId, { authCtx: ac, requestCtx: rc }) => {
+        return withRls(rc, async (tx) => {
+          const existing = await tx.subject.findFirst({ where: { id: entityId, schoolId: ac.schoolId }, select: { id: true } });
+          if (!existing) throw new AuthorizationError('Subject not found in this school');
+          return tx.subject.update({ where: { id: entityId }, data: { isActive: false } });
+        });
       },
       getEntityId: () => id,
       buildAfter: () => ({ isActive: false }),
@@ -107,6 +118,7 @@ export async function DELETE(req: NextRequest) {
     if (!result.success) return NextResponse.json(result, { status: result.error?.code === 'FORBIDDEN' ? 403 : 400 });
     return NextResponse.json(result);
   } catch (e) {
-    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: (e as Error).message } }, { status: 500 });
+    console.error('DELETE /api/subjects error:', e);
+    return NextResponse.json({ success: false, error: { code: 'INTERNAL', message: 'An unexpected error occurred' } }, { status: 500 });
   }
 }

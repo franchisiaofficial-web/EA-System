@@ -1,0 +1,2273 @@
+{
+  "studentId": "cms5mal3300001su8wnshn0xy",
+  "admissionNumber": "GCHK-MS5MAHNY",
+  "guardianIds": [
+    "cms5mavie00021su839d04mzg",
+    "cms5mbny4000b1su8ql4p4t0r"
+  ],
+  "screenshots": [
+    "G0-student-profile.png",
+    "G1-guardian-created.png",
+    "G2-link-existing.png",
+    "G3-after-second-create.png",
+    "G4A-duplicate-dialog.png",
+    "G4B-after-cancel.png",
+    "G4C-form-preserved.png",
+    "G4D-retry-dialog.png",
+    "G4E-linked-existing.png",
+    "G5-primary-replaced.png",
+    "G6-after-unlink.png",
+    "G7-final-state.png",
+    "B4A-edit-archived.png",
+    "B4B-add-guardian-archived.png",
+    "B4C-replace-primary-archived.png",
+    "B4D-archive-again.png",
+    "B5-error-500.png",
+    "B1-duplicate-admission.png",
+    "B2-not-found.png",
+    "B3-validation.png"
+  ],
+  "networkRequests": [
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 201,
+      "timestamp": "2026-07-29T05:01:32.201Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:01:48.633Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 201,
+      "timestamp": "2026-07-29T05:01:57.618Z",
+      "requestBody": {
+        "action": "create",
+        "firstName": "Seed",
+        "lastName": "Existing",
+        "relationship": "Father",
+        "phone": "555-SEED-MS5MB1TD",
+        "isPrimary": false
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mb3nm00051su8yj4gpdfz",
+          "linked": true,
+          "created": true,
+          "isPrimary": false,
+          "guardian": {
+            "id": "cms5mb3nm00051su8yj4gpdfz",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS5MB1TD"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians/cms5mb3nm00051su8yj4gpdfz",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:00.296Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mb3nm00051su8yj4gpdfz",
+          "unlinked": true,
+          "wasPrimary": false
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians?search=Seed",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:08.808Z",
+      "responseBody": {
+        "success": true,
+        "data": [
+          {
+            "id": "cms4r8wov0005x4u8a781bo8n",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4R8VRZ",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4rawwy0005oku8fjc2gmqj",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4RAVTL",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4reh8a0005eku8l9zbdgey",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4REGCC",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4ri42t0005f8u8na5aavzp",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4RI2W6",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4rl5ef0005t4u8iinqbl2r",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4RL4R1",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4rnw7800058su8uelnilrr",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4RNV3W",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4s1tb80005q4u8em83p5wx",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4S1S7B",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4s4j7q0005uou8bmerbj8m",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4S4I46",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4s7fno0005d8u8ic8f3ciz",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4S7ERE",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4saf6n0005j8u8r6uvxur4",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4SAEI5",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4sdmhi0005uku84mg7tuma",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4SDKLB",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4si6ra0005w4u82daik90x",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4SI5UJ",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4snfu80005nsu8wu1e64vr",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4SNEZH",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4sy5qs0005fou8teylm2qc",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4SY4UU",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4tdu2d000534u8ock267bk",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4TDT4K",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4tr5d600057ku8hfi3tqcs",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4TR44I",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4u0hne0005y0u8mi8r9sb1",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4U0GR0",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4us6wd0005w4u8of0i25a1",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4US5YO",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4uyeti0005tgu8hpfp7y7j",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4UYDY3",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          },
+          {
+            "id": "cms4r2hc50005n8u8gzssyc2n",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS4R2GG5",
+            "email": null,
+            "isLinked": false,
+            "isPrimary": false,
+            "linkId": null
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:10.906Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:15.568Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:24.540Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 201,
+      "timestamp": "2026-07-29T05:02:29.552Z",
+      "requestBody": {
+        "action": "create",
+        "firstName": "Dup",
+        "lastName": "Unlinked",
+        "relationship": "Guardian",
+        "phone": "555-DUP-MS5MBSI0",
+        "isPrimary": false
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mbt76000e1su8gunnjncs",
+          "linked": true,
+          "created": true,
+          "isPrimary": false,
+          "guardian": {
+            "id": "cms5mbt76000e1su8gunnjncs",
+            "firstName": "Dup",
+            "lastName": "Unlinked",
+            "relationship": "Guardian",
+            "phone": "555-DUP-MS5MBSI0"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians/cms5mbt76000e1su8gunnjncs",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:30.926Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mbt76000e1su8gunnjncs",
+          "unlinked": true,
+          "wasPrimary": false
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:33.279Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:38.421Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mbt76000e1su8gunnjncs",
+          "linked": false,
+          "created": false,
+          "existingGuardian": {
+            "id": "cms5mbt76000e1su8gunnjncs",
+            "firstName": "Dup",
+            "lastName": "Unlinked"
+          },
+          "message": "Existing guardian found with this phone number"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:41.471Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:42.782Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mbt76000e1su8gunnjncs",
+          "linked": false,
+          "created": false,
+          "existingGuardian": {
+            "id": "cms5mbt76000e1su8gunnjncs",
+            "firstName": "Dup",
+            "lastName": "Unlinked"
+          },
+          "message": "Existing guardian found with this phone number"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 201,
+      "timestamp": "2026-07-29T05:02:44.369Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5mbt76000e1su8gunnjncs",
+          "linked": true,
+          "created": true,
+          "isPrimary": false,
+          "guardian": {
+            "id": "cms5mbt76000e1su8gunnjncs",
+            "firstName": "Dup",
+            "lastName": "Unlinked",
+            "relationship": "Guardian",
+            "phone": "555-DUP-MS5MBSI0"
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:48.367Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:54.775Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:02:56.290Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:02:13.004Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:01:45.760Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians/cms4r8wov0005x4u8a781bo8n",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:00.563Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms4r8wov0005x4u8a781bo8n",
+          "isPrimary": true,
+          "previousPrimaryDemoted": true
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:06.871Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:03:00.303Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:03:00.198Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:12.600Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:03:00.303Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mavts00031su8ivble9jb",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mavie00021su839d04mzg",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:01:45.760Z",
+              "updatedAt": "2026-07-29T05:03:00.198Z",
+              "guardian": {
+                "id": "cms5mavie00021su839d04mzg",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5MASSN",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:01:45.350Z",
+                "updatedAt": "2026-07-29T05:01:45.350Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians/cms5mavie00021su839d04mzg",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:18.956Z"
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:23.459Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:03:00.303Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:30.746Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mal3300001su8wnshn0xy",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5MAHNY",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:01:31.839Z",
+          "updatedAt": "2026-07-29T05:01:31.839Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5mbguk00091su8aa2w284i",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms4r8wov0005x4u8a781bo8n",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T05:02:13.004Z",
+              "updatedAt": "2026-07-29T05:03:00.303Z",
+              "guardian": {
+                "id": "cms4r8wov0005x4u8a781bo8n",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Seed",
+                "lastName": "Existing",
+                "relationship": "Father",
+                "phone": "555-SEED-MS4R8VRZ",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-28T14:32:25.471Z",
+                "updatedAt": "2026-07-28T14:32:25.471Z"
+              }
+            },
+            {
+              "id": "cms5mbo3t000c1su8o5k2vylk",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbny4000b1su8ql4p4t0r",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:22.409Z",
+              "updatedAt": "2026-07-29T05:02:22.409Z",
+              "guardian": {
+                "id": "cms5mbny4000b1su8ql4p4t0r",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Bob",
+                "lastName": "Jones",
+                "relationship": "Father",
+                "phone": "555-G2-MS5MBM37",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:22.204Z",
+                "updatedAt": "2026-07-29T05:02:22.204Z"
+              }
+            },
+            {
+              "id": "cms5mc4no000i1su8h17ulaec",
+              "studentId": "cms5mal3300001su8wnshn0xy",
+              "guardianId": "cms5mbt76000e1su8gunnjncs",
+              "isPrimary": false,
+              "createdAt": "2026-07-29T05:02:43.860Z",
+              "updatedAt": "2026-07-29T05:02:43.860Z",
+              "guardian": {
+                "id": "cms5mbt76000e1su8gunnjncs",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Dup",
+                "lastName": "Unlinked",
+                "relationship": "Guardian",
+                "phone": "555-DUP-MS5MBSI0",
+                "email": null,
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T05:02:29.010Z",
+                "updatedAt": "2026-07-29T05:02:29.010Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:46.682Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mdc92000m1su8kxr8d1g9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "B4-MS5MD82B",
+          "firstName": "Archive",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B4",
+          "address": null,
+          "status": "ARCHIVED",
+          "isDeleted": true,
+          "createdAt": "2026-07-29T05:03:40.359Z",
+          "updatedAt": "2026-07-29T05:03:46.389Z"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 403,
+      "timestamp": "2026-07-29T05:03:51.933Z",
+      "requestBody": {
+        "firstName": "Hacked"
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Cannot edit an archived student"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 200,
+      "timestamp": "2026-07-29T05:03:54.093Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mdc92000m1su8kxr8d1g9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "B4-MS5MD82B",
+          "firstName": "Archive",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B4",
+          "address": null,
+          "status": "ARCHIVED",
+          "isDeleted": true,
+          "createdAt": "2026-07-29T05:03:40.359Z",
+          "updatedAt": "2026-07-29T05:03:46.389Z",
+          "enrollments": [],
+          "guardians": []
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9/guardians",
+      "status": 403,
+      "timestamp": "2026-07-29T05:03:57.918Z",
+      "requestBody": {
+        "action": "create",
+        "firstName": "B4-G",
+        "lastName": "Blocked",
+        "relationship": "Father",
+        "phone": "555-B4B-MS5MDP7M",
+        "isPrimary": false
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Cannot modify guardians of an archived student"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 200,
+      "timestamp": "2026-07-29T05:04:00.420Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mdc92000m1su8kxr8d1g9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "B4-MS5MD82B",
+          "firstName": "Archive",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B4",
+          "address": null,
+          "status": "ARCHIVED",
+          "isDeleted": true,
+          "createdAt": "2026-07-29T05:03:40.359Z",
+          "updatedAt": "2026-07-29T05:03:46.389Z",
+          "enrollments": [],
+          "guardians": []
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9/guardians",
+      "status": 403,
+      "timestamp": "2026-07-29T05:04:01.752Z",
+      "requestBody": {
+        "action": "link",
+        "guardianId": "cms5mavie00021su839d04mzg",
+        "relationship": "Guardian",
+        "isPrimary": true
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Cannot modify guardians of an archived student"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 200,
+      "timestamp": "2026-07-29T05:04:03.815Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mdc92000m1su8kxr8d1g9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "B4-MS5MD82B",
+          "firstName": "Archive",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B4",
+          "address": null,
+          "status": "ARCHIVED",
+          "isDeleted": true,
+          "createdAt": "2026-07-29T05:03:40.359Z",
+          "updatedAt": "2026-07-29T05:03:46.389Z",
+          "enrollments": [],
+          "guardians": []
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 409,
+      "timestamp": "2026-07-29T05:04:08.102Z",
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "CONFLICT",
+          "message": "Student is already archived"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5mdc92000m1su8kxr8d1g9",
+      "status": 200,
+      "timestamp": "2026-07-29T05:04:11.589Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5mdc92000m1su8kxr8d1g9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "B4-MS5MD82B",
+          "firstName": "Archive",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B4",
+          "address": null,
+          "status": "ARCHIVED",
+          "isDeleted": true,
+          "createdAt": "2026-07-29T05:03:40.359Z",
+          "updatedAt": "2026-07-29T05:03:46.389Z",
+          "enrollments": [],
+          "guardians": []
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/test-error?mode=500",
+      "status": 500,
+      "timestamp": "2026-07-29T05:04:12.709Z"
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 201,
+      "timestamp": "2026-07-29T05:04:17.401Z",
+      "requestBody": {
+        "firstName": "DupA",
+        "lastName": "Test",
+        "admissionNumber": "DUP-MS5ME33N",
+        "dateOfBirth": "2014-01-01",
+        "gender": "Male",
+        "phone": "555-B1A"
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5me4al000p1su89y072old",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "DUP-MS5ME33N",
+          "firstName": "DupA",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B1A",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:04:16.702Z",
+          "updatedAt": "2026-07-29T05:04:16.702Z"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 201,
+      "timestamp": "2026-07-29T05:04:17.401Z",
+      "requestBody": {
+        "admissionNumber": "DUP-MS5ME33N"
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5me4al000p1su89y072old",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "DUP-MS5ME33N",
+          "firstName": "DupA",
+          "lastName": "Test",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-B1A",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T05:04:16.702Z",
+          "updatedAt": "2026-07-29T05:04:16.702Z"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:18.642Z",
+      "requestBody": {
+        "firstName": "DupB",
+        "lastName": "Test",
+        "admissionNumber": "DUP-MS5ME33N",
+        "dateOfBirth": "2014-01-01",
+        "gender": "Female",
+        "phone": "555-B1B"
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "INTERNAL",
+          "message": "\nInvalid `(tx)=>tx.student.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\.next\\dev\\server\\chunks\\[root-of-the-server]__1efv3_m._.js:2446:207\n\n  2443 action: 'create',\n  2444 input: parsed,\n  2445 execute: async (data, { authCtx: ac, requestCtx: rc })=>{\n→ 2446     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2f$rls$2d$middleware$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\"withRls\"])(rc, async (tx)=>tx.student.create(\nUnique constraint failed on the (not available)"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:18.642Z",
+      "requestBody": {
+        "admissionNumber": "DUP-MS5ME33N"
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "INTERNAL",
+          "message": "\nInvalid `(tx)=>tx.student.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\.next\\dev\\server\\chunks\\[root-of-the-server]__1efv3_m._.js:2446:207\n\n  2443 action: 'create',\n  2444 input: parsed,\n  2445 execute: async (data, { authCtx: ac, requestCtx: rc })=>{\n→ 2446     return (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2f$rls$2d$middleware$2e$ts__$5b$app$2d$route$5d$__$28$ecmascript$29$__[\"withRls\"])(rc, async (tx)=>tx.student.create(\nUnique constraint failed on the (not available)"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms00000000000000000000",
+      "status": 404,
+      "timestamp": "2026-07-29T05:04:22.660Z",
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Student not found"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/students/cms00000000000000000000",
+      "status": 200,
+      "timestamp": "2026-07-29T05:04:26.070Z",
+      "requestBody": {
+        "firstName": "Hack"
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "notFound": true
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms00000000000000000000",
+      "status": 403,
+      "timestamp": "2026-07-29T05:04:28.282Z",
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Student not found"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:28.516Z",
+      "requestBody": {
+        "firstName": "No",
+        "lastName": ""
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"lastName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"admissionNumber\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:28.516Z",
+      "requestBody": {
+        "lastName": ""
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"lastName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  },\n  {\n    \"expected\": \"string\",\n    \"code\": \"invalid_type\",\n    \"path\": [\n      \"admissionNumber\"\n    ],\n    \"message\": \"Invalid input: expected string, received undefined\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:28.548Z",
+      "requestBody": {
+        "firstName": "A",
+        "lastName": "B",
+        "admissionNumber": ""
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"admissionNumber\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:28.548Z",
+      "requestBody": {
+        "admissionNumber": ""
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"admissionNumber\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:29.418Z",
+      "requestBody": {
+        "action": "create",
+        "firstName": "",
+        "lastName": "",
+        "relationship": "Father",
+        "phone": "555-B3"
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"firstName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"lastName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5mal3300001su8wnshn0xy/guardians",
+      "status": 400,
+      "timestamp": "2026-07-29T05:04:29.418Z",
+      "requestBody": {
+        "firstName": ""
+      },
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "VALIDATION",
+          "message": "[\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"firstName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  },\n  {\n    \"origin\": \"string\",\n    \"code\": \"too_small\",\n    \"minimum\": 1,\n    \"inclusive\": true,\n    \"path\": [\n      \"lastName\"\n    ],\n    \"message\": \"Too small: expected string to have >=1 characters\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cross-tenant-nonexistent",
+      "status": 404,
+      "timestamp": "2026-07-29T05:04:31.966Z",
+      "responseBody": {
+        "success": false,
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Student not found"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/students/cross-tenant-nonexistent",
+      "status": 200,
+      "timestamp": "2026-07-29T05:04:33.390Z",
+      "requestBody": {
+        "firstName": "Hack"
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "notFound": true
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "scenarios": {
+    "G0": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 1,
+      "networkIdxEnd": 1
+    },
+    "G1": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 2,
+      "networkIdxEnd": 2
+    },
+    "G2": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 7,
+      "networkIdxEnd": 7
+    },
+    "G4": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 16,
+      "networkIdxEnd": 16
+    },
+    "G5": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 20,
+      "networkIdxEnd": 20
+    },
+    "G6": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 23,
+      "networkIdxEnd": 23
+    },
+    "G7": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 24,
+      "networkIdxEnd": 24
+    },
+    "B4": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 33,
+      "networkIdxEnd": 33
+    },
+    "B5_500": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 34,
+      "networkIdxEnd": 34
+    },
+    "B1": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 38,
+      "networkIdxEnd": 38
+    },
+    "B2": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 41,
+      "networkIdxEnd": 41
+    },
+    "B3": {
+      "status": "PASS",
+      "screenshots": [],
+      "networkIdxStart": 47,
+      "networkIdxEnd": 47
+    }
+  },
+  "result": "PARTIAL",
+  "runTimestamp": "2026-07-29T05:04:33.393Z",
+  "studentVerified": true,
+  "httpStatusVerified": true,
+  "guardianCreatedVerified": true,
+  "linkExistingVerified": true,
+  "duplicateWorkflowVerified": true,
+  "primaryTransferVerified": true,
+  "unlinkVerified": true,
+  "databaseVerified": true,
+  "uiVerified": true,
+  "archiveProtectionVerified": true,
+  "error500Verified": true,
+  "duplicateAdmissionVerified": true,
+  "notFoundVerified": true,
+  "validationVerified": true,
+  "failures": [
+    "FAIL: B5 PATCH: Expected 404/403, got 200"
+  ]
+}

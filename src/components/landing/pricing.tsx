@@ -73,7 +73,7 @@ export function Pricing() {
               className={cn(
                 'px-4 py-1.5 text-sm font-medium rounded-md transition-colors',
                 !annual
-                  ? 'bg-cli-blue text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : 'bg-muted text-muted-foreground'
               )}
             >
@@ -84,7 +84,7 @@ export function Pricing() {
               className={cn(
                 'px-4 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-1.5',
                 annual
-                  ? 'bg-cli-blue text-white'
+                  ? 'bg-primary text-primary-foreground'
                   : 'bg-muted text-muted-foreground'
               )}
             >
@@ -93,7 +93,7 @@ export function Pricing() {
                 <motion.span
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-[10px] bg-white/20 px-1.5 py-0.5 rounded"
+                  className="text-[10px] bg-muted px-1.5 py-0.5 rounded"
                 >
                   Save 20%
                 </motion.span>
@@ -116,7 +116,7 @@ export function Pricing() {
               )}
             >
               {tier.highlighted && (
-                <span className="absolute -top-3 right-4 bg-cli-blue text-white text-xs px-2 py-0.5 rounded">
+                <span className="absolute -top-3 right-4 bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded">
                   Popular
                 </span>
               )}
@@ -157,7 +157,7 @@ export function Pricing() {
                 variant={tier.highlighted ? 'default' : 'outline'}
                 className={cn(
                   'mt-8 w-full',
-                  tier.highlighted && 'bg-cli-blue hover:bg-cli-blue/90'
+                  tier.highlighted && 'bg-primary hover:bg-primary/90'
                 )}
               >
                 {tier.cta}

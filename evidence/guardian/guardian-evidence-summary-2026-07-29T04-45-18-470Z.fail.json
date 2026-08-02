@@ -1,0 +1,144 @@
+{
+  "studentId": "cms5loj9e0000qgu8xngbe5r9",
+  "admissionNumber": "GCHK-MS5LOAHU",
+  "guardianIds": [
+    "cms5lov8p0002qgu8dy7je1vm"
+  ],
+  "screenshots": [
+    "G0-student-profile.png",
+    "G1-guardian-created.png"
+  ],
+  "networkRequests": [
+    {
+      "method": "POST",
+      "url": "/api/students",
+      "status": 201,
+      "timestamp": "2026-07-29T04:44:23.682Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5loj9e0000qgu8xngbe5r9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5LOAHU",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T04:44:23.043Z",
+          "updatedAt": "2026-07-29T04:44:23.043Z"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "url": "/api/students/cms5loj9e0000qgu8xngbe5r9",
+      "status": 200,
+      "timestamp": "2026-07-29T04:44:50.127Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "id": "cms5loj9e0000qgu8xngbe5r9",
+          "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+          "userId": null,
+          "admissionNumber": "GCHK-MS5LOAHU",
+          "firstName": "Guardian",
+          "lastName": "Check",
+          "dateOfBirth": "2014-01-01T00:00:00.000Z",
+          "gender": "Male",
+          "photoUrl": null,
+          "phone": "555-GUARDIAN",
+          "address": null,
+          "status": "ACTIVE",
+          "isDeleted": false,
+          "createdAt": "2026-07-29T04:44:23.043Z",
+          "updatedAt": "2026-07-29T04:44:23.043Z",
+          "enrollments": [],
+          "guardians": [
+            {
+              "id": "cms5loviw0003qgu8y0pn01n3",
+              "studentId": "cms5loj9e0000qgu8xngbe5r9",
+              "guardianId": "cms5lov8p0002qgu8dy7je1vm",
+              "isPrimary": true,
+              "createdAt": "2026-07-29T04:44:38.936Z",
+              "updatedAt": "2026-07-29T04:44:38.936Z",
+              "guardian": {
+                "id": "cms5lov8p0002qgu8dy7je1vm",
+                "schoolId": "155bd282-f953-4f94-a248-401974eae361",
+                "userId": null,
+                "firstName": "Alice",
+                "lastName": "Smith",
+                "relationship": "Mother",
+                "phone": "555-G1-MS5LORGR",
+                "email": "",
+                "address": null,
+                "isActive": true,
+                "createdAt": "2026-07-29T04:44:38.569Z",
+                "updatedAt": "2026-07-29T04:44:38.569Z"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "url": "/api/students/cms5loj9e0000qgu8xngbe5r9/guardians",
+      "status": 201,
+      "timestamp": "2026-07-29T04:45:03.306Z",
+      "requestBody": {
+        "action": "create",
+        "firstName": "Seed",
+        "lastName": "Existing",
+        "relationship": "Father",
+        "phone": "555-SEED-MS5LPAQX",
+        "isPrimary": false
+      },
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5lpcsl0005qgu8o387lzmm",
+          "linked": true,
+          "created": true,
+          "isPrimary": false,
+          "guardian": {
+            "id": "cms5lpcsl0005qgu8o387lzmm",
+            "firstName": "Seed",
+            "lastName": "Existing",
+            "relationship": "Father",
+            "phone": "555-SEED-MS5LPAQX"
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/students/cms5loj9e0000qgu8xngbe5r9/guardians/cms5lpcsl0005qgu8o387lzmm",
+      "status": 200,
+      "timestamp": "2026-07-29T04:45:08.482Z",
+      "responseBody": {
+        "success": true,
+        "data": {
+          "guardianId": "cms5lpcsl0005qgu8o387lzmm",
+          "unlinked": true,
+          "wasPrimary": false
+        }
+      }
+    }
+  ],
+  "notes": [],
+  "scenarios": {},
+  "result": "PARTIAL",
+  "runTimestamp": "2026-07-29T04:45:18.470Z",
+  "studentVerified": true,
+  "httpStatusVerified": true,
+  "guardianCreatedVerified": true,
+  "failures": [
+    "FAIL: No Link buttons in search"
+  ]
+}

@@ -8,7 +8,7 @@ export function FinalCta() {
           One Platform. Every Department. Every School.
         </h2>
         <div className="flex flex-row gap-4 justify-center mt-8">
-          <Button className="bg-cli-blue text-white hover:bg-cli-blue/90">
+          <Button className="bg-primary text-primary-foreground hover:bg-cli-blue/90">
             Start Free Trial
           </Button>
           <Button variant="outline">Book a Live Demo</Button>

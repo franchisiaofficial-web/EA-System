@@ -12,7 +12,10 @@ function createAuthPrismaClient() {
       'DIRECT_URL environment variable is not set. Auth client requires a trusted privileged connection.'
     );
   }
-  const adapter = new PrismaPg({ connectionString });
+  const adapter = new PrismaPg({
+    connectionString,
+    max: Number(process.env.PRISMA_POOL_MAX) || 3,
+  });
   return new PrismaClient({ adapter });
 }
 

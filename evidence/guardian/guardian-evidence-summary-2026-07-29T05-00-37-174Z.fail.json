@@ -1,0 +1,14 @@
+{
+  "studentId": "",
+  "admissionNumber": "",
+  "guardianIds": [],
+  "screenshots": [],
+  "networkRequests": [],
+  "notes": [],
+  "scenarios": {},
+  "result": "PARTIAL",
+  "runTimestamp": "2026-07-29T05:00:37.174Z",
+  "failures": [
+    "locator.waitFor: Timeout 5000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('label').filter({ hasText: 'First Name' }).locator('..').locator('input,select,textarea').first() to be visible\u001b[22m\n"
+  ]
+}

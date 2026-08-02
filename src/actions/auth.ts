@@ -6,21 +6,21 @@ import { resolveAuthUser } from '@/lib/auth/resolve-auth-user';
 import { headers } from 'next/headers';
 
 const ROLE_REDIRECTS: Record<string, string> = {
-  SUPER_ADMIN: '/dashboard/super-admin',
-  SCHOOL_ADMIN: '/dashboard/admin',
-  PRINCIPAL: '/dashboard/principal',
-  VICE_PRINCIPAL: '/dashboard/vice-principal',
-  TEACHER: '/dashboard/teacher',
-  CLASS_TEACHER: '/dashboard/teacher',
-  STUDENT: '/dashboard/student',
-  PARENT: '/dashboard/parent',
-  ACCOUNTANT: '/dashboard/accountant',
-  HR: '/dashboard/hr',
-  TRANSPORT_MANAGER: '/dashboard/transport',
-  DRIVER: '/dashboard/driver',
-  LIBRARIAN: '/dashboard/library',
-  NON_TEACHING: '/dashboard/staff',
-  CAFETERIA_STAFF: '/dashboard/staff',
+  SUPER_ADMIN: '/dashboard',
+  SCHOOL_ADMIN: '/dashboard',
+  PRINCIPAL: '/dashboard',
+  VICE_PRINCIPAL: '/dashboard',
+  TEACHER: '/dashboard',
+  CLASS_TEACHER: '/dashboard',
+  STUDENT: '/dashboard',
+  PARENT: '/dashboard',
+  ACCOUNTANT: '/dashboard',
+  HR: '/dashboard',
+  TRANSPORT_MANAGER: '/dashboard',
+  DRIVER: '/dashboard',
+  LIBRARIAN: '/dashboard',
+  NON_TEACHING: '/dashboard',
+  CAFETERIA_STAFF: '/dashboard',
 };
 
 export async function getAuthRedirect(): Promise<{

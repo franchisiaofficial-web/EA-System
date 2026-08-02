@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Menu, X, Sun, Moon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "@/components/ui/theme-provider";
+import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
   { label: 'Features', href: '#features' },
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -35,16 +37,17 @@ export function Navbar() {
       className={cn(
         'sticky top-0 z-50 w-full transition-all duration-300',
         scrolled
-          ? 'bg-background/80 backdrop-blur-md border-b border-border shadow-sm'
+          ? 'bg-background/90 backdrop-blur-md border-b border-border'
           : 'bg-transparent'
       )}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
         <a
           href="#"
-          className="flex items-center gap-1.5 font-mono text-lg font-bold text-foreground"
+          className="flex items-center gap-2.5 font-mono text-lg font-bold text-foreground"
         >
-          ❯ EA System
+          <Image src="/logo.png" alt="EA System" width={28} height={28} className="rounded" />
+          EA System
         </a>
 
         <div className="hidden md:flex items-center gap-6">
@@ -74,18 +77,22 @@ export function Navbar() {
           </Button>
           <Button
             size="sm"
-            className="bg-cli-blue hover:bg-cli-blue/80 text-white font-mono text-sm"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-mono text-sm "
           >
             Book a Demo
           </Button>
-          <ThemeToggle />
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-colors">
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
         </div>
 
         <div className="flex md:hidden items-center gap-2">
-          <ThemeToggle />
+          <button onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="p-2 rounded-lg hover:bg-muted text-muted-foreground transition-colors">
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="p-2 rounded-lg border border-border hover:bg-muted transition-colors"
+            className="p-2 rounded-lg border border-border hover:bg-muted text-muted-foreground transition-colors"
             aria-label="Toggle menu"
           >
             {mobileOpen ? (
@@ -130,7 +137,7 @@ export function Navbar() {
                 </Button>
                 <Button
                   size="sm"
-                  className="bg-cli-blue hover:bg-cli-blue/80 text-white font-mono text-sm w-full"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold font-mono text-sm w-full "
                 >
                   Book a Demo
                 </Button>

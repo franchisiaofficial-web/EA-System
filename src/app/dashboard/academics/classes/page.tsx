@@ -11,8 +11,6 @@ export default async function ClassListPage() {
   return (
     <ClassList
       canCreate={hasPermission(authCtx.role, 'classes', 'create')}
-      canUpdate={hasPermission(authCtx.role, 'classes', 'update')}
-      canArchive={hasPermission(authCtx.role, 'classes', 'delete')}
     />
   );
 }

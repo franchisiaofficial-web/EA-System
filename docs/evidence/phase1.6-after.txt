@@ -1,0 +1,180 @@
+EA SYSTEM - PHASE 1.6 AUDIT EVIDENCE - N1-N13 AFTER FIX (identical request replays)
+Run: 2026-08-02  Auth: schooladmin@easystem.dev (School A)  Target: School B ids
+login: HTTP 200
+
+========================================================
+N1a PATCH /api/terms?id=fixture_term_b1 (foreign term rename)
+========================================================
+[N1a] REQUEST: PATCH /api/terms?id=fixture_term_b1 body={
+    "name":  "Evidence Renamed"
+}
+[N1a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Term not found in this school"}}
+
+========================================================
+N1b DELETE /api/terms?id=fixture_term_b1 (foreign term archive)
+========================================================
+[N1b] REQUEST: DELETE /api/terms?id=fixture_term_b1 body=
+[N1b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Term not found in this school"}}
+
+========================================================
+N2a PATCH /api/classes?id=fixture_cls_b_g01 (foreign class rename)
+========================================================
+[N2a] REQUEST: PATCH /api/classes?id=fixture_cls_b_g01 body={
+    "name":  "Evidence Renamed"
+}
+[N2a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+========================================================
+N2b DELETE /api/classes?id=fixture_cls_b_g01 (foreign class archive)
+========================================================
+[N2b] REQUEST: DELETE /api/classes?id=fixture_cls_b_g01 body=
+[N2b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+========================================================
+N3a PATCH /api/classes/fixture_cls_b_g01 (foreign class rename path)
+========================================================
+[N3a] REQUEST: PATCH /api/classes/fixture_cls_b_g01 body={
+    "name":  "Evidence Renamed"
+}
+[N3a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+========================================================
+N3b DELETE /api/classes/fixture_cls_b_g02 (foreign empty class archive)
+========================================================
+[N3b] REQUEST: DELETE /api/classes/fixture_cls_b_g02 body=
+[N3b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+========================================================
+N4a PATCH /api/sections?id=fixture_sec_b_g01_a (foreign section rename)
+========================================================
+[N4a] REQUEST: PATCH /api/sections?id=fixture_sec_b_g01_a body={
+    "name":  "Evidence Renamed"
+}
+[N4a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Section not found in this school"}}
+
+========================================================
+N4b DELETE /api/sections?id=fixture_sec_b_g01_a (foreign section archive)
+========================================================
+[N4b] REQUEST: DELETE /api/sections?id=fixture_sec_b_g01_a body=
+[N4b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Section not found in this school"}}
+
+========================================================
+N5a PATCH /api/subjects?id=fixture_sub_b_math (foreign subject rename)
+========================================================
+[N5a] REQUEST: PATCH /api/subjects?id=fixture_sub_b_math body={
+    "name":  "Evidence Renamed"
+}
+[N5a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Subject not found in this school"}}
+
+========================================================
+N5b DELETE /api/subjects?id=fixture_sub_b_math (foreign subject archive)
+========================================================
+[N5b] REQUEST: DELETE /api/subjects?id=fixture_sub_b_math body=
+[N5b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Subject not found in this school"}}
+
+========================================================
+N6a PATCH /api/academic-years?id=fixture_ay_b (foreign year rename)
+========================================================
+[N6a] REQUEST: PATCH /api/academic-years?id=fixture_ay_b body={
+    "name":  "Evidence Renamed"
+}
+[N6a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N6b DELETE /api/academic-years?id=fixture_ay_b (foreign year archive)
+========================================================
+[N6b] REQUEST: DELETE /api/academic-years?id=fixture_ay_b body=
+[N6b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N7a PATCH /api/academic-years/fixture_ay_b (foreign year rename path)
+========================================================
+[N7a] REQUEST: PATCH /api/academic-years/fixture_ay_b body={
+    "name":  "Evidence Renamed"
+}
+[N7a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N7b DELETE /api/academic-years/fixture_ay_b2 (foreign empty year archive)
+========================================================
+[N7b] REQUEST: DELETE /api/academic-years/fixture_ay_b2 body=
+[N7b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N8 DELETE /api/students/fixture_stu_b1 (foreign student archive)
+========================================================
+[N8] REQUEST: DELETE /api/students/fixture_stu_b1 body=
+[N8] RESPONSE: HTTP 404 body={"success":false,"error":{"code":"NOT_FOUND","message":"Student not found"}}
+
+========================================================
+N9 DELETE /api/crud-demo?id=fixture_crud_b1 (foreign crud demo archive)
+========================================================
+[N9] REQUEST: DELETE /api/crud-demo?id=fixture_crud_b1 body=
+[N9] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Role SCHOOL_ADMIN does not have delete permission on schools"}}
+
+========================================================
+N10a POST /api/classes (class referencing foreign academic year)
+========================================================
+[N10a] REQUEST: POST /api/classes body={
+    "name":  "Evidence N10",
+    "academicYearId":  "fixture_ay_b"
+}
+[N10a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N10b POST /api/terms (term referencing foreign academic year)
+========================================================
+[N10b] REQUEST: POST /api/terms body={
+    "startDate":  "2026-06-01",
+    "academicYearId":  "fixture_ay_b",
+    "name":  "Evidence N10",
+    "endDate":  "2026-12-31"
+}
+[N10b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N11 POST /api/sections (section referencing foreign class)
+========================================================
+[N11] REQUEST: POST /api/sections body={
+    "name":  "Evidence N11",
+    "classId":  "fixture_cls_b_g01"
+}
+[N11] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Class not found in this school"}}
+
+========================================================
+N12a POST /api/students (student enrollment with foreign refs)
+========================================================
+[N12a] REQUEST: POST /api/students body={
+    "sectionId":  "fixture_sec_b_g01_a",
+    "admissionNumber":  "EVIDENCE-N12A",
+    "lastName":  "N12",
+    "classId":  "fixture_cls_b_g01",
+    "academicYearId":  "fixture_ay_b",
+    "firstName":  "Evidence"
+}
+[N12a] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N12b PATCH /api/students/seed_stu_001296 (in-school student, foreign refs)
+========================================================
+[N12b] REQUEST: PATCH /api/students/seed_stu_001296 body={
+    "rollNumber":  "99",
+    "classId":  "fixture_cls_b_g01",
+    "academicYearId":  "fixture_ay_b",
+    "sectionId":  "fixture_sec_b_g01_a"
+}
+[N12b] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+========================================================
+N13 PATCH /api/subjects/seed_sub_mat action=assign (assignment with foreign refs)
+========================================================
+[N13] REQUEST: PATCH /api/subjects/seed_sub_mat body={
+    "teacherMembershipId":  "seed_mem_admin",
+    "classId":  "fixture_cls_b_g01",
+    "academicYearId":  "fixture_ay_b",
+    "action":  "assign",
+    "sectionId":  "fixture_sec_b_g01_a"
+}
+[N13] RESPONSE: HTTP 403 body={"success":false,"error":{"code":"FORBIDDEN","message":"Academic year not found in this school"}}
+
+DONE

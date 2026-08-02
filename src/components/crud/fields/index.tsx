@@ -203,7 +203,7 @@ export function SwitchField({
       </div>
       <label className="relative inline-flex items-center cursor-pointer">
         <input type="checkbox" className="sr-only peer" disabled={disabled} {...registration} />
-        <div className="w-9 h-5 bg-border rounded-full peer peer-checked:bg-cli-emerald peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all" />
+        <div className="w-9 h-5 bg-border rounded-full peer peer-checked:bg-cli-emerald peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-background after:rounded-full after:h-4 after:w-4 after:transition-all" />
       </label>
     </div>
   );

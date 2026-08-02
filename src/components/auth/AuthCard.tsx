@@ -16,7 +16,7 @@ export function AuthCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className={cn(
-        'w-full max-w-[420px] rounded-2xl border border-border/60 bg-card p-8 shadow-sm',
+        'w-full max-w-[420px] rounded-2xl border border-border bg-card p-8 shadow-[0_4px_24px_rgba(15,23,42,0.08)]',
         className
       )}
     >

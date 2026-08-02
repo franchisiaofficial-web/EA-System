@@ -1,0 +1,15 @@
+{
+  "studentId": "",
+  "admissionNumber": "",
+  "guardianIds": [],
+  "screenshots": [],
+  "screenshotManifest": [],
+  "networkRequests": [],
+  "notes": [],
+  "scenarios": {},
+  "result": "PARTIAL",
+  "runTimestamp": "2026-07-29T15:30:00.490Z",
+  "failures": [
+    "locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('input[name=email]')\u001b[22m\n"
+  ]
+}
