@@ -1,0 +1,29 @@
+SQL EXECUTED:
+
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+
+--- RAW DATABASE OUTPUT @ 2026-08-05T07:22:49.736Z | run=full-school-3.2b-lite ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2627_g01_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g02_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g03_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g04_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g05_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g06_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g07_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g08_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g09_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g10_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g11_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g12_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g13_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g14_a | assigned_rolls=120 | unique_rolls=120 | OK
+DUPLICATE-ROLL PASS=true

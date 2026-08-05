@@ -1,0 +1,42 @@
+Workers=1 trial started 2026-08-04T02:33:07.552Z
+=== Gap A (Workers=1) chunked trial 2026-08-04T02:57:20.859Z ===
+env PROMOTION_PROFILE=true, chunk size=200
+initial eligible=1457 (baseline 1457)
+chunk 1 start: processing 200, remaining after=1257 @ 2026-08-04T02:57:22.218Z
+chunk 1: promoted=100 passed=0 failed=100 retryable=1 collisionEvents=66 dur=132375ms avgPerStudent=662ms
+ERROR: PrismaClientKnownRequestError: 
+Invalid `p.enrollment.findMany()` invocation in
+D:\Startup\project-1\schoolos\docs\evidence\tmp-1.9-gapA-chunked.ts:47:37
+
+  44 
+  45 while (true) {
+  46   if (chunks >= 12) { L('SAFETY CAP reached (chunks>=12) — stopping.'); break; }
+→ 47   const rows = await p.enrollment.findMany(
+Can't reach database server at aws-1-ap-south-1.pooler.supabase.com
+    at Jr.handleRequestError (D:\Startup\project-1\schoolos\node_modules\@prisma\client\src\runtime\RequestHandler.ts:237:13)
+    at Jr.handleAndLogRequestError (D:\Startup\project-1\schoolos\node_modules\@prisma\client\src\runtime\RequestHandler.ts:183:12)
+    at Jr.request (D:\Startup\project-1\schoolos\node_modules\@prisma\client\src\runtime\RequestHandler.ts:152:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async a (D:\Startup\project-1\schoolos\node_modules\@prisma\client\src\runtime\getPrismaClient.ts:1014:24)
+    at async <anonymous> (D:\Startup\project-1\schoolos\docs\evidence\tmp-1.9-gapA-chunked.ts:47:18)=== Gap A (Workers=1) chunked trial v2 2026-08-04T06:39:22.094Z ===
+env PROMOTION_PROFILE=true, chunk size=200, maxChunks=12, wallCapMs=3300000
+initial eligible=1457 (baseline 1457)
+chunk 1 attempt 1: processing 200 @ 2026-08-04T06:39:28.623Z
+chunk 1 attempt 1: completed in 383265ms
+chunk 1: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=125 dur=383217ms avgPerStudent=1916ms failReasons={}
+chunk 2 attempt 1: processing 200 @ 2026-08-04T06:45:56.626Z
+chunk 2 attempt 1: completed in 590899ms
+chunk 2: promoted=192 passed=0 failed=8 retryable=2 collisionEvents=257 dur=590862ms avgPerStudent=2954ms failReasons={"Roll collision retry exhausted (1 attempts): Connection terminated unexpectedly":1,"Unexpected error (all changes rolled back): Can't reach database server at aws-1-ap-south-1.pooler.supabase.com":6,"Roll collision retry exhausted (1 attempts): \nInvalid `tx.enrollment.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:722:27\n\n  719 \n  720 await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });\n  721 const t3 = profilingEnabled() ? performance.now() : 0;\n→ 722 await tx.enrollment.create(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":1}
+chunk 3 attempt 1: processing 200 @ 2026-08-04T06:55:53.234Z
+chunk 3 attempt 1: completed in 1356101ms
+chunk 3: promoted=196 passed=0 failed=4 retryable=3 collisionEvents=398 dur=1356054ms avgPerStudent=6780ms failReasons={"Unexpected error (all changes rolled back): \nInvalid `tx.enrollment.update()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:570:23\n\n  567 // Close the current enrollment FIRST so the \"one ACTIVE enrollment per student\"\n  568 // partial unique constraint is satisfied before the new enrollment is created.\n  569 const tCloseSrc = profilingEnabled() ? performance.now() : 0;\n→ 570 await tx.enrollment.update(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":1,"Roll collision retry exhausted (1 attempts): \nInvalid `tx.enrollment.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:722:27\n\n  719 \n  720 await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });\n  721 const t3 = profilingEnabled() ? performance.now() : 0;\n→ 722 await tx.enrollment.create(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":3}
+chunk 4 attempt 1: processing 200 @ 2026-08-04T07:18:30.283Z
+chunk 4 attempt 1: completed in 388088ms
+chunk 4: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=518 dur=388067ms avgPerStudent=1940ms failReasons={}
+chunk 5 attempt 1: processing 200 @ 2026-08-04T07:25:01.037Z
+chunk 5 attempt 1: completed in 344908ms
+chunk 5: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=668 dur=344887ms avgPerStudent=1724ms failReasons={}
+chunk 6 attempt 1: processing 200 @ 2026-08-04T07:30:46.853Z
+chunk 6 attempt 1: completed in 286544ms
+chunk 6: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=823 dur=286514ms avgPerStudent=1433ms failReasons={}
+ALL CHUNKS DONE. wallMs=3370056 chunks=6 promoted=1188 passedOut=0 failed=12 retryable=5

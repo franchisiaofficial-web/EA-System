@@ -27,6 +27,7 @@ model School {
   academicYears      AcademicYear[]
   attendanceRecords  AttendanceRecord[]
   auditLogs          AuditLog[]
+  promotionJobs      PromotionJob[]
   classAssignments   ClassAssignment[]
   classEnrollments   ClassEnrollment[]
   classes            Class[]
@@ -297,26 +298,28 @@ model AuditLog {
 }
 
 model AcademicYear {
-  id          String              @id @default(cuid())
-  schoolId    String              @map("school_id")
-  name        String
-  startDate   DateTime            @map("start_date") @db.Date
-  endDate     DateTime            @map("end_date") @db.Date
-  isActive    Boolean             @default(false) @map("is_active")
-  isCurrent   Boolean             @default(false) @map("is_current")
-  status      AcademicYearStatus  @default(ACTIVE)
-  createdBy   String?             @map("created_by")
-  updatedBy   String?             @map("updated_by")
-  createdAt   DateTime            @default(now()) @map("created_at")
-  updatedAt   DateTime            @updatedAt @map("updated_at")
-  school      School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  classes     Class[]
-  terms       Term[]
+  id                 String              @id @default(cuid())
+  schoolId           String              @map("school_id")
+  name               String
+  startDate          DateTime            @map("start_date") @db.Date
+  endDate            DateTime            @map("end_date") @db.Date
+  isActive           Boolean             @default(false) @map("is_active")
+  isCurrent          Boolean             @default(false) @map("is_current")
+  status             AcademicYearStatus  @default(ACTIVE)
+  createdBy          String?             @map("created_by")
+  updatedBy          String?             @map("updated_by")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  school             School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  classes            Class[]
+  terms              Term[]
   studentEnrollments StudentEnrollment[]
-  enrollments Enrollment[]
-  exams       Exam[]
+  enrollments        Enrollment[]
+  exams              Exam[]
   subjectAssignments SubjectAssignment[]
-  passedOutRecords    PassedOutRecord[]
+  passedOutRecords   PassedOutRecord[]
+  promotionJobsFrom  PromotionJob[]      @relation("PromotionJobFromYear")
+  promotionJobsTo    PromotionJob[]      @relation("PromotionJobToYear")
 
   @@unique([schoolId, name])
   @@index([schoolId])
@@ -339,12 +342,12 @@ model Section {
   attendanceSessions AttendanceSession[]
   exams              Exam[]
 
-  school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  class      Class       @relation(fields: [classId], references: [id])
-  timetables Timetable[]
-  enrollmentRecords Enrollment[]
+  school             School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  class              Class               @relation(fields: [classId], references: [id])
+  timetables         Timetable[]
+  enrollmentRecords  Enrollment[]
   subjectAssignments SubjectAssignment[]
-  passedOutRecords    PassedOutRecord[]
+  passedOutRecords   PassedOutRecord[]
 
   @@unique([schoolId, classId, name])
   @@index([schoolId])
@@ -376,7 +379,7 @@ model Class {
   assignments        ClassAssignment[]
   enrollments        ClassEnrollment[]
   studentEnrollments StudentEnrollment[]
-  enrollmentRecords   Enrollment[]
+  enrollmentRecords  Enrollment[]
   academicYear       AcademicYear        @relation(fields: [academicYearId], references: [id])
   school             School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   subjectAssignments SubjectAssignment[]
@@ -660,6 +663,20 @@ enum EnrollmentStatus {
   WITHDRAWN
 }
 
+enum PromotionJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum PromotionJobBatchStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
 enum AssignmentRole {
   PRIMARY
   ASSISTANT
@@ -794,12 +811,12 @@ model SubjectAssignment {
   createdAt           DateTime         @default(now()) @map("created_at")
   updatedAt           DateTime         @updatedAt @map("updated_at")
 
-  school            School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  subject           Subject       @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-  academicYear      AcademicYear  @relation(fields: [academicYearId], references: [id])
-  class             Class         @relation(fields: [classId], references: [id])
-  section           Section?      @relation(fields: [sectionId], references: [id])
-  teacherMembership Membership    @relation(fields: [teacherMembershipId], references: [id])
+  school            School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subject           Subject      @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  academicYear      AcademicYear @relation(fields: [academicYearId], references: [id])
+  class             Class        @relation(fields: [classId], references: [id])
+  section           Section?     @relation(fields: [sectionId], references: [id])
+  teacherMembership Membership   @relation(fields: [teacherMembershipId], references: [id])
 
   @@index([subjectId])
   @@index([academicYearId])
@@ -844,8 +861,8 @@ model Student {
   classId        String? @map("class_id")
   sectionId      String? @map("section_id")
 
-  createdAt       DateTime      @default(now()) @map("created_at")
-  updatedAt       DateTime      @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   school               School                @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user                 User?                 @relation("StudentUser", fields: [userId], references: [id], onDelete: SetNull)
@@ -911,40 +928,99 @@ model Enrollment {
   class        Class        @relation(fields: [classId], references: [id], onDelete: Restrict)
   section      Section      @relation(fields: [sectionId], references: [id], onDelete: Restrict)
 
+  @@unique([schoolId, studentId], map: "enrollments_school_student_active_key", where: raw("(status = 'ACTIVE'::\"EnrollmentStatus\")"))
   @@index([schoolId])
   @@index([studentId])
   @@index([academicYearId])
   @@index([classId])
   @@index([sectionId])
   @@index([studentId, academicYearId])
-  @@unique([schoolId, studentId], map: "enrollments_school_student_active_key", where: raw("(status = 'ACTIVE'::\"EnrollmentStatus\")"))
+  @@unique([schoolId, academicYearId, classId, sectionId, rollNumber], map: "enrollments_target_roll_active_key", where: raw("(roll_number IS NOT NULL AND status = 'ACTIVE'::\"EnrollmentStatus\")"))
   @@map("enrollments")
 }
 
 model PassedOutRecord {
-  id                  String        @id @default(cuid())
-  schoolId            String        @map("school_id")
-  studentId           String        @map("student_id")
-  batch               String        @map("batch")
-  passedOutDate       DateTime      @default(now()) @map("passed_out_date")
-  graduationReason    String?       @map("graduation_reason")
-  finalAcademicYearId String        @map("final_academic_year_id")
-  finalClassId        String?       @map("final_class_id")
-  finalSectionId      String?       @map("final_section_id")
-  finalRollNumber     String?       @map("final_roll_number")
-  createdAt           DateTime      @default(now()) @map("created_at")
-  updatedAt           DateTime      @updatedAt @map("updated_at")
+  id                  String   @id @default(cuid())
+  schoolId            String   @map("school_id")
+  studentId           String   @map("student_id")
+  batch               String   @map("batch")
+  passedOutDate       DateTime @default(now()) @map("passed_out_date")
+  graduationReason    String?  @map("graduation_reason")
+  finalAcademicYearId String   @map("final_academic_year_id")
+  finalClassId        String?  @map("final_class_id")
+  finalSectionId      String?  @map("final_section_id")
+  finalRollNumber     String?  @map("final_roll_number")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
-  school            School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  student           Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  finalAcademicYear AcademicYear  @relation(fields: [finalAcademicYearId], references: [id], onDelete: Restrict)
-  finalClass        Class?        @relation(fields: [finalClassId], references: [id], onDelete: SetNull)
-  finalSection      Section?      @relation(fields: [finalSectionId], references: [id], onDelete: SetNull)
+  school            School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student           Student      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  finalAcademicYear AcademicYear @relation(fields: [finalAcademicYearId], references: [id], onDelete: Restrict)
+  finalClass        Class?       @relation(fields: [finalClassId], references: [id], onDelete: SetNull)
+  finalSection      Section?     @relation(fields: [finalSectionId], references: [id], onDelete: SetNull)
 
   @@index([schoolId])
   @@index([studentId])
   @@index([schoolId, batch])
   @@map("passed_out_records")
+}
+
+model PromotionJob {
+  id                 String             @id @default(cuid())
+  schoolId           String             @map("school_id")
+  fromAcademicYearId String             @map("from_academic_year_id")
+  toAcademicYearId   String             @map("to_academic_year_id")
+  classId            String?            @map("class_id")
+  retryClassIds      String[]           @default([]) @map("retry_class_ids")
+  status             PromotionJobStatus @default(PENDING)
+  eligibleStudents   Int                @default(0) @map("eligible_students")
+  processedStudents  Int                @default(0) @map("processed_students")
+  promotedStudents   Int                @default(0) @map("promoted_students")
+  passedOutStudents  Int                @default(0) @map("passed_out_students")
+  failedStudents     Int                @default(0) @map("failed_students")
+  startedAt          DateTime?          @map("started_at")
+  completedAt        DateTime?          @map("completed_at")
+  durationMs         Int?               @map("duration_ms")
+  error              String?            @map("error")
+  createdBy          String?            @map("created_by")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+
+  school           School              @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  fromAcademicYear AcademicYear        @relation("PromotionJobFromYear", fields: [fromAcademicYearId], references: [id], onDelete: Restrict)
+  toAcademicYear   AcademicYear        @relation("PromotionJobToYear", fields: [toAcademicYearId], references: [id], onDelete: Restrict)
+  batches          PromotionJobBatch[]
+
+  @@index([schoolId, status])
+  @@index([schoolId, createdAt])
+  @@index([schoolId, fromAcademicYearId])
+  @@map("promotion_jobs")
+}
+
+model PromotionJobBatch {
+  id              String                  @id @default(cuid())
+  promotionJobId  String                  @map("promotion_job_id")
+  sourceClassId   String?                 @map("source_class_id")
+  sourceClassName String                  @map("source_class_name")
+  targetClassId   String?                 @map("target_class_id")
+  targetClassName String                  @map("target_class_name")
+  transition      String                  @map("transition")
+  eligible        Int                     @default(0)
+  processed       Int                     @default(0)
+  promoted        Int                     @default(0)
+  passedOut         Int                      @default(0) @map("passed_out")
+  failed          Int                     @default(0)
+  status          PromotionJobBatchStatus @default(PENDING)
+  startedAt       DateTime?               @map("started_at")
+  completedAt     DateTime?               @map("completed_at")
+  createdAt       DateTime                @default(now()) @map("created_at")
+  updatedAt       DateTime                @updatedAt @map("updated_at")
+
+  promotionJob PromotionJob @relation(fields: [promotionJobId], references: [id], onDelete: Cascade)
+
+  @@index([promotionJobId])
+  @@index([promotionJobId, status])
+  @@map("promotion_job_batches")
 }
 
 model Guardian {
@@ -1325,6 +1401,7 @@ model StudentDraft {
   updatedAt DateTime @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
   school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
   @@index([schoolId])
   @@index([createdBy])
   @@map("student_drafts")

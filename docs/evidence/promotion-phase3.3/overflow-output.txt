@@ -1,0 +1,232 @@
+=== PHASE 3.3 SCOPED VERIFICATION 2026-08-05T08:09:23.924Z | SCENARIO=overflow ===
+PROMOTION_WORKERS=(unset -> default 6)
+RUN_CLASS=seed_cls_2526_g03 TARGET_CLASS=seed_cls_2627_g04
+TWEAK: CAPACITY_ZERO_SEC=CAPACITY_ZERO_SEC=seed_sec_2627_g04_b
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+TWEAK applied: seed_sec_2627_g04_b capacity 40 -> 0
+created: cmsft37530000kwu8ogegzplw status= PENDING duplicate= false
+poll 0: status=RUNNING processed=0/115 promoted=0 passedOut=0 failed=0
+poll 5: status=RUNNING processed=0/115 promoted=0 passedOut=0 failed=0
+poll 10: status=RUNNING processed=0/115 promoted=0 passedOut=0 failed=0
+[PromotionJob cmsft37530000kwu8ogegzplw] completed in 34205ms (115 eligible)
+poll 15: status=COMPLETED processed=115/115 promoted=115 passedOut=0 failed=0
+--- JOB TERMINAL: COMPLETED (wall 36.4 s; pg_locks samples=60) ---
+--- PROMOTION_JOBS ROW (raw) ---
+{"id":"cmsft37530000kwu8ogegzplw","status":"COMPLETED","eligibleStudents":115,"processedStudents":115,"promotedStudents":115,"passedOutStudents":0,"failedStudents":0,"error":null,"durationMs":34092}
+--- PROMOTION_JOB_BATCHES ROWS (raw) ---
+Grade 1 ΓåÆ Grade 2 | eligible=115 processed=115 promoted=115 passedOut=0 failed=0 | 31470ms
+--- MUTEX-KEY VERIFICATION (pg_locks advisory keys observed) ---
+observed distinct advisory key2s (unsigned oid): 2 | max concurrently granted: 2
+  key2=unsigned 1462792871 (signed 1462792871) firstSeen=2026-08-05T08:09:53.087Z
+  key2=unsigned 3638495005 (signed -656472291) firstSeen=2026-08-05T08:09:59.893Z
+expected lock key2s for target class seed_cls_2627_g04 (hashtext('seed_ay_2627' || classId || sectionId)):
+  seed_sec_2627_g04_a (A) -> signed -656472291 | unsigned 3638495005 | observed=true
+  seed_sec_2627_g04_b (B) -> signed -861521337 | unsigned 3433445959 | observed=false
+  seed_sec_2627_g04_c (C) -> signed 1462792871 | unsigned 1462792871 | observed=true
+sections WRITTEN in seed_cls_2627_g04: seed_sec_2627_g04_a, seed_sec_2627_g04_c
+MUTEX-KEY CHECK (lock key == resolved section, NOT firstSectionId): true
+  (observed distinct keys=2, written distinct keys=2, max concurrent granted=2; PASS requires observed==written & >1 concurrent)
+--- SECTION DISTRIBUTION (target class raw SQL) ---
+SQL EXECUTED:
+SELECT sec.name AS section_letter, sec.id AS section_id, COUNT(e.id)::int AS students
+FROM enrollments e JOIN sections sec ON sec.id = e.section_id
+WHERE e.school_id='seed_school_ea' AND e.academic_year_id='seed_ay_2627' AND e.class_id='seed_cls_2627_g04'
+GROUP BY sec.name, sec.id ORDER BY sec.name;
+--- RAW DATABASE OUTPUT ---
+seed_cls_2627_g04 | Section A : 80 students (seed_sec_2627_g04_a)
+seed_cls_2627_g04 | Section C : 40 students (seed_sec_2627_g04_c)
+--- SOURCE->TARGET SECTION MAPPING (per student, raw) ---
+seed_stu_000121 | source=A roll=1 -> target=A roll=33
+seed_stu_000130 | source=A roll=10 -> target=A roll=9
+seed_stu_000131 | source=A roll=11 -> target=A roll=41
+seed_stu_000132 | source=A roll=12 -> target=A roll=12
+seed_stu_000133 | source=A roll=13 -> target=A roll=46
+seed_stu_000134 | source=A roll=14 -> target=A roll=54
+seed_stu_000135 | source=A roll=15 -> target=A roll=15
+seed_stu_000136 | source=A roll=16 -> target=A roll=16
+seed_stu_000137 | source=A roll=17 -> target=A roll=44
+seed_stu_000138 | source=A roll=18 -> target=A roll=13
+seed_stu_000122 | source=A roll=2 -> target=A roll=2
+seed_stu_000141 | source=A roll=21 -> target=A roll=58
+seed_stu_000142 | source=A roll=22 -> target=A roll=22
+seed_stu_000143 | source=A roll=23 -> target=A roll=23
+seed_stu_000144 | source=A roll=24 -> target=A roll=73
+seed_stu_000145 | source=A roll=25 -> target=A roll=61
+seed_stu_000146 | source=A roll=26 -> target=A roll=79
+seed_stu_000147 | source=A roll=27 -> target=A roll=78
+seed_stu_000148 | source=A roll=28 -> target=A roll=48
+seed_stu_000149 | source=A roll=29 -> target=A roll=68
+seed_stu_000150 | source=A roll=30 -> target=A roll=43
+seed_stu_000151 | source=A roll=31 -> target=A roll=80
+seed_stu_000152 | source=A roll=32 -> target=A roll=30
+seed_stu_000153 | source=A roll=33 -> target=A roll=62
+seed_stu_000154 | source=A roll=34 -> target=A roll=49
+seed_stu_000155 | source=A roll=35 -> target=A roll=72
+seed_stu_000156 | source=A roll=36 -> target=A roll=45
+seed_stu_000157 | source=A roll=37 -> target=A roll=57
+seed_stu_000158 | source=A roll=38 -> target=A roll=38
+seed_stu_000159 | source=A roll=39 -> target=A roll=39
+seed_stu_000124 | source=A roll=4 -> target=A roll=17
+seed_stu_000160 | source=A roll=40 -> target=A roll=40
+seed_stu_000126 | source=A roll=6 -> target=A roll=29
+seed_stu_000128 | source=A roll=8 -> target=A roll=8
+seed_stu_000129 | source=A roll=9 -> target=A roll=69
+seed_stu_000161 | source=B roll=1 -> target=A roll=1
+seed_stu_000170 | source=B roll=10 -> target=A roll=10
+seed_stu_000171 | source=B roll=11 -> target=A roll=11
+seed_stu_000172 | source=B roll=12 -> target=A roll=42
+seed_stu_000173 | source=B roll=13 -> target=A roll=75
+seed_stu_000174 | source=B roll=14 -> target=A roll=14
+seed_stu_000175 | source=B roll=15 -> target=A roll=21
+seed_stu_000176 | source=B roll=16 -> target=A roll=71
+seed_stu_000177 | source=B roll=17 -> target=A roll=64
+seed_stu_000178 | source=B roll=18 -> target=A roll=18
+seed_stu_000179 | source=B roll=19 -> target=A roll=70
+seed_stu_000162 | source=B roll=2 -> target=A roll=74
+seed_stu_000180 | source=B roll=20 -> target=A roll=66
+seed_stu_000181 | source=B roll=21 -> target=A roll=63
+seed_stu_000182 | source=B roll=22 -> target=A roll=6
+seed_stu_000183 | source=B roll=23 -> target=A roll=67
+seed_stu_000184 | source=B roll=24 -> target=A roll=24
+seed_stu_000185 | source=B roll=25 -> target=A roll=25
+seed_stu_000186 | source=B roll=26 -> target=A roll=26
+seed_stu_000187 | source=B roll=27 -> target=A roll=27
+seed_stu_000188 | source=B roll=28 -> target=A roll=52
+seed_stu_000189 | source=B roll=29 -> target=A roll=36
+seed_stu_000163 | source=B roll=3 -> target=A roll=28
+seed_stu_000190 | source=B roll=30 -> target=A roll=76
+seed_stu_000191 | source=B roll=31 -> target=A roll=31
+seed_stu_000192 | source=B roll=32 -> target=A roll=32
+seed_stu_000193 | source=B roll=33 -> target=A roll=59
+seed_stu_000194 | source=B roll=34 -> target=A roll=34
+seed_stu_000195 | source=B roll=35 -> target=A roll=35
+seed_stu_000196 | source=B roll=36 -> target=A roll=65
+seed_stu_000197 | source=B roll=37 -> target=A roll=37
+seed_stu_000198 | source=B roll=38 -> target=A roll=50
+seed_stu_000199 | source=B roll=39 -> target=A roll=77
+seed_stu_000164 | source=B roll=4 -> target=A roll=4
+seed_stu_000200 | source=B roll=40 -> target=A roll=47
+seed_stu_000165 | source=B roll=5 -> target=A roll=56
+seed_stu_000166 | source=B roll=6 -> target=A roll=55
+seed_stu_000167 | source=B roll=7 -> target=A roll=60
+seed_stu_000168 | source=B roll=8 -> target=A roll=51
+seed_stu_000169 | source=B roll=9 -> target=A roll=53
+seed_stu_000201 | source=C roll=1 -> target=C roll=1
+seed_stu_000210 | source=C roll=10 -> target=C roll=10
+seed_stu_000211 | source=C roll=11 -> target=C roll=11
+seed_stu_000212 | source=C roll=12 -> target=C roll=12
+seed_stu_000213 | source=C roll=13 -> target=C roll=13
+seed_stu_000214 | source=C roll=14 -> target=C roll=14
+seed_stu_000215 | source=C roll=15 -> target=C roll=15
+seed_stu_000216 | source=C roll=16 -> target=C roll=16
+seed_stu_000217 | source=C roll=17 -> target=C roll=17
+seed_stu_000218 | source=C roll=18 -> target=C roll=18
+seed_stu_000219 | source=C roll=19 -> target=C roll=19
+seed_stu_000202 | source=C roll=2 -> target=C roll=2
+seed_stu_000220 | source=C roll=20 -> target=C roll=20
+seed_stu_000221 | source=C roll=21 -> target=C roll=21
+seed_stu_000222 | source=C roll=22 -> target=C roll=22
+seed_stu_000223 | source=C roll=23 -> target=C roll=23
+seed_stu_000224 | source=C roll=24 -> target=C roll=24
+seed_stu_000225 | source=C roll=25 -> target=C roll=25
+seed_stu_000226 | source=C roll=26 -> target=C roll=26
+seed_stu_000227 | source=C roll=27 -> target=C roll=27
+seed_stu_000228 | source=C roll=28 -> target=C roll=28
+seed_stu_000229 | source=C roll=29 -> target=C roll=29
+seed_stu_000203 | source=C roll=3 -> target=C roll=3
+seed_stu_000230 | source=C roll=30 -> target=C roll=30
+seed_stu_000231 | source=C roll=31 -> target=C roll=31
+seed_stu_000232 | source=C roll=32 -> target=C roll=32
+seed_stu_000233 | source=C roll=33 -> target=C roll=33
+seed_stu_000234 | source=C roll=34 -> target=C roll=34
+seed_stu_000235 | source=C roll=35 -> target=C roll=35
+seed_stu_000236 | source=C roll=36 -> target=C roll=36
+seed_stu_000237 | source=C roll=37 -> target=C roll=37
+seed_stu_000238 | source=C roll=38 -> target=C roll=38
+seed_stu_000239 | source=C roll=39 -> target=C roll=39
+seed_stu_000204 | source=C roll=4 -> target=C roll=4
+seed_stu_000240 | source=C roll=40 -> target=C roll=40
+seed_stu_000205 | source=C roll=5 -> target=C roll=5
+seed_stu_000206 | source=C roll=6 -> target=C roll=6
+seed_stu_000207 | source=C roll=7 -> target=C roll=7
+seed_stu_000208 | source=C roll=8 -> target=C roll=8
+seed_stu_000209 | source=C roll=9 -> target=C roll=9
+--- ROLL-NUMBER PRESERVATION (source roll == target roll) ---
+source A: preserved 10/35
+source B: preserved 15/40
+source C: preserved 40/40
+--- AUDIT MARKERS (raw counts in run window) ---
+sectionOverflowFallback=true audits: 40
+sectionFallback='no_matching_section' audits: 0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T08:10:02.323Z | scenario=overflow ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g04_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=80 | unique_rolls=80 | OK
+seed_sec_2627_g04_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T08:10:02.387Z | scenario=overflow
+--- LOCK STATS (application timing) ---
+acquisitions=165 waitMinMs=58 waitAvgMs=538 waitP95Ms=1223 waitMaxMs=1484 lockTimeouts=0 mutexFailures=0 deadlocks=0 retryAttempts=50
+RECONCILIATION: eligible==processed=true | processed==promoted+passedOut+failed=true | audits 1:1=true (promote=115 vs 115 | passout=0 vs 0)
+TENANT (fixture_school_b): enrollments=1 attendance=0 guardians=0
+--- VERDICT (correctness only; timing incidental, not evaluated) ---
+wall=36.4 s (incidental) | job.durationMs=34092
+SCENARIO overflow: PASS

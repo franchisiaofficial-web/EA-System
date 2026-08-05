@@ -1,0 +1,108 @@
+=== PHASE 3.3 SCOPED VERIFICATION 2026-08-05T08:29:56.599Z | SCENARIO=passout ===
+PROMOTION_WORKERS=(unset -> default 6)
+RUN_CLASS=seed_cls_2526_g14 TARGET_CLASS=seed_cls_2627_g13
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+created: cmsfttm2u00001gu8yqarcrja status= PENDING duplicate= false
+poll 0: status=RUNNING processed=0/0 promoted=0 passedOut=0 failed=0
+poll 5: status=RUNNING processed=0/120 promoted=0 passedOut=0 failed=0
+[PromotionJob cmsfttm2u00001gu8yqarcrja] completed in 19828ms (120 eligible)
+poll 8: status=COMPLETED processed=120/120 promoted=0 passedOut=120 failed=0
+--- JOB TERMINAL: COMPLETED (wall 21.3 s; pg_locks samples=33) ---
+--- PROMOTION_JOBS ROW (raw) ---
+{"id":"cmsfttm2u00001gu8yqarcrja","status":"COMPLETED","eligibleStudents":120,"processedStudents":120,"promotedStudents":0,"passedOutStudents":120,"failedStudents":0,"error":null,"durationMs":19658}
+--- PROMOTION_JOB_BATCHES ROWS (raw) ---
+Grade 12 ΓåÆ Passed Out | eligible=120 processed=120 promoted=0 passedOut=120 failed=0 | 16687ms
+--- MUTEX-KEY VERIFICATION (pg_locks advisory keys observed) ---
+observed distinct advisory key2s (unsigned oid): 0 | max concurrently granted: 0
+expected lock key2s for target class seed_cls_2627_g13 (hashtext('seed_ay_2627' || classId || sectionId)):
+  seed_sec_2627_g13_a (A) -> signed 806856574 | unsigned 806856574 | observed=false
+  seed_sec_2627_g13_b (B) -> signed 670807279 | unsigned 670807279 | observed=false
+  seed_sec_2627_g13_c (C) -> signed -367754761 | unsigned 3927212535 | observed=false
+sections WRITTEN in seed_cls_2627_g13: seed_sec_2627_g13_a
+MUTEX-KEY CHECK (lock key == resolved section, NOT firstSectionId): false
+  (observed distinct keys=0, written distinct keys=1, max concurrent granted=0; SKIPPED (no target-section writes this run ΓÇö e.g. passout-only: no inserts, hence no locks, by design))
+--- SECTION DISTRIBUTION (target class raw SQL) ---
+SQL EXECUTED:
+SELECT sec.name AS section_letter, sec.id AS section_id, COUNT(e.id)::int AS students
+FROM enrollments e JOIN sections sec ON sec.id = e.section_id
+WHERE e.school_id='seed_school_ea' AND e.academic_year_id='seed_ay_2627' AND e.class_id='seed_cls_2627_g13'
+GROUP BY sec.name, sec.id ORDER BY sec.name;
+--- RAW DATABASE OUTPUT ---
+seed_cls_2627_g13 | Section A : 1 students (seed_sec_2627_g13_a)
+--- SOURCE->TARGET SECTION MAPPING (per student, raw) ---
+--- ROLL-NUMBER PRESERVATION (source roll == target roll) ---
+--- AUDIT MARKERS (raw counts in run window) ---
+sectionOverflowFallback=true audits: 0
+sectionFallback='no_matching_section' audits: 0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T08:30:20.051Z | scenario=passout ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T08:30:20.153Z | scenario=passout
+--- LOCK STATS (application timing) ---
+acquisitions=0 waitMinMs=0 waitAvgMs=0 waitP95Ms=0 waitMaxMs=0 lockTimeouts=0 mutexFailures=0 deadlocks=0 retryAttempts=0
+RECONCILIATION: eligible==processed=true | processed==promoted+passedOut+failed=true | audits 1:1=true (promote=0 vs 0 | passout=120 vs 120)
+TENANT (fixture_school_b): enrollments=1 attendance=0 guardians=0
+POST-STATE: ay2526_active=1337 ay2627_active=103 passed_out_records=120 students_passed_out=120
+--- VERDICT (correctness only; timing incidental, not evaluated) ---
+wall=21.3 s (incidental) | job.durationMs=19658
+SCENARIO passout: PASS

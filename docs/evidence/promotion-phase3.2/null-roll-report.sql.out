@@ -1,0 +1,10 @@
+SQL EXECUTED:
+
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T07:22:49.838Z | run=full-school-3.2b-lite

@@ -1,0 +1,21 @@
+=== TASK 4: INSTRUMENTED PROMOTION RUN ===
+Started: 2026-08-03T15:33:52.572Z
+PROMOTION_PROFILE=true
+
+Before: querying eligible counts...
+Before run: 2526 active=1457 2627 active=103 passedOutRecords=0
+
+=== EXECUTING runPromotionBatch (with instrumentation) ===
+
+[PROFILE] Flushed to evidence/promotion-profile/latest.json (461 students, 402742ms)
+
+=== RESULT ===
+wallClockMs=402770
+eligible=1457 submitted=1457
+promoted=1290 passedOut=120 skipped=0
+failed=47 retryable=47
+durationMs=402742
+
+After run: 2526 active=47 promoted=1290 2627 active=1393 passedOutRecords=120
+
+=== DONE ===

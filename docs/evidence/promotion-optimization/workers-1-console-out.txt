@@ -1,0 +1,40 @@
+=== Gap A (Workers=1) chunked trial v2 2026-08-04T06:39:22.094Z ===
+env PROMOTION_PROFILE=true, chunk size=200, maxChunks=12, wallCapMs=3300000
+initial eligible=1457 (baseline 1457)
+chunk 1 attempt 1: processing 200 @ 2026-08-04T06:39:28.623Z
+[PROFILE] Flushed latest.json (75 first-pass, 125 retries, 125 collisions, 383217ms)
+[PROFILE] Flushed retry-path.json (125 students, 125 attempts)
+[PROFILE] Flushed retry-root-cause.json (125 collisions)
+chunk 1 attempt 1: completed in 383265ms
+chunk 1: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=125 dur=383217ms avgPerStudent=1916ms failReasons={}
+chunk 2 attempt 1: processing 200 @ 2026-08-04T06:45:56.626Z
+[PROFILE] Flushed latest.json (137 first-pass, 257 retries, 257 collisions, 590862ms)
+[PROFILE] Flushed retry-path.json (257 students, 257 attempts)
+[PROFILE] Flushed retry-root-cause.json (257 collisions)
+chunk 2 attempt 1: completed in 590899ms
+chunk 2: promoted=192 passed=0 failed=8 retryable=2 collisionEvents=257 dur=590862ms avgPerStudent=2954ms failReasons={"Roll collision retry exhausted (1 attempts): Connection terminated unexpectedly":1,"Unexpected error (all changes rolled back): Can't reach database server at aws-1-ap-south-1.pooler.supabase.com":6,"Roll collision retry exhausted (1 attempts): \nInvalid `tx.enrollment.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:722:27\n\n  719 \n  720 await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });\n  721 const t3 = profilingEnabled() ? performance.now() : 0;\n→ 722 await tx.enrollment.create(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":1}
+chunk 3 attempt 1: processing 200 @ 2026-08-04T06:55:53.234Z
+[PROFILE] Flushed latest.json (195 first-pass, 398 retries, 398 collisions, 1356054ms)
+[PROFILE] Flushed retry-path.json (397 students, 398 attempts)
+[PROFILE] Flushed retry-root-cause.json (398 collisions)
+chunk 3 attempt 1: completed in 1356101ms
+chunk 3: promoted=196 passed=0 failed=4 retryable=3 collisionEvents=398 dur=1356054ms avgPerStudent=6780ms failReasons={"Unexpected error (all changes rolled back): \nInvalid `tx.enrollment.update()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:570:23\n\n  567 // Close the current enrollment FIRST so the \"one ACTIVE enrollment per student\"\n  568 // partial unique constraint is satisfied before the new enrollment is created.\n  569 const tCloseSrc = profilingEnabled() ? performance.now() : 0;\n→ 570 await tx.enrollment.update(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":1,"Roll collision retry exhausted (1 attempts): \nInvalid `tx.enrollment.create()` invocation in\nD:\\Startup\\project-1\\schoolos\\src\\services\\promotion\\promotion-service.ts:722:27\n\n  719 \n  720 await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });\n  721 const t3 = profilingEnabled() ? performance.now() : 0;\n→ 722 await tx.enrollment.create(\nDatabase error. Code: `57014`. Message: `canceling statement due to statement timeout`":3}
+chunk 4 attempt 1: processing 200 @ 2026-08-04T07:18:30.283Z
+[PROFILE] Flushed latest.json (275 first-pass, 518 retries, 518 collisions, 388067ms)
+[PROFILE] Flushed retry-path.json (513 students, 518 attempts)
+[PROFILE] Flushed retry-root-cause.json (518 collisions)
+chunk 4 attempt 1: completed in 388088ms
+chunk 4: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=518 dur=388067ms avgPerStudent=1940ms failReasons={}
+chunk 5 attempt 1: processing 200 @ 2026-08-04T07:25:01.037Z
+[PROFILE] Flushed latest.json (325 first-pass, 668 retries, 668 collisions, 344887ms)
+[PROFILE] Flushed retry-path.json (663 students, 668 attempts)
+[PROFILE] Flushed retry-root-cause.json (668 collisions)
+chunk 5 attempt 1: completed in 344908ms
+chunk 5: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=668 dur=344887ms avgPerStudent=1724ms failReasons={}
+chunk 6 attempt 1: processing 200 @ 2026-08-04T07:30:46.853Z
+[PROFILE] Flushed latest.json (370 first-pass, 823 retries, 823 collisions, 286514ms)
+[PROFILE] Flushed retry-path.json (818 students, 823 attempts)
+[PROFILE] Flushed retry-root-cause.json (823 collisions)
+chunk 6 attempt 1: completed in 286544ms
+chunk 6: promoted=200 passed=0 failed=0 retryable=0 collisionEvents=823 dur=286514ms avgPerStudent=1433ms failReasons={}
+ALL CHUNKS DONE. wallMs=3370056 chunks=6 promoted=1188 passedOut=0 failed=12 retryable=5

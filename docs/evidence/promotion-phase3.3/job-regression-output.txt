@@ -1,0 +1,33 @@
+=== JOB REGRESSION 2026-08-05T08:16:44.943Z ===
+PROMOTION_WORKERS=(unset -> default 6)
+RUN_CLASS=seed_cls_2526_g04
+PRE: ay2526=1457 ay2627=103 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+--- 1) create class-scoped PromotionJob (goes through global scheduler) ---
+created: cmsftcngh0000xku8arsosd36 status= PENDING duplicate= false
+--- 2) poll until terminal ---
+poll 0: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 5: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+[PromotionJob cmsftcngh0000xku8arsosd36] completed in 18108ms (120 eligible)
+--- 3) final state (20s) ---
+status: COMPLETED | eligible: 120 | processed: 120 | promoted: 120 | passedOut: 0 | failed: 0 | error: null | durationMs: 17983
+batches: [{"id":"cmsftcopt0001xku869ii2y6e","transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"passedOut":0,"failed":0}]
+processed==promoted+passedOut+failed: true | eligible==processed: true | single batch COMPLETED: true
+--- LOCK STATS (through JOB path) ---
+acquisitions=120 waitMinMs=56 waitAvgMs=226 waitMaxMs=827 waitP95Ms=582 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=0
+--- 4) idempotent re-run (same class after COMPLETED: 0 double-promotions) ---
+rerun created: cmsftd3ho006qxku81ewdo2yp duplicate= false
+[PromotionJob cmsftd3ho006qxku81ewdo2yp] completed in 2253ms (0 eligible)
+rerun final: COMPLETED eligible= 0 processed= 0 promoted= 0 failed= 0
+idempotent re-run ok (0 double-promotions): true
+--- 5) retry route branch (retry ONLY failed batches; expect NOTHING_TO_RETRY / 409) ---
+FAILED batches in job: 0
+retry branch taken: 409 NOTHING_TO_RETRY (no failed batches)
+--- 6) raw duplicate-roll + NULL-roll + tenants + audit (post-run) ---
+DUPLICATE-ROLL PASS=true
+NULL ROLL COUNT=0
+audit_logs (entity=enrollment action=promote) created during job: 120
+POST: ay2526=1337 ay2627=223 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+tenant isolation: other school total enrollments untouched=1
+promotion_job row (raw): {"status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0,"durationMs":17983}
+promotion_job_batches rows (raw): {"transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0}
+JOB REGRESSION PASSED

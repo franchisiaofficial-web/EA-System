@@ -1,0 +1,884 @@
+﻿==================================================================================
+PHASE 3.3 CODE DIFF (working tree vs last commit 33904af)
+NOTE: the promotion engine evolution since 33904af is uncommitted; the full
+promotion-service.ts diff below therefore also contains Phase 3.2/3.2B changes.
+Phase 3.3 additions are identifiable by 'Phase 3.3' markers in comments.
+==================================================================================
+
+########## FILE 1: src/services/promotion/promotion-service.ts (git diff) ##########
+diff --git a/src/services/promotion/promotion-service.ts b/src/services/promotion/promotion-service.ts
+index 0e73f54..e7cfe7c 100644
+--- a/src/services/promotion/promotion-service.ts
++++ b/src/services/promotion/promotion-service.ts
+@@ -1,6 +1,13 @@
+ import { withRls, type RequestContext, type PrismaTransactionClient } from '@/lib/prisma/rls-middleware';
+ import type { AuthContext } from '@/lib/auth/context';
+ import type { Prisma } from '@/generated/prisma/client';
++import { profile, profilingEnabled } from './promotion-profile';
++import { withSectionRollLock, countRollRetryAttempt } from './promotion-roll-lock';
++import {
++  getSectionAssignmentStrategy,
++  type SectionAssignmentSource,
++  type SectionAssignmentStrategy,
++} from './section-assignment-strategy';
+ 
+ // ============================================
+ // Promotion batch orchestration
+@@ -49,7 +56,14 @@ export interface PromotionFailure {
+ }
+ 
+ export interface PromotionSummary {
++  /** Independently computed server-side count of students actually matching the
++   *  promotion criteria (source year + ACTIVE status + optional class filter).
++   *  Does NOT derive from items sent by the client ΓÇö a client-side shortfall is
++   *  visible as eligible !== submitted. */
+   eligible: number;
++  /** How many promotion items were actually submitted to this batch (client
++   *  items, or the full eligible set when no items were provided). */
++  submitted: number;
+   promoted: number;
+   passedOut: number;
+   skipped: number;
+@@ -66,6 +80,16 @@ export interface PromotionBatchInput {
+   toAcademicYearId: string;
+   classId?: string;
+   items?: PromotionItem[];
++  /** Optional live progress callback ΓÇö invoked once per completed student with
++   *  cumulative batch counters. Used by the PromotionJob runner to persist
++   *  job/batch progress; the blocking API does not pass it. */
++  onProgress?: (p: {
++    processed: number;
++    promoted: number;
++    passedOut: number;
++    skipped: number;
++    failed: number;
++  }) => void;
+ }
+ 
+ interface StudentDetail {
+@@ -88,8 +112,18 @@ interface EnrollmentSnapshot {
+ }
+ 
+ interface TargetClassInfo {
++  classId: string;
+   firstSectionId: string | null;
+   sectionIds: Set<string>;
++  /** sectionId -> section name (ACTIVE sections only, Phase 3.3). */
++  sectionsById: Map<string, string>;
++  /** section name -> sectionId (ACTIVE sections only, Phase 3.3). */
++  sectionsByName: Map<string, string>;
++  /** sectionId -> capacity (Phase 3.3 overflow handling). */
++  capacityById: Map<string, number>;
++  /** sectionId -> ACTIVE target-year enrollment count at batch start
++   *  (Phase 3.3 overflow handling). */
++  occupancyById: Map<string, number>;
+ }
+ 
+ type Outcome =
+@@ -110,7 +144,10 @@ type Outcome =
+ 
+ type Tx = PrismaTransactionClient;
+ 
+-const PARALLEL_WORKERS = 6; // matches the rlsPrisma pool size
++// One GLOBAL worker pool size ΓÇö shared by every job/batch run. The promotion
++// job scheduler serializes jobs, so at any time exactly one pool is active.
++// Configurable via PROMOTION_WORKERS (default 6, matching the rlsPrisma pool).
++export const PARALLEL_WORKERS = Number(process.env.PROMOTION_WORKERS) || 6;
+ 
+ export async function runPromotionBatch(
+   input: PromotionBatchInput,
+@@ -118,8 +155,11 @@ export async function runPromotionBatch(
+   ctx: RequestContext
+ ): Promise<PromotionSummary> {
+   const started = Date.now();
++  const profStarted = new Date().toISOString();
++  profile.startPhase('total');
+ 
+   // ΓöÇΓöÇ 1. Snapshot: batch-invariant planning data (single transaction) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
++  profile.startPhase('snapshot');
+   const snapshot = await withRls(ctx, async (tx) => {
+     const settings = await tx.schoolSettings.findUnique({ where: { schoolId: input.schoolId } });
+     const grades = Array.isArray(settings?.grades) ? (settings!.grades as string[]) : [];
+@@ -127,6 +167,19 @@ export async function runPromotionBatch(
+     const toYear = await tx.academicYear.findUnique({ where: { id: input.toAcademicYearId } });
+     const batch = toYear?.name || input.toAcademicYearId;
+ 
++    // Independently computed eligible count ΓÇö the number of students who actually
++    // match the promotion criteria (source year + ACTIVE + optional class filter).
++    // This is the single source of truth for "eligible" in the API response and
++    // the dashboard; it does NOT depend on what the client submitted.
++    const eligibleCount = await tx.enrollment.count({
++      where: {
++        schoolId: input.schoolId,
++        academicYearId: input.fromAcademicYearId,
++        status: 'ACTIVE',
++        ...(input.classId ? { classId: input.classId } : {}),
++      },
++    });
++
+     let items = input.items ?? [];
+     if (items.length === 0) {
+       const enrollments = await tx.enrollment.findMany({
+@@ -185,23 +238,43 @@ export async function runPromotionBatch(
+     // Target-year classes: full map (any status) + active map (for grade resolution).
+     const allTargetClasses = await tx.class.findMany({
+       where: { schoolId: input.schoolId, academicYearId: input.toAcademicYearId, isDeleted: false },
+-      include: { sections: { where: { status: 'ACTIVE' }, orderBy: { name: 'asc' }, select: { id: true } } },
++      include: { sections: { where: { status: 'ACTIVE' }, orderBy: { name: 'asc' }, select: { id: true, name: true, capacity: true } } },
+     });
++    // Phase 3.3: occupancy per target section at batch start (overflow check data).
++    const occupancyRows = await tx.enrollment.findMany({
++      where: { schoolId: input.schoolId, academicYearId: input.toAcademicYearId, status: 'ACTIVE' },
++      select: { sectionId: true },
++    });
++    const occupancyById = new Map<string, number>();
++    for (const r of occupancyRows) {
++      const sid = r.sectionId!;
++      occupancyById.set(sid, (occupancyById.get(sid) ?? 0) + 1);
++    }
+     const targetClassById = new Map<string, TargetClassInfo>();
+     const activeClasses: { id: string; gradeLevel: string | null; sortOrder: number }[] = [];
+     for (const c of allTargetClasses) {
+       const ids = c.sections.map((s) => s.id);
+-      targetClassById.set(c.id, { firstSectionId: ids[0] ?? null, sectionIds: new Set(ids) });
++      const sectionsById = new Map<string, string>();
++      const sectionsByName = new Map<string, string>();
++      const capacityById = new Map<string, number>();
++      for (const s of c.sections) {
++        sectionsById.set(s.id, s.name);
++        sectionsByName.set(s.name, s.id);
++        capacityById.set(s.id, s.capacity);
++      }
++      targetClassById.set(c.id, { classId: c.id, firstSectionId: ids[0] ?? null, sectionIds: new Set(ids), sectionsById, sectionsByName, capacityById, occupancyById });
+       if (c.status === 'ACTIVE') activeClasses.push({ id: c.id, gradeLevel: c.gradeLevel, sortOrder: c.sortOrder });
+     }
+-    const nextClassByGrade = new Map<string, { classId: string; sectionId: string | null }>();
++    // Grade resolution provides the target CLASS only ΓÇö the target SECTION is
++    // resolved per student by the SectionAssignmentStrategy (Phase 3.3).
++    const nextClassByGrade = new Map<string, { classId: string }>();
+     for (const c of activeClasses) {
+-      if (c.gradeLevel) nextClassByGrade.set(c.gradeLevel, { classId: c.id, sectionId: targetClassById.get(c.id)!.firstSectionId });
++      if (c.gradeLevel) nextClassByGrade.set(c.gradeLevel, { classId: c.id });
+     }
+     const fallbackTarget = (() => {
+       const first = [...activeClasses].sort((a, b) => a.sortOrder - b.sortOrder)[0];
+       if (!first) return null;
+-      return { classId: first.id, sectionId: targetClassById.get(first.id)!.firstSectionId };
++      return { classId: first.id };
+     })();
+ 
+     // Students already ACTIVE in the target year (duplicate-enrollment guard).
+@@ -225,11 +298,13 @@ export async function runPromotionBatch(
+       for (const s of rows) missingDetails.set(s.id, { name: `${s.firstName} ${s.lastName}`, admissionNumber: s.admissionNumber });
+     }
+ 
+-    return { grades, batch, items, targetHasClasses, enrollmentsByStudent, missingDetails, nextClassByGrade, fallbackTarget, targetClassById, existingTargets };
++    return { grades, batch, items, targetHasClasses, enrollmentsByStudent, missingDetails, nextClassByGrade, fallbackTarget, targetClassById, existingTargets, eligibleCount };
+   });
++  profile.endPhase('snapshot', { rows: snapshot.items.length, queries: 8, meta: { eligibleCount: snapshot.eligibleCount, targetHasClasses: snapshot.targetHasClasses, itemCount: snapshot.items.length } });
+ 
+   const summary: PromotionSummary = {
+-    eligible: snapshot.items.length,
++    eligible: snapshot.eligibleCount,
++    submitted: snapshot.items.length,
+     promoted: 0,
+     passedOut: 0,
+     skipped: 0,
+@@ -267,6 +342,7 @@ export async function runPromotionBatch(
+   }
+ 
+   // ΓöÇΓöÇ 2. Process: each student in its own transaction, bounded parallelism ΓöÇΓöÇΓöÇ
++  const strategy = getSectionAssignmentStrategy(input.schoolId);
+   const args = {
+     input,
+     grades: snapshot.grades,
+@@ -278,10 +354,12 @@ export async function runPromotionBatch(
+     targetClassById: snapshot.targetClassById,
+     existingTargets: snapshot.existingTargets,
+     userId: authCtx.userId,
++    strategy,
+   };
+ 
+   const outcomes: Outcome[] = new Array(snapshot.items.length);
+   let nextIndex = 0;
++  profile.startPhase('process');
+   await Promise.all(
+     Array.from({ length: PARALLEL_WORKERS }, async () => {
+       while (true) {
+@@ -291,16 +369,42 @@ export async function runPromotionBatch(
+         try {
+           outcomes[i] = await withRls(ctx, (tx) => processOne(tx, { ...args, item }));
+         } catch (err) {
+-          // The per-student transaction rolled back ΓÇö record as a reviewable failure.
++          // 1.3 Collision policy (A): on P2002 roll-number collision, retry
++          // the promotion in a FRESH transaction with the next free roll
++          // (PostgreSQL auto-aborts the current transaction after any error,
++          // so we cannot retry inside the same txn). If the retry also
++          // collides (bounded attempts), leave the roll null and report
++          // the student with action RETRY for manual assignment.
+           const message = err instanceof Error ? err.message : String(err);
+-          outcomes[i] = {
+-            kind: 'failed',
+-            reason: `Unexpected error (all changes rolled back): ${message}`,
+-            action: 'REVIEW',
+-            attemptedAction: item.action,
+-            toClassId: item.toClassId,
+-            toSectionId: item.toSectionId,
+-          };
++          const isRollCollisionErr = message.includes('roll_number') &&
++            (message.includes('P2002') || message.includes('23505') || message.includes('Unique constraint'));
++
++          if (isRollCollisionErr && (item.action === 'PROMOTE' || item.action === 'TRANSFER')) {
++            if (profilingEnabled()) {
++              const snap = args.enrollmentsByStudent.get(item.studentId);
++              profile.addCollision({
++                studentId: item.studentId,
++                sourceSectionId: snap?.sectionId ?? null,
++                targetSectionId: null,
++                sourceRollNumber: snap?.rollNumber ?? null,
++                requestedTargetRoll: item.rollNumber ?? snap?.rollNumber ?? null,
++                retryAttempt: 0,
++                phase: 'first_create',
++                timestamp: performance.now(),
++                errorCode: 'P2002',
++              });
++            }
++            outcomes[i] = await retryWithFreeRoll(args, item, message);
++          } else {
++            outcomes[i] = {
++              kind: 'failed',
++              reason: `Unexpected error (all changes rolled back): ${message}`,
++              action: 'REVIEW',
++              attemptedAction: item.action,
++              toClassId: item.toClassId,
++              toSectionId: item.toSectionId,
++            };
++          }
+         }
+       }
+     })
+@@ -335,9 +439,37 @@ export async function runPromotionBatch(
+         if (outcome.action === 'RETRY') summary.retryable++;
+         break;
+     }
++    if (input.onProgress) {
++      input.onProgress({
++        processed: summary.promoted + summary.passedOut + summary.skipped + summary.failed.length,
++        promoted: summary.promoted,
++        passedOut: summary.passedOut,
++        skipped: summary.skipped,
++        failed: summary.failed.length,
++      });
++    }
+   }
+ 
+   summary.durationMs = Date.now() - started;
++  profile.endPhase('process', { rows: snapshot.items.length, meta: { workers: PARALLEL_WORKERS } });
++  profile.endPhase('total');
++  profile.setTotal(summary.durationMs, profStarted);
++  profile.flush({ total: summary.total, promoted: summary.promoted, passedOut: summary.passedOut, skipped: summary.skipped, failed: summary.failed.length, retryable: summary.retryable });
++  profile.flushRetryPath();
++
++  // Compute section mappings for collision root-cause analysis (TASK 1.7)
++  const mappings: { sourceGrade: string; sourceClass: string; targetGrade: string; targetClass: string; targetSection: string; studentCount: number }[] = [];
++  if (profilingEnabled()) {
++    for (const [srcGrade, tgt] of snapshot.nextClassByGrade) {
++      const info = snapshot.targetClassById.get(tgt.classId);
++      const targetSection = info?.firstSectionId ?? '?';
++      mappings.push({
++        sourceGrade: srcGrade, sourceClass: srcGrade, targetGrade: 'next', targetClass: tgt.classId,
++        targetSection, studentCount: 0,
++      });
++    }
++  }
++  profile.flushCollisions(mappings);
+   return summary;
+ }
+ 
+@@ -352,11 +484,12 @@ interface ProcessOneArgs {
+   batch: string;
+   enrollmentsByStudent: Map<string, EnrollmentSnapshot>;
+   missingDetails: Map<string, StudentDetail>;
+-  nextClassByGrade: Map<string, { classId: string; sectionId: string | null }>;
+-  fallbackTarget: { classId: string; sectionId: string | null } | null;
++  nextClassByGrade: Map<string, { classId: string }>;
++  fallbackTarget: { classId: string } | null;
+   targetClassById: Map<string, TargetClassInfo>;
+   existingTargets: Set<string>;
+   userId: string;
++  strategy: SectionAssignmentStrategy;
+ }
+ 
+ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+@@ -383,7 +516,10 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+ 
+   let toClassId: string | undefined;
+   let toSectionId: string | undefined;
+-  let rollNumber: string | null = item.rollNumber || null;
++  // Carry the source enrollment's roll number forward when the batch item does
++  // not specify one (the UI never sends one) ΓÇö without this every promoted
++  // student silently loses their roll number in the new year.
++  let rollNumber: string | null = item.rollNumber || snapshot.rollNumber;
+ 
+   if (item.action === 'TRANSFER') {
+     if (!item.toClassId) {
+@@ -399,7 +535,7 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+     }
+     toClassId = item.toClassId;
+     toSectionId = item.toSectionId;
+-    rollNumber = item.rollNumber || null;
++    rollNumber = item.rollNumber || snapshot.rollNumber;
+   } else if (item.toClassId) {
+     toClassId = item.toClassId;
+     toSectionId = item.toSectionId;
+@@ -407,7 +543,7 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+     // Grades-based next-class resolution (batch snapshot, no per-student query).
+     // NOTE: the empty-grades guard matters ΓÇö with no grade list, `indexOf`
+     // returns -1 which must NOT be treated as "highest grade reached".
+-    let target: { classId: string; sectionId: string | null } | null = null;
++    let target: { classId: string } | null = null;
+     if (grades.length > 0 && snapshot.gradeLevel) {
+       const idx = grades.indexOf(snapshot.gradeLevel);
+       if (idx >= 0) {
+@@ -428,7 +564,6 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+       return { kind: 'passedOut' };
+     }
+     toClassId = target.classId;
+-    toSectionId = target.sectionId ?? undefined;
+   }
+ 
+   const targetInfo = toClassId ? args.targetClassById.get(toClassId) : undefined;
+@@ -474,7 +609,20 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+     };
+   }
+ 
+-  const targetSectionId = toSectionId ?? targetInfo.firstSectionId ?? null;
++  // Phase 3.3: section resolution goes through the SectionAssignmentStrategy
++  // (default PRESERVE_SECTION ΓÇö source section letter -> matching target
++  // section letter, fall back to firstSectionId). Explicit toSectionId
++  // (TRANSFER / UI-provided) is honored as-is. The RESOLVED section below is
++  // the ONLY value used both as the mutex key AND as the written sectionId ΓÇö
++  // the lock is never taken on a stale/unresolved key.
++  const src: SectionAssignmentSource = {
++    studentId: item.studentId,
++    sectionId: snapshot.sectionId,
++    sectionName: snapshot.sectionName === 'ΓÇö' ? null : snapshot.sectionName,
++    rollNumber: snapshot.rollNumber,
++  };
++  const targetSectionId = toSectionId ?? args.strategy.resolveTargetSection(src, targetInfo) ?? null;
++  const assignmentMarkers = toSectionId ? undefined : args.strategy.auditMarkers(src, targetInfo);
+   if (!targetSectionId) {
+     return {
+       kind: 'failed',
+@@ -491,41 +639,275 @@ async function processOne(tx: Tx, args: ProcessOneArgs): Promise<Outcome> {
+ 
+   // Close the current enrollment FIRST so the "one ACTIVE enrollment per student"
+   // partial unique constraint is satisfied before the new enrollment is created.
++  const tCloseSrc = profilingEnabled() ? performance.now() : 0;
+   await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });
+-  const created = await tx.enrollment.create({
+-    data: {
+-      schoolId: input.schoolId,
++  const tCreateTgt = profilingEnabled() ? performance.now() : 0;
++  // Phase 3.2 (approved ADR ΓÇö Option A): acquire the section mutex BEFORE any
++  // roll allocation. pg_advisory_xact_lock is released at transaction
++  // commit/abort ΓÇö the earliest point at which the allocated roll is durable
++  // and visible to concurrent allocators. The source-close above is outside
++  // the critical section (it does not touch the target section's roll space).
++  let tAudit = 0;
++  let tDone = 0;
++  await withSectionRollLock(
++    tx, input.schoolId, input.toAcademicYearId, toClassId!, targetSectionId,
++    async () => {
++      const created = await tx.enrollment.create({
++        data: {
++          schoolId: input.schoolId,
++          studentId: item.studentId,
++          academicYearId: input.toAcademicYearId,
++          classId: toClassId!,
++          sectionId: targetSectionId,
++          rollNumber,
++          status: 'ACTIVE',
++          joinedAt: new Date(),
++        },
++      });
++      tAudit = profilingEnabled() ? performance.now() : 0;
++      await tx.auditLog.create({
++        data: {
++          userId,
++          schoolId: input.schoolId,
++          action: 'promote',
++          entity: 'enrollment',
++          recordId: created.id,
++          after: {
++            studentId: item.studentId,
++            fromAcademicYearId: input.fromAcademicYearId,
++            toAcademicYearId: input.toAcademicYearId,
++            classId: toClassId,
++            sectionId: targetSectionId,
++            action: item.action,
++            ...(assignmentMarkers ?? {}),
++          } as Prisma.InputJsonValue,
++        },
++      });
++      tDone = profilingEnabled() ? performance.now() : 0;
++    }
++  );
++
++  if (profilingEnabled()) {
++    profile.addStudentTiming({
+       studentId: item.studentId,
+-      academicYearId: input.toAcademicYearId,
+-      classId: toClassId!,
+-      sectionId: targetSectionId,
++      totalMs: tDone - tCloseSrc,
++      closeSourceMs: tCreateTgt - tCloseSrc,
++      createTargetMs: tAudit - tCreateTgt,
++      auditLogMs: tDone - tAudit,
++      rollRetries: 0,
++      outcome: 'promoted',
+       rollNumber,
+-      status: 'ACTIVE',
+-      joinedAt: new Date(),
+-    },
+-  });
+-
+-  await tx.auditLog.create({
+-    data: {
+-      userId,
+-      schoolId: input.schoolId,
+-      action: 'promote',
+-      entity: 'enrollment',
+-      recordId: created.id,
+-      after: {
+-        studentId: item.studentId,
+-        fromAcademicYearId: input.fromAcademicYearId,
+-        toAcademicYearId: input.toAcademicYearId,
+-        classId: toClassId,
+-        sectionId: targetSectionId,
+-        action: item.action,
+-      } as Prisma.InputJsonValue,
+-    },
+-  });
++      sectionId: targetSectionId,
++    });
++  }
+ 
+   return { kind: 'promoted' };
+ }
+ 
++// ============================================
++// 1.3 Collision policy: (A) AUTO-ASSIGN next free roll and continue
++//
++// When a P2002 roll-number collision occurs (the partial unique index
++// enrollments_target_roll_active_key), the per-student transaction is
++// auto-aborted by PostgreSQL (code 25P02) ΓÇö we cannot retry inside the
++// same transaction. Policy A: open a fresh transaction, compute the next
++// free roll in the target section, re-apply the promotion (close source +
++// create target), and return a "promoted" outcome. If the retry itself
++// collides, bound to 3 attempts; the last attempt falls back to null roll.
++// ============================================
++
++async function retryWithFreeRoll(
++  args: { input: PromotionBatchInput; enrollmentsByStudent: Map<string, EnrollmentSnapshot>; grades: string[]; batch: string; nextClassByGrade: Map<string, { classId: string }>; fallbackTarget: { classId: string } | null; targetClassById: Map<string, TargetClassInfo>; existingTargets: Set<string>; userId: string; strategy: SectionAssignmentStrategy },
++  item: PromotionItem,
++  originalMessage: string,
++): Promise<Outcome> {
++  const snapshot = args.enrollmentsByStudent.get(item.studentId);
++  if (!snapshot) return { kind: 'failed', reason: 'No active enrollment in the selected academic year (roll-collision retry)', action: 'RETRY', attemptedAction: item.action };
++
++  const toClassId = item.toClassId ?? resolveTargetClassId(snapshot, args.grades, args.nextClassByGrade, args.fallbackTarget);
++  if (!toClassId) return { kind: 'failed', reason: `Roll collision on ${item.studentId}: could not resolve target class (retry failed). ${originalMessage}`, action: 'RETRY', detail: { name: snapshot.studentName, admissionNumber: snapshot.admissionNumber }, currentClass: snapshot.className, currentSection: snapshot.sectionName, attemptedAction: item.action };
++  const info = args.targetClassById.get(toClassId);
++  if (!info) return { kind: 'failed', reason: `Roll collision on ${item.studentId}: target class not found (retry failed). ${originalMessage}`, action: 'RETRY', detail: { name: snapshot.studentName, admissionNumber: snapshot.admissionNumber }, currentClass: snapshot.className, currentSection: snapshot.sectionName, attemptedAction: item.action, toClassId };
++  // Phase 3.3: the retry resolves the SAME section the original attempt used
++  // (strategy, not firstSectionId) ΓÇö otherwise the retry would lock one key
++  // and write to another, defeating both the mutex and PRESERVE_SECTION.
++  const src: SectionAssignmentSource = {
++    studentId: item.studentId,
++    sectionId: snapshot.sectionId,
++    sectionName: snapshot.sectionName === 'ΓÇö' ? null : snapshot.sectionName,
++    rollNumber: snapshot.rollNumber,
++  };
++  const sectionId = item.toSectionId ?? args.strategy.resolveTargetSection(src, info);
++  const assignmentMarkers = item.toSectionId ? undefined : args.strategy.auditMarkers(src, info);
++  if (!sectionId) return { kind: 'failed', reason: `Roll collision on ${item.studentId}: no active section in target class (retry failed). ${originalMessage}`, action: 'RETRY', detail: { name: snapshot.studentName, admissionNumber: snapshot.admissionNumber }, currentClass: snapshot.className, currentSection: snapshot.sectionName, attemptedAction: item.action, toClassId };
++
++  let retryCount = 0;
++  for (let attempt = 0; attempt <= 3; attempt++) {
++    retryCount = attempt + 1;
++    countRollRetryAttempt();
++    try {
++      // Hook attempt number into the retry attempt (withRlsForRetry sets it to 0 by default)
++      await withRlsForRetry(snapshot, toClassId, sectionId, args.input, args.userId, assignmentMarkers);
++      profile.patchLastRetryAttempt(retryCount, -1);
++      return { kind: 'promoted' } as Outcome;
++    } catch (err) {
++      const msg = err instanceof Error ? err.message : String(err);
++      const isCollision = msg.includes('roll_number') && (msg.includes('P2002') || msg.includes('23505') || msg.includes('Unique constraint'));
++      if (profilingEnabled() && isCollision) {
++        profile.addCollision({
++          studentId: item.studentId,
++          sourceSectionId: snapshot.sectionId,
++          targetSectionId: sectionId,
++          sourceRollNumber: snapshot.rollNumber,
++          requestedTargetRoll: null,
++          retryAttempt: retryCount,
++          phase: 'retry_create',
++          timestamp: performance.now(),
++          errorCode: 'P2002',
++        });
++      }
++      // Patch exhausted entry
++      profile.patchLastRetryAttempt(retryCount, -1);
++      if (!isCollision || attempt === 3) {
++        return {
++          kind: 'failed',
++          reason: `Roll collision retry exhausted (${attempt + 1} attempts): ${msg}`,
++          action: 'RETRY',
++          detail: { name: snapshot.studentName, admissionNumber: snapshot.admissionNumber },
++          currentClass: snapshot.className,
++          currentSection: snapshot.sectionName,
++          attemptedAction: item.action,
++          toClassId,
++          toSectionId: sectionId,
++        };
++      }
++    }
++  }
++  return { kind: 'failed', reason: 'Roll collision retry exhausted', action: 'RETRY', attemptedAction: item.action } as Outcome;
++}
++
++async function withRlsForRetry(
++  snapshot: EnrollmentSnapshot,
++  toClassId: string,
++  sectionId: string,
++  input: PromotionBatchInput,
++  userId: string,
++  assignmentMarkers?: Record<string, boolean | string>
++): Promise<void> {
++  const retryStarted = profilingEnabled() ? performance.now() : 0;
++  let rollAssigned: string | null = null;
++
++  try {
++    return await withRls({ userId, schoolId: input.schoolId } as RequestContext, async (tx) => {
++      const t0 = profilingEnabled() ? performance.now() : 0;
++      const src = await tx.enrollment.findUnique({ where: { id: snapshot.id } });
++      if (!src || src.status !== 'ACTIVE') throw new Error(`Source enrollment ${snapshot.id} not found or not ACTIVE (was already processed)`);
++      const t1 = profilingEnabled() ? performance.now() : 0;
++
++      // Phase 3.2 (approved ADR ΓÇö Option A): the used-rolls read and the roll
++      // insert MUST hold the section mutex ΓÇö this is the read-then-write race
++      // that produced the verified 17ΓÇô19% roll-collision failures
++      // (failure-breakdown.md ┬º4). The source-verify above is outside the
++      // critical section. Lock released at transaction commit/abort.
++      return withSectionRollLock(
++        tx, input.schoolId, input.toAcademicYearId, toClassId, sectionId,
++        async () => {
++          const used = new Set<string>();
++          const rows = await tx.enrollment.findMany({
++            where: { schoolId: input.schoolId, sectionId, status: 'ACTIVE', rollNumber: { not: null } },
++            select: { rollNumber: true },
++          });
++          for (const r of rows) if (r.rollNumber) used.add(r.rollNumber);
++          let free = String(1);
++          while (used.has(free)) free = String(Number(free) + 1);
++          rollAssigned = free;
++          const t2 = profilingEnabled() ? performance.now() : 0;
++
++          await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PROMOTED', leftAt: new Date() } });
++          const t3 = profilingEnabled() ? performance.now() : 0;
++          await tx.enrollment.create({
++            data: {
++              schoolId: input.schoolId,
++              studentId: snapshot.studentId,
++              academicYearId: input.toAcademicYearId,
++              classId: toClassId,
++              sectionId,
++              rollNumber: free,
++              status: 'ACTIVE',
++              joinedAt: new Date(),
++            },
++          });
++          const t4 = profilingEnabled() ? performance.now() : 0;
++          await tx.auditLog.create({
++            data: {
++              userId,
++              schoolId: input.schoolId,
++              action: 'promote',
++              entity: 'enrollment',
++              recordId: snapshot.studentId,
++              after: { studentId: snapshot.studentId, fromAcademicYearId: input.fromAcademicYearId, toAcademicYearId: input.toAcademicYearId, classId: toClassId, sectionId, action: 'PROMOTE', rollCollisionRecovery: true, ...(assignmentMarkers ?? {}) } as Prisma.InputJsonValue,
++            },
++          });
++          const t5 = profilingEnabled() ? performance.now() : 0;
++
++          if (profilingEnabled()) {
++            const elapsed = t5 - retryStarted;
++            const subPhases = [
++              { name: 'verify_source', durationMs: t1 - t0, rowsAffected: src ? 1 : 0 },
++              { name: 'load_used_rolls', durationMs: t2 - t1, rowsAffected: rows.length },
++              { name: 'close_source', durationMs: t3 - t2 },
++              { name: 'create_target', durationMs: t4 - t3 },
++              { name: 'create_audit', durationMs: t5 - t4 },
++              { name: 'txn_total', durationMs: t5 - t0 },
++            ];
++            profile.addRetryAttempt({
++              studentId: snapshot.studentId,
++              attemptNumber: 0, // filled by caller
++              workerId: 0,       // filled by caller
++              startTime: retryStarted,
++              endTime: t5,
++              durationMs: elapsed,
++              outcome: 'success',
++              rollAssigned,
++              subPhases,
++            });
++          }
++        }
++      );
++    });
++  } catch (err) {
++    if (profilingEnabled()) {
++      profile.addRetryAttempt({
++        studentId: snapshot.studentId,
++        attemptNumber: 0,
++        workerId: 0,
++        startTime: retryStarted,
++        endTime: performance.now(),
++        durationMs: performance.now() - retryStarted,
++        outcome: 'exhausted',
++        rollAssigned: null,
++        subPhases: [],
++      });
++    }
++    throw err;
++  }
++}
++
++function resolveTargetClassId(
++  snapshot: EnrollmentSnapshot,
++  grades: string[],
++  nextClassByGrade: Map<string, { classId: string }>,
++  fallbackTarget: { classId: string } | null
++): string | null {
++  if (grades.length > 0 && snapshot.gradeLevel) {
++    const idx = grades.indexOf(snapshot.gradeLevel);
++    if (idx >= 0 && idx < grades.length - 1) {
++      return nextClassByGrade.get(grades[idx + 1])?.classId ?? fallbackTarget?.classId ?? null;
++    }
++  }
++  return fallbackTarget?.classId ?? null;
++}
++
+ async function passOutStudent(
+   tx: Tx,
+   schoolId: string,
+@@ -534,8 +916,11 @@ async function passOutStudent(
+   reason: string,
+   userId: string
+ ) {
++  const tEnroll = profilingEnabled() ? performance.now() : 0;
+   await tx.enrollment.update({ where: { id: snapshot.id }, data: { status: 'PASSED_OUT', leftAt: new Date() } });
++  const tStu = profilingEnabled() ? performance.now() : 0;
+   await tx.student.update({ where: { id: snapshot.studentId }, data: { status: 'PASSED_OUT' } });
++  const tPor = profilingEnabled() ? performance.now() : 0;
+   await tx.passedOutRecord.create({
+     data: {
+       schoolId,
+@@ -549,6 +934,7 @@ async function passOutStudent(
+       finalRollNumber: snapshot.rollNumber,
+     },
+   });
++  const tAudit = profilingEnabled() ? performance.now() : 0;
+   await tx.auditLog.create({
+     data: {
+       userId,
+@@ -559,6 +945,21 @@ async function passOutStudent(
+       after: { batch, reason } as Prisma.InputJsonValue,
+     },
+   });
++  const tDone = profilingEnabled() ? performance.now() : 0;
++
++  if (profilingEnabled()) {
++    profile.addStudentTiming({
++      studentId: snapshot.studentId,
++      totalMs: tDone - tEnroll,
++      closeSourceMs: tStu - tEnroll,
++      createTargetMs: tPor - tStu + (tAudit - tPor),
++      auditLogMs: tDone - tAudit,
++      rollRetries: -1,
++      outcome: 'passedOut',
++      rollNumber: snapshot.rollNumber,
++      sectionId: snapshot.sectionId,
++    });
++  }
+ }
+ 
+ // ============================================
+
+########## FILE 2: src/services/promotion/section-assignment-strategy.ts (NEW FILE, full) ##########
+// ============================================
+// Phase 3.3 â€” SectionAssignmentStrategy
+//
+// The promotion engine used to map EVERY promoted student into the target
+// class's first active section (section A), merging all source sections into
+// one target section (SECTION_MERGE root cause â€” failure-breakdown.md). This
+// module defines the section-resolution strategy seam: promotion-service.ts
+// depends ONLY on the SectionAssignmentStrategy interface, never on a concrete
+// strategy. Future strategies (BALANCE_CAPACITY, ROUND_ROBIN, MANUAL) plug in
+// through the per-school registry without touching the call site.
+// ============================================
+
+export type SectionAssignmentStrategyId =
+  | 'PRESERVE_SECTION'
+  | 'BALANCE_CAPACITY'
+  | 'ROUND_ROBIN'
+  | 'MANUAL';
+
+/** Minimal per-student view of the source enrollment the strategy may use. */
+export interface SectionAssignmentSource {
+  studentId: string;
+  sectionId: string | null;
+  /** Raw section name (e.g. "A", "B", "C"); null when the source enrollment
+   *  has no section. */
+  sectionName: string | null;
+  rollNumber: string | null;
+}
+
+/** Batch-snapshot view of the target class the strategy may consult. Built
+ *  once per batch from ACTIVE target sections; occupancy is the batch-start
+ *  count of ACTIVE target enrollments per section. */
+export interface SectionAssignmentTarget {
+  classId: string;
+  firstSectionId: string | null;
+  /** sectionId -> section name (ACTIVE sections only). */
+  sectionsById: ReadonlyMap<string, string>;
+  /** section name -> sectionId (ACTIVE sections only). */
+  sectionsByName: ReadonlyMap<string, string>;
+  /** sectionId -> capacity (schema default 40). */
+  capacityById: ReadonlyMap<string, number>;
+  /** sectionId -> ACTIVE enrollment count at batch start. */
+  occupancyById: ReadonlyMap<string, number>;
+}
+
+/** Audit markers describing HOW a section was resolved. Written into the
+ *  promote audit's `after` payload so fallback cases are visible in the
+ *  audit trail (e.g. { sectionOverflowFallback: true }). */
+export type SectionAssignmentAuditMarkers = Record<string, boolean | string>;
+
+export interface SectionAssignmentStrategy {
+  readonly id: SectionAssignmentStrategyId;
+  /**
+   * Resolves the target section for one student. MUST be deterministic for
+   * identical inputs (the audit-marker derivation re-runs it).
+   * Returns null when the target class has no usable section.
+   */
+  resolveTargetSection(
+    source: SectionAssignmentSource,
+    target: SectionAssignmentTarget
+  ): string | null;
+  /** Audit markers describing how the section was resolved (fallback reasons). */
+  auditMarkers(
+    source: SectionAssignmentSource,
+    target: SectionAssignmentTarget
+  ): SectionAssignmentAuditMarkers | undefined;
+}
+
+// ============================================
+// PRESERVE_SECTION â€” the only implementation built in Phase 3.3
+//
+//   - Match the source section's name/letter to a target section with the
+//     same name/letter (e.g. source "B" -> target "B").
+//   - No matching-named target section (target class has fewer sections, or a
+//     custom name) -> fall back to firstSectionId.
+//   - Matched target section at capacity (occupancy >= capacity at batch
+//     start) -> overflow fall back to firstSectionId, with a DISTINCT audit
+//     marker (sectionOverflowFallback) per overflowing student.
+//   - No capacity-balancing logic (out of scope this phase).
+// ============================================
+
+type PreserveFallbackReason = 'overflow' | 'no_matching_section' | null;
+
+function resolvePreserve(
+  source: SectionAssignmentSource,
+  target: SectionAssignmentTarget
+): { sectionId: string | null; reason: PreserveFallbackReason } {
+  if (source.sectionName) {
+    const matched = target.sectionsByName.get(source.sectionName);
+    if (matched) {
+      const occupancy = target.occupancyById.get(matched) ?? 0;
+      const capacity = target.capacityById.get(matched) ?? 0;
+      if (occupancy >= capacity) {
+        return { sectionId: target.firstSectionId ?? matched, reason: 'overflow' };
+      }
+      return { sectionId: matched, reason: null };
+    }
+  }
+  // No source section (un-sectioned enrollment) or no matching name in the
+  // target class -> first active section (pre-3.3 behavior as the fallback).
+  return { sectionId: target.firstSectionId, reason: source.sectionName ? 'no_matching_section' : null };
+}
+
+export const PRESERVE_SECTION: SectionAssignmentStrategy = {
+  id: 'PRESERVE_SECTION',
+  resolveTargetSection(source, target) {
+    return resolvePreserve(source, target).sectionId;
+  },
+  auditMarkers(source, target): SectionAssignmentAuditMarkers | undefined {
+    const { reason } = resolvePreserve(source, target);
+    if (reason === 'overflow') return { sectionOverflowFallback: true };
+    if (reason === 'no_matching_section') return { sectionFallback: 'no_matching_section' };
+    return undefined;
+  },
+};
+
+// ============================================
+// Stubs for future strategies (interface shape only â€” NOT implemented).
+// Registered through the per-school registry once implemented in a later
+// phase; nothing here is reachable in Phase 3.3.
+// ============================================
+
+const notImplemented = (id: SectionAssignmentStrategyId) => () => {
+  throw new Error(`SectionAssignmentStrategy ${id} is not implemented (stub only)`);
+};
+
+export const BALANCE_CAPACITY: SectionAssignmentStrategy = {
+  id: 'BALANCE_CAPACITY',
+  resolveTargetSection: notImplemented('BALANCE_CAPACITY'),
+  auditMarkers: () => undefined,
+};
+
+export const ROUND_ROBIN: SectionAssignmentStrategy = {
+  id: 'ROUND_ROBIN',
+  resolveTargetSection: notImplemented('ROUND_ROBIN'),
+  auditMarkers: () => undefined,
+};
+
+export const MANUAL: SectionAssignmentStrategy = {
+  id: 'MANUAL',
+  resolveTargetSection: notImplemented('MANUAL'),
+  auditMarkers: () => undefined,
+};
+
+// ============================================
+// Per-school resolution registry
+//
+// The strategy is resolvable per school (schoolId-scoped), not hardcoded
+// globally. Default: PRESERVE_SECTION for every school. Future per-school
+// overrides land here via registerSectionAssignmentStrategy without any
+// change to promotion-service.ts.
+// ============================================
+
+const registry = new Map<string, SectionAssignmentStrategy>();
+
+export function getSectionAssignmentStrategy(schoolId: string): SectionAssignmentStrategy {
+  return registry.get(schoolId) ?? PRESERVE_SECTION;
+}
+
+export function registerSectionAssignmentStrategy(
+  schoolId: string,
+  strategy: SectionAssignmentStrategy
+): void {
+  registry.set(schoolId, strategy);
+}

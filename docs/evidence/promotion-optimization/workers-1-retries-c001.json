@@ -1,0 +1,4757 @@
+{
+  "runId": "retry-1785825951883",
+  "totalRetryStudents": 125,
+  "totalRetryAttempts": 125,
+  "attempts": [
+    {
+      "studentId": "seed_stu_000004",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 13852.0851,
+      "endTime": 14476.2313,
+      "durationMs": 624.1461999999992,
+      "outcome": "success",
+      "rollAssigned": "38",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 100.51269999999931,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.18209999999999,
+          "rowsAffected": 37
+        },
+        {
+          "name": "close_source",
+          "durationMs": 78.40130000000136
+        },
+        {
+          "name": "create_target",
+          "durationMs": 59.81949999999961
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 76.31129999999939
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 419.22689999999966
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000006",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 15283.51,
+      "endTime": 16615.2392,
+      "durationMs": 1331.7291999999998,
+      "outcome": "success",
+      "rollAssigned": "39",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 310.0681999999997,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 204.15719999999965,
+          "rowsAffected": 38
+        },
+        {
+          "name": "close_source",
+          "durationMs": 302.15549999999894
+        },
+        {
+          "name": "create_target",
+          "durationMs": 105.71420000000217
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 104.85529999999926
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1026.9503999999997
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000008",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 17537.824,
+      "endTime": 18914.5301,
+      "durationMs": 1376.7060999999994,
+      "outcome": "success",
+      "rollAssigned": "40",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.6898000000001,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 204.39069999999992,
+          "rowsAffected": 39
+        },
+        {
+          "name": "close_source",
+          "durationMs": 211.245600000002
+        },
+        {
+          "name": "create_target",
+          "durationMs": 201.436099999999
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 455.10469999999987
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1174.866900000001
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000041",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 19586.4996,
+      "endTime": 20299.7308,
+      "durationMs": 713.231200000002,
+      "outcome": "success",
+      "rollAssigned": "31",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 103.45089999999982,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 101.82340000000113,
+          "rowsAffected": 30
+        },
+        {
+          "name": "close_source",
+          "durationMs": 53.6163000000015
+        },
+        {
+          "name": "create_target",
+          "durationMs": 148.79169999999795
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 100.65720000000147
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 508.33950000000186
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000042",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 21530.2368,
+      "endTime": 22558.305,
+      "durationMs": 1028.0682000000015,
+      "outcome": "success",
+      "rollAssigned": "32",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 100.20789999999761,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 107.57840000000215,
+          "rowsAffected": 31
+        },
+        {
+          "name": "close_source",
+          "durationMs": 387.84920000000056
+        },
+        {
+          "name": "create_target",
+          "durationMs": 49.10570000000007
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 176.80679999999847
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 821.5479999999989
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000044",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 23477.885,
+      "endTime": 24502.052,
+      "durationMs": 1024.1670000000013,
+      "outcome": "success",
+      "rollAssigned": "33",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 113.89780000000246,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 95.75169999999707,
+          "rowsAffected": 32
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.17450000000099
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.04780000000028
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 102.36520000000019
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 513.237000000001
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000046",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 25728.9503,
+      "endTime": 26492.2027,
+      "durationMs": 763.2524000000012,
+      "outcome": "success",
+      "rollAssigned": "34",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 48.52400000000125,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 162.2481000000007,
+          "rowsAffected": 33
+        },
+        {
+          "name": "close_source",
+          "durationMs": 99.4403999999995
+        },
+        {
+          "name": "create_target",
+          "durationMs": 99.78930000000037
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 48.375700000000506
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 458.3775000000023
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000048",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 27580.7165,
+      "endTime": 28498.2181,
+      "durationMs": 917.5015999999996,
+      "outcome": "success",
+      "rollAssigned": "35",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 211.32800000000134,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 99.7510000000002,
+          "rowsAffected": 34
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.5557000000008
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.69659999999931
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 105.90289999999732
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 621.234199999999
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000050",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 29415.7293,
+      "endTime": 30439.2824,
+      "durationMs": 1023.553100000001,
+      "outcome": "success",
+      "rollAssigned": "36",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 99.78800000000047,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 102.85229999999865,
+          "rowsAffected": 35
+        },
+        {
+          "name": "close_source",
+          "durationMs": 109.22950000000128
+        },
+        {
+          "name": "create_target",
+          "durationMs": 97.8797999999988
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 102.15220000000045
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 511.90179999999964
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000052",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 31158.3484,
+      "endTime": 32079.4061,
+      "durationMs": 921.0577000000012,
+      "outcome": "success",
+      "rollAssigned": "37",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 47.36570000000211,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 84.50959999999759,
+          "rowsAffected": 36
+        },
+        {
+          "name": "close_source",
+          "durationMs": 407.6896000000015
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.76169999999911
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.76350000000093
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 745.0901000000013
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000054",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 32695.2969,
+      "endTime": 33765.8614,
+      "durationMs": 1070.5645000000004,
+      "outcome": "success",
+      "rollAssigned": "38",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 405.44830000000366,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 205.23459999999614,
+          "rowsAffected": 37
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.91079999999783
+        },
+        {
+          "name": "create_target",
+          "durationMs": 105.13180000000284
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 48.901700000002165
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 865.6272000000026
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000056",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 34439.1701,
+      "endTime": 36242.9918,
+      "durationMs": 1803.8217000000004,
+      "outcome": "success",
+      "rollAssigned": "39",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 241.20440000000235,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 987.9291999999987,
+          "rowsAffected": 38
+        },
+        {
+          "name": "close_source",
+          "durationMs": 139.77170000000478
+        },
+        {
+          "name": "create_target",
+          "durationMs": 170.15009999999893
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 158.56330000000162
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1697.6187000000064
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000058",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 37538.153,
+      "endTime": 38622.0728,
+      "durationMs": 1083.9198000000033,
+      "outcome": "success",
+      "rollAssigned": "40",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 168.98619999999937,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 195.71089999999822,
+          "rowsAffected": 39
+        },
+        {
+          "name": "close_source",
+          "durationMs": 203.34130000000005
+        },
+        {
+          "name": "create_target",
+          "durationMs": 114.45859999999811
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 64.2789000000048
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 746.7759000000005
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000081",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 41399.2196,
+      "endTime": 42656.9942,
+      "durationMs": 1257.7746000000043,
+      "outcome": "success",
+      "rollAssigned": "31",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 122.73470000000088,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 360.03110000000015,
+          "rowsAffected": 30
+        },
+        {
+          "name": "close_source",
+          "durationMs": 63.66560000000027
+        },
+        {
+          "name": "create_target",
+          "durationMs": 187.8775999999998
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 101.77300000000105
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 836.0820000000022
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000082",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 43373.3554,
+      "endTime": 44104.8426,
+      "durationMs": 731.4872000000032,
+      "outcome": "success",
+      "rollAssigned": "32",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 93.55289999999513,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 108.969600000004,
+          "rowsAffected": 31
+        },
+        {
+          "name": "close_source",
+          "durationMs": 51.73099999999977
+        },
+        {
+          "name": "create_target",
+          "durationMs": 146.2725999999966
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 117.9007000000056
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 518.4268000000011
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000084",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 44600.5441,
+      "endTime": 45624.19,
+      "durationMs": 1023.6459000000032,
+      "outcome": "success",
+      "rollAssigned": "33",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 52.93920000000071,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 173.77210000000196,
+          "rowsAffected": 32
+        },
+        {
+          "name": "close_source",
+          "durationMs": 103.3150999999998
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.37000000000262
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 407.1226999999999
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 840.519100000005
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000086",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 46650.3522,
+      "endTime": 47500.4978,
+      "durationMs": 850.1455999999962,
+      "outcome": "success",
+      "rollAssigned": "34",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 143.72589999999764,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 202.92349999999715,
+          "rowsAffected": 33
+        },
+        {
+          "name": "close_source",
+          "durationMs": 105.08030000000144
+        },
+        {
+          "name": "create_target",
+          "durationMs": 94.42339999999967
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 135.86179999999877
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 682.0148999999947
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000088",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 49326.9194,
+      "endTime": 52092.4534,
+      "durationMs": 2765.5339999999997,
+      "outcome": "success",
+      "rollAssigned": "35",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 280.1073000000033,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1180.0806000000011,
+          "rowsAffected": 34
+        },
+        {
+          "name": "close_source",
+          "durationMs": 156.36129999999685
+        },
+        {
+          "name": "create_target",
+          "durationMs": 407.8729999999996
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 169.16619999999966
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 2193.5884000000005
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000090",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 53935.0093,
+      "endTime": 54984.9394,
+      "durationMs": 1049.930100000005,
+      "outcome": "success",
+      "rollAssigned": "36",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 116.07830000000104,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.23309999999765,
+          "rowsAffected": 35
+        },
+        {
+          "name": "close_source",
+          "durationMs": 209.68639999999868
+        },
+        {
+          "name": "create_target",
+          "durationMs": 234.1094000000012
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 97.88350000000355
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 761.9907000000021
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000092",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 55773.9849,
+      "endTime": 56598.8267,
+      "durationMs": 824.8417999999947,
+      "outcome": "success",
+      "rollAssigned": "37",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 205.48070000000007,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 105.90499999999884,
+          "rowsAffected": 36
+        },
+        {
+          "name": "close_source",
+          "durationMs": 105.01720000000205
+        },
+        {
+          "name": "create_target",
+          "durationMs": 98.63729999999487
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 117.64570000000094
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 632.6858999999968
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000094",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 57938.0301,
+      "endTime": 59284.0768,
+      "durationMs": 1346.046699999999,
+      "outcome": "success",
+      "rollAssigned": "38",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 115.19180000000051,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 229.08580000000075,
+          "rowsAffected": 37
+        },
+        {
+          "name": "close_source",
+          "durationMs": 173.58460000000196
+        },
+        {
+          "name": "create_target",
+          "durationMs": 131.07279999999446
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 205.06370000000607
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 853.9987000000037
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000096",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 60782.9771,
+      "endTime": 62418.2232,
+      "durationMs": 1635.246100000004,
+      "outcome": "success",
+      "rollAssigned": "39",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 99.46630000000005,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 760.2829000000056,
+          "rowsAffected": 38
+        },
+        {
+          "name": "close_source",
+          "durationMs": 162.6536999999953
+        },
+        {
+          "name": "create_target",
+          "durationMs": 144.99339999999938
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 260.31900000000314
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1427.7153000000035
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000098",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 63238.4954,
+      "endTime": 64484.3149,
+      "durationMs": 1245.8194999999978,
+      "outcome": "success",
+      "rollAssigned": "40",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 249.7954000000027,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 262.7514999999985,
+          "rowsAffected": 39
+        },
+        {
+          "name": "close_source",
+          "durationMs": 140.07880000000296
+        },
+        {
+          "name": "create_target",
+          "durationMs": 52.56160000000091
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 238.0908999999956
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 943.2782000000007
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000161",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 105018.7064,
+      "endTime": 105848.0144,
+      "durationMs": 829.3080000000045,
+      "outcome": "success",
+      "rollAssigned": "41",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 107.80380000000878,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 200.00680000000284,
+          "rowsAffected": 40
+        },
+        {
+          "name": "close_source",
+          "durationMs": 107.01759999999194
+        },
+        {
+          "name": "create_target",
+          "durationMs": 99.6079000000027
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 110.79989999999816
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 625.2360000000044
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000162",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 106555.3615,
+      "endTime": 108300.1876,
+      "durationMs": 1744.8261000000057,
+      "outcome": "success",
+      "rollAssigned": "42",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 196.23219999999856,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 615.3034000000043,
+          "rowsAffected": 41
+        },
+        {
+          "name": "close_source",
+          "durationMs": 98.73139999998966
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.90430000000924
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 518.2301000000007
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1530.4014000000025
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000163",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 109424.019,
+      "endTime": 110552.4653,
+      "durationMs": 1128.446299999996,
+      "outcome": "success",
+      "rollAssigned": "43",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 284.21169999999984,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 236.0731000000087,
+          "rowsAffected": 42
+        },
+        {
+          "name": "close_source",
+          "durationMs": 173.82859999999346
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.11140000000887
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 105.24889999999141
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 900.4737000000023
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000164",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 111878.6661,
+      "endTime": 113006.7086,
+      "durationMs": 1128.042499999996,
+      "outcome": "success",
+      "rollAssigned": "44",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 122.90869999999995,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 234.6189000000013,
+          "rowsAffected": 43
+        },
+        {
+          "name": "close_source",
+          "durationMs": 152.97789999999804
+        },
+        {
+          "name": "create_target",
+          "durationMs": 109.3058999999921
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 193.2908000000025
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 813.1021999999939
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000165",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 113721.3236,
+      "endTime": 114729.3576,
+      "durationMs": 1008.0339999999997,
+      "outcome": "success",
+      "rollAssigned": "45",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 43.1140000000014,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 159.91990000000806,
+          "rowsAffected": 44
+        },
+        {
+          "name": "close_source",
+          "durationMs": 211.15649999999732
+        },
+        {
+          "name": "create_target",
+          "durationMs": 202.29069999999774
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 82.13760000000184
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 698.6187000000064
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000166",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 115678.2222,
+      "endTime": 116488.052,
+      "durationMs": 809.8297999999922,
+      "outcome": "success",
+      "rollAssigned": "46",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 112.92140000000654,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 50.997199999997974,
+          "rowsAffected": 45
+        },
+        {
+          "name": "close_source",
+          "durationMs": 148.89349999999104
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.36490000000049
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 98.76810000000114
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 512.9450999999972
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000167",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 117722.8775,
+      "endTime": 119358.935,
+      "durationMs": 1636.0574999999953,
+      "outcome": "success",
+      "rollAssigned": "47",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 251.70110000000568,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 225.90630000000237,
+          "rowsAffected": 46
+        },
+        {
+          "name": "close_source",
+          "durationMs": 294.5804999999964
+        },
+        {
+          "name": "create_target",
+          "durationMs": 334.232600000003
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 282.62489999999525
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1389.0454000000027
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000168",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 120996.5059,
+      "endTime": 122847.5582,
+      "durationMs": 1851.0522999999957,
+      "outcome": "success",
+      "rollAssigned": "48",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 109.10589999999502,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 196.72570000000997,
+          "rowsAffected": 47
+        },
+        {
+          "name": "close_source",
+          "durationMs": 714.5589999999938
+        },
+        {
+          "name": "create_target",
+          "durationMs": 113.69250000000466
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 204.34829999999783
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1338.4314000000013
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000169",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 124168.8621,
+      "endTime": 125294.5716,
+      "durationMs": 1125.7094999999972,
+      "outcome": "success",
+      "rollAssigned": "49",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 180.05169999999634,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.57480000000214,
+          "rowsAffected": 48
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.52730000000156
+        },
+        {
+          "name": "create_target",
+          "durationMs": 117.43949999999313
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 87.84279999999853
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 591.4360999999917
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000170",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 125910.5368,
+      "endTime": 126665.333,
+      "durationMs": 754.796199999997,
+      "outcome": "success",
+      "rollAssigned": "50",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 105.27960000000894,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 99.60540000000037,
+          "rowsAffected": 49
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.9537999999884
+        },
+        {
+          "name": "create_target",
+          "durationMs": 102.28820000000997
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 142.89539999999397
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 552.0224000000017
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000171",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 127737.7967,
+      "endTime": 128681.5373,
+      "durationMs": 943.7405999999901,
+      "outcome": "success",
+      "rollAssigned": "51",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 104.66859999998996,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 106.79790000000503,
+          "rowsAffected": 50
+        },
+        {
+          "name": "close_source",
+          "durationMs": 198.46409999999742
+        },
+        {
+          "name": "create_target",
+          "durationMs": 99.51260000000184
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 212.86939999999595
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 722.3125999999902
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000172",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 129446.6052,
+      "endTime": 130415.5821,
+      "durationMs": 968.9768999999942,
+      "outcome": "success",
+      "rollAssigned": "52",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 188.60749999999825,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 101.82009999999718,
+          "rowsAffected": 51
+        },
+        {
+          "name": "close_source",
+          "durationMs": 103.52190000000701
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.34470000000147
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.10959999999614
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 597.4038
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000173",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 131541.1261,
+      "endTime": 133283.0644,
+      "durationMs": 1741.938300000009,
+      "outcome": "success",
+      "rollAssigned": "53",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 200.38590000002296,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 849.8191999999981,
+          "rowsAffected": 52
+        },
+        {
+          "name": "close_source",
+          "durationMs": 189.74739999999292
+        },
+        {
+          "name": "create_target",
+          "durationMs": 120.37260000000242
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 174.0109999999986
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1534.336100000015
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000174",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 133903.6478,
+      "endTime": 136051.1929,
+      "durationMs": 2147.5450999999885,
+      "outcome": "success",
+      "rollAssigned": "54",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 258.8587000000116,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1120.052800000005,
+          "rowsAffected": 53
+        },
+        {
+          "name": "close_source",
+          "durationMs": 104.9661999999953
+        },
+        {
+          "name": "create_target",
+          "durationMs": 195.45530000000144
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 106.86809999999241
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1786.2011000000057
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000175",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 136662.3608,
+      "endTime": 137487.3609,
+      "durationMs": 825.0001000000047,
+      "outcome": "success",
+      "rollAssigned": "55",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 63.67720000000554,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 53.109900000010384,
+          "rowsAffected": 54
+        },
+        {
+          "name": "close_source",
+          "durationMs": 221.49739999999292
+        },
+        {
+          "name": "create_target",
+          "durationMs": 173.94760000001406
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 104.64009999998962
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 616.8722000000125
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000176",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 139232.7464,
+      "endTime": 140041.9853,
+      "durationMs": 809.2388999999966,
+      "outcome": "success",
+      "rollAssigned": "56",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 159.0358000000124,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 73.67119999998249,
+          "rowsAffected": 55
+        },
+        {
+          "name": "close_source",
+          "durationMs": 129.6836000000185
+        },
+        {
+          "name": "create_target",
+          "durationMs": 107.25070000000414
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 96.83979999998701
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 566.4811000000045
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000177",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 140760.0205,
+      "endTime": 141478.4938,
+      "durationMs": 718.4732999999833,
+      "outcome": "success",
+      "rollAssigned": "57",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 103.01370000001043,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 55.51879999999073,
+          "rowsAffected": 56
+        },
+        {
+          "name": "close_source",
+          "durationMs": 146.09049999999115
+        },
+        {
+          "name": "create_target",
+          "durationMs": 105.83060000001569
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 102.92309999998542
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 513.3766999999934
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000178",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 142088.5276,
+      "endTime": 144750.4904,
+      "durationMs": 2661.9628000000084,
+      "outcome": "success",
+      "rollAssigned": "58",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 106.20610000001034,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 517.8959000000032,
+          "rowsAffected": 57
+        },
+        {
+          "name": "close_source",
+          "durationMs": 379.1449999999895
+        },
+        {
+          "name": "create_target",
+          "durationMs": 1249.7149999999965
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.03820000000997
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 2356.0002000000095
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000179",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 146047.5393,
+      "endTime": 147005.4474,
+      "durationMs": 957.9081000000006,
+      "outcome": "success",
+      "rollAssigned": "59",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 221.70879999999306,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.39560000001802,
+          "rowsAffected": 58
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.83299999998417
+        },
+        {
+          "name": "create_target",
+          "durationMs": 102.40770000001066
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.18249999999534
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 632.5276000000013
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000180",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 147723.2741,
+      "endTime": 149260.4991,
+      "durationMs": 1537.2249999999767,
+      "outcome": "success",
+      "rollAssigned": "60",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 409.9382999999798,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 621.7309000000241,
+          "rowsAffected": 59
+        },
+        {
+          "name": "close_source",
+          "durationMs": 91.49799999999232
+        },
+        {
+          "name": "create_target",
+          "durationMs": 106.3631999999925
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.22769999998854
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1332.7580999999773
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000181",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 150185.1918,
+      "endTime": 151848.0627,
+      "durationMs": 1662.870900000009,
+      "outcome": "success",
+      "rollAssigned": "61",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 237.21299999998882,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 312.73670000000857,
+          "rowsAffected": 60
+        },
+        {
+          "name": "close_source",
+          "durationMs": 489.94740000000456
+        },
+        {
+          "name": "create_target",
+          "durationMs": 193.81260000000475
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 129.99890000000596
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1363.7086000000127
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000182",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 153047.5394,
+      "endTime": 154211.2228,
+      "durationMs": 1163.6833999999799,
+      "outcome": "success",
+      "rollAssigned": "62",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 108.42459999999846,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 194.18510000000242,
+          "rowsAffected": 61
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.92149999999674
+        },
+        {
+          "name": "create_target",
+          "durationMs": 310.4228000000003
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 137.63989999998012
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 851.593899999978
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000183",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 155509.4779,
+      "endTime": 157451.4692,
+      "durationMs": 1941.9912999999942,
+      "outcome": "success",
+      "rollAssigned": "63",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 702.8393999999971,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 726.3410000000149,
+          "rowsAffected": 62
+        },
+        {
+          "name": "close_source",
+          "durationMs": 93.95149999999558
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.0576000000001
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 105.3912999999884
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1728.580799999996
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000184",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 158472.4763,
+      "endTime": 159809.8688,
+      "durationMs": 1337.3924999999872,
+      "outcome": "success",
+      "rollAssigned": "64",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 106.11579999999958,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 115.1310999999987,
+          "rowsAffected": 63
+        },
+        {
+          "name": "close_source",
+          "durationMs": 192.15710000001127
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.11559999999008
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 514.6935999999987
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1031.2131999999983
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000185",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 160725.8761,
+      "endTime": 161445.6309,
+      "durationMs": 719.7547999999952,
+      "outcome": "success",
+      "rollAssigned": "65",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 106.28390000000945,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 100.54789999997593,
+          "rowsAffected": 64
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.71060000002035
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.3403999999864
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 102.00109999999404
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 513.8838999999862
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000186",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 162982.3866,
+      "endTime": 164318.7909,
+      "durationMs": 1336.4042999999947,
+      "outcome": "success",
+      "rollAssigned": "66",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 103.35210000001825,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 554.0288,
+          "rowsAffected": 65
+        },
+        {
+          "name": "close_source",
+          "durationMs": 162.67639999999665
+        },
+        {
+          "name": "create_target",
+          "durationMs": 110.42129999998724
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 202.50370000000112
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1132.9823000000033
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000187",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 165336.3851,
+      "endTime": 167181.176,
+      "durationMs": 1844.7908999999927,
+      "outcome": "success",
+      "rollAssigned": "67",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 202.81050000002142,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 214.9372999999905,
+          "rowsAffected": 66
+        },
+        {
+          "name": "close_source",
+          "durationMs": 184.04339999999502
+        },
+        {
+          "name": "create_target",
+          "durationMs": 51.73089999999502
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 887.464100000012
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1540.986200000014
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000188",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 168409.9853,
+      "endTime": 170156.1781,
+      "durationMs": 1746.1927999999898,
+      "outcome": "success",
+      "rollAssigned": "68",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 209.26319999998668,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 833.6140000000014,
+          "rowsAffected": 67
+        },
+        {
+          "name": "close_source",
+          "durationMs": 119.09799999999814
+        },
+        {
+          "name": "create_target",
+          "durationMs": 72.46610000001965
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 309.6392999999807
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1544.0805999999866
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000189",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 171530.9254,
+      "endTime": 172925.2852,
+      "durationMs": 1394.3598000000056,
+      "outcome": "success",
+      "rollAssigned": "69",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 293.70509999999194,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 408.7467999999935,
+          "rowsAffected": 68
+        },
+        {
+          "name": "close_source",
+          "durationMs": 97.06580000001122
+        },
+        {
+          "name": "create_target",
+          "durationMs": 206.66229999999632
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 110.64430000001448
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1116.8243000000075
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000190",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 174239.2067,
+      "endTime": 175470.4758,
+      "durationMs": 1231.2690999999759,
+      "outcome": "success",
+      "rollAssigned": "70",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 108.83090000000084,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 232.00280000001658,
+          "rowsAffected": 69
+        },
+        {
+          "name": "close_source",
+          "durationMs": 215.91659999999683
+        },
+        {
+          "name": "create_target",
+          "durationMs": 163.63370000000577
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 203.01479999997537
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 923.3987999999954
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000191",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 176312.8548,
+      "endTime": 177362.9191,
+      "durationMs": 1050.0642999999982,
+      "outcome": "success",
+      "rollAssigned": "71",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 117.69699999998556,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 99.82469999999739,
+          "rowsAffected": 70
+        },
+        {
+          "name": "close_source",
+          "durationMs": 285.5316000000166
+        },
+        {
+          "name": "create_target",
+          "durationMs": 206.8022999999812
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 145.16930000000866
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 855.0248999999894
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000192",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 177931.6282,
+      "endTime": 179216.5983,
+      "durationMs": 1284.970100000006,
+      "outcome": "success",
+      "rollAssigned": "72",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 108.04949999999371,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 195.60150000001886,
+          "rowsAffected": 71
+        },
+        {
+          "name": "close_source",
+          "durationMs": 269.6418999999878
+        },
+        {
+          "name": "create_target",
+          "durationMs": 53.76039999999921
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 342.88400000002
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 969.9373000000196
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000193",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 180805.7971,
+      "endTime": 182855.4694,
+      "durationMs": 2049.6723000000056,
+      "outcome": "success",
+      "rollAssigned": "73",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 103.15570000000298,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 827.1540999999852,
+          "rowsAffected": 72
+        },
+        {
+          "name": "close_source",
+          "durationMs": 98.15810000000056
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.54959999999846
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 109.78080000000773
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1238.798299999995
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000194",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 183869.952,
+      "endTime": 184893.1068,
+      "durationMs": 1023.1548000000184,
+      "outcome": "success",
+      "rollAssigned": "74",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 114.80400000000373,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 131.03200000000652,
+          "rowsAffected": 73
+        },
+        {
+          "name": "close_source",
+          "durationMs": 161.2954000000027
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.56510000000708
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 204.4140999999945
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 712.1106000000145
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000195",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 186224.0999,
+      "endTime": 187600.4228,
+      "durationMs": 1376.3228999999992,
+      "outcome": "success",
+      "rollAssigned": "75",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 198.64019999999437,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 102.69779999999446,
+          "rowsAffected": 74
+        },
+        {
+          "name": "close_source",
+          "durationMs": 107.73699999999371
+        },
+        {
+          "name": "create_target",
+          "durationMs": 421.87330000000657
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 129.36770000000251
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 960.3159999999916
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000196",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 189304.8145,
+      "endTime": 191052.7085,
+      "durationMs": 1747.8940000000002,
+      "outcome": "success",
+      "rollAssigned": "76",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 314.9343999999983,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 909.0399000000034,
+          "rowsAffected": 75
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.75969999999506
+        },
+        {
+          "name": "create_target",
+          "durationMs": 57.24790000001667
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 59.47119999999995
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1442.4531000000134
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000197",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 191757.4722,
+      "endTime": 193700.5992,
+      "durationMs": 1943.1270000000077,
+      "outcome": "success",
+      "rollAssigned": "77",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.93640000000596,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 299.55199999999604,
+          "rowsAffected": 76
+        },
+        {
+          "name": "close_source",
+          "durationMs": 611.4206000000122
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.6878999999899
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 308.18270000000484
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1425.779600000009
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000198",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 194831.7726,
+      "endTime": 196836.5714,
+      "durationMs": 2004.7987999999896,
+      "outcome": "success",
+      "rollAssigned": "78",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 81.53169999999227,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 350.51439999998547,
+          "rowsAffected": 77
+        },
+        {
+          "name": "close_source",
+          "durationMs": 102.4770000000135
+        },
+        {
+          "name": "create_target",
+          "durationMs": 109.09419999999227
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 877.3772999999928
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1520.9945999999763
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000199",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 198416.5927,
+      "endTime": 200049.0661,
+      "durationMs": 1632.473399999988,
+      "outcome": "success",
+      "rollAssigned": "79",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 187.90499999999884,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 423.84500000000116,
+          "rowsAffected": 78
+        },
+        {
+          "name": "close_source",
+          "durationMs": 188.8450999999768
+        },
+        {
+          "name": "create_target",
+          "durationMs": 105.01590000002761
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 197.19939999998314
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1102.8103999999876
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000200",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 202232.9865,
+      "endTime": 205477.9549,
+      "durationMs": 3244.9684000000125,
+      "outcome": "success",
+      "rollAssigned": "80",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 495.4831000000122,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1676.0562999999966,
+          "rowsAffected": 79
+        },
+        {
+          "name": "close_source",
+          "durationMs": 175.57159999999567
+        },
+        {
+          "name": "create_target",
+          "durationMs": 105.06909999999334
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 98.18680000002496
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 2550.3669000000227
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000201",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 206400.5445,
+      "endTime": 207632.7312,
+      "durationMs": 1232.1867000000202,
+      "outcome": "success",
+      "rollAssigned": "81",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 109.37830000001122,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 399.0011999999988,
+          "rowsAffected": 80
+        },
+        {
+          "name": "close_source",
+          "durationMs": 269.2329000000027
+        },
+        {
+          "name": "create_target",
+          "durationMs": 145.90219999998226
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 104.4949000000197
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1028.0095000000147
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000202",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 208747.0617,
+      "endTime": 209795.478,
+      "durationMs": 1048.4163000000117,
+      "outcome": "success",
+      "rollAssigned": "82",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 204.5116000000271,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 103.88539999999921,
+          "rowsAffected": 81
+        },
+        {
+          "name": "close_source",
+          "durationMs": 117.91899999999441
+        },
+        {
+          "name": "create_target",
+          "durationMs": 167.0608999999822
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 243.01010000001406
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 836.387000000017
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000203",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 211118.9472,
+      "endTime": 212464.5223,
+      "durationMs": 1345.5751000000164,
+      "outcome": "success",
+      "rollAssigned": "83",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 136.0635000000184,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 194.35939999998664,
+          "rowsAffected": 82
+        },
+        {
+          "name": "close_source",
+          "durationMs": 199.3349000000162
+        },
+        {
+          "name": "create_target",
+          "durationMs": 117.79039999999804
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 209.8695000000007
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 857.41770000002
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000204",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 213718.8547,
+      "endTime": 215755.1212,
+      "durationMs": 2036.266499999998,
+      "outcome": "success",
+      "rollAssigned": "84",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 193.13829999999143,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 297.2711999999883,
+          "rowsAffected": 83
+        },
+        {
+          "name": "close_source",
+          "durationMs": 201.04290000000037
+        },
+        {
+          "name": "create_target",
+          "durationMs": 104.13500000000931
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 336.858899999992
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1132.4462999999814
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000205",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 217901.7794,
+      "endTime": 219506.3199,
+      "durationMs": 1604.5405000000028,
+      "outcome": "success",
+      "rollAssigned": "85",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 244.21770000000834,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 414.2737999999954,
+          "rowsAffected": 84
+        },
+        {
+          "name": "close_source",
+          "durationMs": 258.4841000000015
+        },
+        {
+          "name": "create_target",
+          "durationMs": 321.5127999999968
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 79.76410000000033
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1318.2525000000023
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000206",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 223706.704,
+      "endTime": 224925.8028,
+      "durationMs": 1219.098800000007,
+      "outcome": "success",
+      "rollAssigned": "86",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 595.2569000000076,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 110.03039999998873,
+          "rowsAffected": 85
+        },
+        {
+          "name": "close_source",
+          "durationMs": 49.90559999999823
+        },
+        {
+          "name": "create_target",
+          "durationMs": 71.3185999999987
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 83.70170000000508
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 910.2131999999983
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000207",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 225281.3165,
+      "endTime": 226401.8734,
+      "durationMs": 1120.556900000025,
+      "outcome": "success",
+      "rollAssigned": "87",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 104.40739999999641,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 442.5035000000207,
+          "rowsAffected": 86
+        },
+        {
+          "name": "close_source",
+          "durationMs": 54.89509999999427
+        },
+        {
+          "name": "create_target",
+          "durationMs": 59.83220000000438
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 350.0576000000001
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1011.6958000000159
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000208",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 227291.2234,
+      "endTime": 229238.6874,
+      "durationMs": 1947.4640000000072,
+      "outcome": "success",
+      "rollAssigned": "88",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.11850000001141,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 819.6379999999772,
+          "rowsAffected": 87
+        },
+        {
+          "name": "close_source",
+          "durationMs": 116.65740000002552
+        },
+        {
+          "name": "create_target",
+          "durationMs": 330.6740999999747
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 273.1307000000088
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1641.2186999999976
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000209",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 230230.9001,
+      "endTime": 232356.0585,
+      "durationMs": 2125.158400000015,
+      "outcome": "success",
+      "rollAssigned": "89",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.46749999999884,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 474.8254999999772,
+          "rowsAffected": 88
+        },
+        {
+          "name": "close_source",
+          "durationMs": 344.5175000000163
+        },
+        {
+          "name": "create_target",
+          "durationMs": 96.80979999998817
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 662.664700000023
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1681.2850000000035
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000210",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 233846.1924,
+      "endTime": 236532.952,
+      "durationMs": 2686.7595999999903,
+      "outcome": "success",
+      "rollAssigned": "90",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 223.19640000001527,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 991.4266999999818,
+          "rowsAffected": 89
+        },
+        {
+          "name": "close_source",
+          "durationMs": 477.81260000000475
+        },
+        {
+          "name": "create_target",
+          "durationMs": 143.5688000000082
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 429.17129999998724
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 2265.1757999999973
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000211",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 237967.6441,
+      "endTime": 239394.592,
+      "durationMs": 1426.9478999999992,
+      "outcome": "success",
+      "rollAssigned": "91",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.14830000000075,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 611.1760000000068,
+          "rowsAffected": 90
+        },
+        {
+          "name": "close_source",
+          "durationMs": 107.80470000000787
+        },
+        {
+          "name": "create_target",
+          "durationMs": 102.80499999999302
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 114.68989999999758
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1038.623900000006
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000212",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 240317.0173,
+      "endTime": 242550.3552,
+      "durationMs": 2233.337899999984,
+      "outcome": "success",
+      "rollAssigned": "92",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.90209999997751,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1009.7651000000187,
+          "rowsAffected": 91
+        },
+        {
+          "name": "close_source",
+          "durationMs": 121.69469999999274
+        },
+        {
+          "name": "create_target",
+          "durationMs": 333.1103000000003
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 169.55059999998775
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1736.022799999977
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000213",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 243271.0354,
+      "endTime": 244858.6975,
+      "durationMs": 1587.662100000016,
+      "outcome": "success",
+      "rollAssigned": "93",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.30169999998179,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 110.2451000000001,
+          "rowsAffected": 92
+        },
+        {
+          "name": "close_source",
+          "durationMs": 403.00780000002123
+        },
+        {
+          "name": "create_target",
+          "durationMs": 316.61979999998584
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 453.4868000000133
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1384.6612000000023
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000214",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 246436.2262,
+      "endTime": 249019.4855,
+      "durationMs": 2583.259300000005,
+      "outcome": "success",
+      "rollAssigned": "94",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 225.47750000000815,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 480.66380000000936,
+          "rowsAffected": 93
+        },
+        {
+          "name": "close_source",
+          "durationMs": 107.15129999999772
+        },
+        {
+          "name": "create_target",
+          "durationMs": 314.63730000000214
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 310.37309999999707
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1438.3030000000144
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000215",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 250681.252,
+      "endTime": 251884.9452,
+      "durationMs": 1203.6931999999797,
+      "outcome": "success",
+      "rollAssigned": "95",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 90.61459999997169,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 368.17680000001565,
+          "rowsAffected": 94
+        },
+        {
+          "name": "close_source",
+          "durationMs": 154.890699999989
+        },
+        {
+          "name": "create_target",
+          "durationMs": 115.38779999999679
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 196.73099999999977
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 925.8008999999729
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000216",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 254941.9595,
+      "endTime": 255961.099,
+      "durationMs": 1019.1394999999902,
+      "outcome": "success",
+      "rollAssigned": "96",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 90.32620000001043,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 310.33719999997993,
+          "rowsAffected": 95
+        },
+        {
+          "name": "close_source",
+          "durationMs": 98.70930000001681
+        },
+        {
+          "name": "create_target",
+          "durationMs": 102.36139999999432
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 98.90479999998934
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 700.6388999999908
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000217",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 257234.9361,
+      "endTime": 259041.2925,
+      "durationMs": 1806.3564000000188,
+      "outcome": "success",
+      "rollAssigned": "97",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 325.8849999999802,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 319.3219000000099,
+          "rowsAffected": 96
+        },
+        {
+          "name": "close_source",
+          "durationMs": 130.35959999999614
+        },
+        {
+          "name": "create_target",
+          "durationMs": 241.60599999999977
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 275.04940000001807
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1292.221900000004
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000218",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 260165.3678,
+      "endTime": 262002.8246,
+      "durationMs": 1837.4567999999854,
+      "outcome": "success",
+      "rollAssigned": "98",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 121.73499999998603,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 94.92209999999614,
+          "rowsAffected": 97
+        },
+        {
+          "name": "close_source",
+          "durationMs": 182.68559999999707
+        },
+        {
+          "name": "create_target",
+          "durationMs": 335.3722000000125
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 677.8711999999941
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1412.586099999986
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000219",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 262922.3694,
+      "endTime": 264379.8393,
+      "durationMs": 1457.4698999999673,
+      "outcome": "success",
+      "rollAssigned": "99",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 804.6068000000087,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 109.46460000000661,
+          "rowsAffected": 98
+        },
+        {
+          "name": "close_source",
+          "durationMs": 106.98159999999916
+        },
+        {
+          "name": "create_target",
+          "durationMs": 100.73080000001937
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 114.5850999999675
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1236.3689000000013
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000220",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 265383.0385,
+      "endTime": 266102.8276,
+      "durationMs": 719.7890999999945,
+      "outcome": "success",
+      "rollAssigned": "100",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 191.9945000000298,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 99.44530000002123,
+          "rowsAffected": 99
+        },
+        {
+          "name": "close_source",
+          "durationMs": 109.04719999997178
+        },
+        {
+          "name": "create_target",
+          "durationMs": 95.66019999998389
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 105.07550000003539
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 601.2227000000421
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000221",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 266720.1065,
+      "endTime": 267771.3465,
+      "durationMs": 1051.2399999999907,
+      "outcome": "success",
+      "rollAssigned": "101",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 126.97380000003614,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 285.83869999996386,
+          "rowsAffected": 100
+        },
+        {
+          "name": "close_source",
+          "durationMs": 294.6504000000423
+        },
+        {
+          "name": "create_target",
+          "durationMs": 90.6758999999729
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 45.52059999998892
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 843.6594000000041
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000222",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 268605.7311,
+      "endTime": 269377.8723,
+      "durationMs": 772.1412000000128,
+      "outcome": "success",
+      "rollAssigned": "102",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.71199999999953,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 111.72920000000158,
+          "rowsAffected": 101
+        },
+        {
+          "name": "close_source",
+          "durationMs": 91.0048999999999
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.84320000000298
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 101.34289999998873
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 508.63219999999274
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000223",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 270650.0888,
+      "endTime": 272592.9071,
+      "durationMs": 1942.8182999999844,
+      "outcome": "success",
+      "rollAssigned": "103",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 204.45000000001164,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 430.99459999997634,
+          "rowsAffected": 102
+        },
+        {
+          "name": "close_source",
+          "durationMs": 371.22810000000754
+        },
+        {
+          "name": "create_target",
+          "durationMs": 217.02039999997942
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 339.289700000023
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1562.982799999998
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000224",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 273576.9178,
+      "endTime": 274552.9913,
+      "durationMs": 976.0734999999986,
+      "outcome": "success",
+      "rollAssigned": "104",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 308.01459999999497,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 182.45230000000447,
+          "rowsAffected": 103
+        },
+        {
+          "name": "close_source",
+          "durationMs": 92.13360000000102
+        },
+        {
+          "name": "create_target",
+          "durationMs": 91.29780000000028
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 68.21100000001024
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 742.109300000011
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000225",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 276660.7701,
+      "endTime": 278599.2866,
+      "durationMs": 1938.5164999999688,
+      "outcome": "success",
+      "rollAssigned": "105",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 213.71289999998407,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 392.94490000000224,
+          "rowsAffected": 104
+        },
+        {
+          "name": "close_source",
+          "durationMs": 221.50170000002254
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.47920000000158
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 295.16029999998864
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1226.798999999999
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000226",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 279719.8118,
+      "endTime": 282101.057,
+      "durationMs": 2381.2451999999466,
+      "outcome": "success",
+      "rollAssigned": "106",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.54460000002291,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1131.2384999999776,
+          "rowsAffected": 105
+        },
+        {
+          "name": "close_source",
+          "durationMs": 209.9472999999998
+        },
+        {
+          "name": "create_target",
+          "durationMs": 420.1896999999881
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.63079999998445
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1966.550899999973
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000227",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 282894.4826,
+      "endTime": 284499.4313,
+      "durationMs": 1604.948700000008,
+      "outcome": "success",
+      "rollAssigned": "107",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 179.9603000000352,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 197.51880000001984,
+          "rowsAffected": 106
+        },
+        {
+          "name": "close_source",
+          "durationMs": 104.53919999999925
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.8861999999499
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 69.96730000001844
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 653.8718000000226
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000228",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 285660.3058,
+      "endTime": 287093.9649,
+      "durationMs": 1433.659100000048,
+      "outcome": "success",
+      "rollAssigned": "108",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 450.7869000000064,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 254.07079999998678,
+          "rowsAffected": 107
+        },
+        {
+          "name": "close_source",
+          "durationMs": 129.70100000000093
+        },
+        {
+          "name": "create_target",
+          "durationMs": 78.96039999998175
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 216.5399000000325
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1130.0590000000084
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000229",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 287810.2907,
+      "endTime": 288680.6434,
+      "durationMs": 870.3526999999885,
+      "outcome": "success",
+      "rollAssigned": "109",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 96.29330000001937,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 209.26029999996535,
+          "rowsAffected": 108
+        },
+        {
+          "name": "close_source",
+          "durationMs": 201.0570000000298
+        },
+        {
+          "name": "create_target",
+          "durationMs": 104.4265000000014
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 50.07709999999497
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 661.1142000000109
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000230",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 289655.6464,
+      "endTime": 290474.8927,
+      "durationMs": 819.2462999999989,
+      "outcome": "success",
+      "rollAssigned": "110",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 164.88410000002477,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 204.13510000001406,
+          "rowsAffected": 109
+        },
+        {
+          "name": "close_source",
+          "durationMs": 104.74629999999888
+        },
+        {
+          "name": "create_target",
+          "durationMs": 99.41309999994701
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.4043000000529
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 676.5829000000376
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000231",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 291598.664,
+      "endTime": 293030.5118,
+      "durationMs": 1431.8477999999886,
+      "outcome": "success",
+      "rollAssigned": "111",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 164.13430000003427,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 608.3682999999728,
+          "rowsAffected": 110
+        },
+        {
+          "name": "close_source",
+          "durationMs": 96.25119999999879
+        },
+        {
+          "name": "create_target",
+          "durationMs": 110.50470000004862
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 298.16439999995055
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1277.422900000005
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000232",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 293751.8845,
+      "endTime": 295395.5657,
+      "durationMs": 1643.6811999999918,
+      "outcome": "success",
+      "rollAssigned": "112",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 104.55790000001434,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 619.2050999999628,
+          "rowsAffected": 111
+        },
+        {
+          "name": "close_source",
+          "durationMs": 103.24970000004396
+        },
+        {
+          "name": "create_target",
+          "durationMs": 106.80309999996098
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 99.63709999999264
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1033.4528999999748
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000233",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 296002.2899,
+      "endTime": 297952.4579,
+      "durationMs": 1950.1680000000051,
+      "outcome": "success",
+      "rollAssigned": "113",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 308.5498999999836,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 403.46059999999125,
+          "rowsAffected": 112
+        },
+        {
+          "name": "close_source",
+          "durationMs": 201.66440000000875
+        },
+        {
+          "name": "create_target",
+          "durationMs": 194.3569000000134
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 213.45149999996647
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1321.4832999999635
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000234",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 298572.8484,
+      "endTime": 299711.5933,
+      "durationMs": 1138.7448999999906,
+      "outcome": "success",
+      "rollAssigned": "114",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 58.06060000002617,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 346.1493999999948,
+          "rowsAffected": 113
+        },
+        {
+          "name": "close_source",
+          "durationMs": 109.57900000002701
+        },
+        {
+          "name": "create_target",
+          "durationMs": 233.64569999999367
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 190.7497999999905
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 938.1845000000321
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000235",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 300598.7369,
+      "endTime": 301286.5493,
+      "durationMs": 687.8123999999953,
+      "outcome": "success",
+      "rollAssigned": "115",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 77.27439999999478,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 233.63449999998556,
+          "rowsAffected": 114
+        },
+        {
+          "name": "close_source",
+          "durationMs": 53.99220000003697
+        },
+        {
+          "name": "create_target",
+          "durationMs": 126.95899999997346
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 54.22330000001239
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 546.0834000000032
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000236",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 302265.1168,
+      "endTime": 303473.7364,
+      "durationMs": 1208.6195999999763,
+      "outcome": "success",
+      "rollAssigned": "116",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 92.0060999999987,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 432.72669999999925,
+          "rowsAffected": 115
+        },
+        {
+          "name": "close_source",
+          "durationMs": 74.10390000004554
+        },
+        {
+          "name": "create_target",
+          "durationMs": 47.709399999992456
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 48.633099999977276
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 695.1792000000132
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000237",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 305030.8349,
+      "endTime": 306256.991,
+      "durationMs": 1226.1560999999638,
+      "outcome": "success",
+      "rollAssigned": "117",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.26959999999963,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 410.4221999999718,
+          "rowsAffected": 116
+        },
+        {
+          "name": "close_source",
+          "durationMs": 98.88860000000568
+        },
+        {
+          "name": "create_target",
+          "durationMs": 109.77350000001024
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 106.79109999997308
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 827.1449999999604
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000238",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 307138.1279,
+      "endTime": 308398.285,
+      "durationMs": 1260.157099999953,
+      "outcome": "success",
+      "rollAssigned": "118",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.63419999997132,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 320.11170000000857,
+          "rowsAffected": 117
+        },
+        {
+          "name": "close_source",
+          "durationMs": 232.2277999999933
+        },
+        {
+          "name": "create_target",
+          "durationMs": 179.2606000000378
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 92.66819999995641
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 926.9024999999674
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000239",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 309732.5571,
+      "endTime": 311007.9704,
+      "durationMs": 1275.4133000000147,
+      "outcome": "success",
+      "rollAssigned": "119",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 183.04849999997532,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 615.2950999999885,
+          "rowsAffected": 118
+        },
+        {
+          "name": "close_source",
+          "durationMs": 104.35409999999683
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.97030000004452
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 54.991999999969266
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1059.6599999999744
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000240",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 311668.3536,
+      "endTime": 312896.1339,
+      "durationMs": 1227.7803000000422,
+      "outcome": "success",
+      "rollAssigned": "120",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 99.93249999999534,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 615.8311000000103,
+          "rowsAffected": 119
+        },
+        {
+          "name": "close_source",
+          "durationMs": 108.13280000002123
+        },
+        {
+          "name": "create_target",
+          "durationMs": 96.47669999999925
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 101.21700000000419
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1021.5901000000304
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000281",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 343225.3753,
+      "endTime": 344450.6596,
+      "durationMs": 1225.2842999999993,
+      "outcome": "success",
+      "rollAssigned": "41",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 106.69620000000577,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 201.62109999998938,
+          "rowsAffected": 40
+        },
+        {
+          "name": "close_source",
+          "durationMs": 311.1408999999985
+        },
+        {
+          "name": "create_target",
+          "durationMs": 192.37349999998696
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 114.99920000002021
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 926.8309000000008
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000282",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 345154.1009,
+      "endTime": 345872.3805,
+      "durationMs": 718.2796000000089,
+      "outcome": "success",
+      "rollAssigned": "42",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 105.09769999998389,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 75.87660000001779,
+          "rowsAffected": 41
+        },
+        {
+          "name": "close_source",
+          "durationMs": 122.9087999999756
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.06000000005588
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 103.25370000000112
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 508.1968000000343
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000283",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 347011.3236,
+      "endTime": 348131.8331,
+      "durationMs": 1120.5094999999856,
+      "outcome": "success",
+      "rollAssigned": "43",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 190.4183999999659,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.63870000001043,
+          "rowsAffected": 42
+        },
+        {
+          "name": "close_source",
+          "durationMs": 205.6194999999716
+        },
+        {
+          "name": "create_target",
+          "durationMs": 200.7380000000121
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 110.01230000000214
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 811.4268999999622
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000284",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 349131.108,
+      "endTime": 351007.7457,
+      "durationMs": 1876.6377000000211,
+      "outcome": "success",
+      "rollAssigned": "44",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 196.23970000003465,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 157.01529999997,
+          "rowsAffected": 43
+        },
+        {
+          "name": "close_source",
+          "durationMs": 265.9164999999921
+        },
+        {
+          "name": "create_target",
+          "durationMs": 346.0619000000297
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 176.5739000000176
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1141.807300000044
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000285",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 352225.763,
+      "endTime": 353215.3002,
+      "durationMs": 989.5372000000207,
+      "outcome": "success",
+      "rollAssigned": "45",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 98.8409999999567,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 105.45290000003297,
+          "rowsAffected": 44
+        },
+        {
+          "name": "close_source",
+          "durationMs": 203.36119999998482
+        },
+        {
+          "name": "create_target",
+          "durationMs": 104.4784000000218
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 71.13819999998668
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 583.271699999983
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000286",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 353859.1472,
+      "endTime": 354580.3018,
+      "durationMs": 721.1546000000089,
+      "outcome": "success",
+      "rollAssigned": "46",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.18020000000251,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 100.22600000002421,
+          "rowsAffected": 45
+        },
+        {
+          "name": "close_source",
+          "durationMs": 103.47409999999218
+        },
+        {
+          "name": "create_target",
+          "durationMs": 102.34340000001248
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 105.9140999999945
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 514.1378000000259
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000287",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 355134.586,
+      "endTime": 356120.585,
+      "durationMs": 985.9990000000107,
+      "outcome": "success",
+      "rollAssigned": "47",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 156.56070000003092,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 272.22589999996126,
+          "rowsAffected": 46
+        },
+        {
+          "name": "close_source",
+          "durationMs": 85.8304000000353
+        },
+        {
+          "name": "create_target",
+          "durationMs": 97.62390000000596
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 111.42420000000857
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 723.665100000042
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000288",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 356739.5995,
+      "endTime": 357776.235,
+      "durationMs": 1036.6354999999749,
+      "outcome": "success",
+      "rollAssigned": "48",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 133.12940000003437,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 82.4712999999756,
+          "rowsAffected": 47
+        },
+        {
+          "name": "close_source",
+          "durationMs": 194.99589999997988
+        },
+        {
+          "name": "create_target",
+          "durationMs": 309.13280000002123
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 124.90779999998631
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 844.6371999999974
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000289",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 360108.9197,
+      "endTime": 363278.536,
+      "durationMs": 3169.616299999994,
+      "outcome": "success",
+      "rollAssigned": "49",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 816.4091999999946,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1230.263500000001,
+          "rowsAffected": 48
+        },
+        {
+          "name": "close_source",
+          "durationMs": 101.18619999999646
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.07319999998435
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 99.64930000004824
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 2350.5814000000246
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000290",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 363896.7473,
+      "endTime": 364612.3495,
+      "durationMs": 715.602200000023,
+      "outcome": "success",
+      "rollAssigned": "50",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 104.2448999999906,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 101.9375,
+          "rowsAffected": 49
+        },
+        {
+          "name": "close_source",
+          "durationMs": 104.12050000001909
+        },
+        {
+          "name": "create_target",
+          "durationMs": 103.38909999997122
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 101.4037000000244
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 515.0957000000053
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000291",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 365230.4928,
+      "endTime": 366354.0081,
+      "durationMs": 1123.51529999997,
+      "outcome": "success",
+      "rollAssigned": "51",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.49609999998938,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 233.6807999999728,
+          "rowsAffected": 50
+        },
+        {
+          "name": "close_source",
+          "durationMs": 174.89160000003176
+        },
+        {
+          "name": "create_target",
+          "durationMs": 203.2996999999741
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 208.15669999999227
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 922.5248999999603
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000292",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 367377.895,
+      "endTime": 368405.5115,
+      "durationMs": 1027.6165000000037,
+      "outcome": "success",
+      "rollAssigned": "52",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.61689999996452,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 105.17970000003697,
+          "rowsAffected": 51
+        },
+        {
+          "name": "close_source",
+          "durationMs": 307.43859999999404
+        },
+        {
+          "name": "create_target",
+          "durationMs": 104.83659999998054
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 204.2101000000257
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 823.2819000000018
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000293",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 369433.7999,
+      "endTime": 370453.7942,
+      "durationMs": 1019.9943000000203,
+      "outcome": "success",
+      "rollAssigned": "53",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 100.02269999997225,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 207.5268999999971,
+          "rowsAffected": 52
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.98759999999311
+        },
+        {
+          "name": "create_target",
+          "durationMs": 101.69900000002235
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 106.69860000000335
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 616.9347999999882
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000294",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 371501.412,
+      "endTime": 372809.6094,
+      "durationMs": 1308.1974000000046,
+      "outcome": "success",
+      "rollAssigned": "54",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 209.92330000002403,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 250.07889999996405,
+          "rowsAffected": 53
+        },
+        {
+          "name": "close_source",
+          "durationMs": 155.53759999998147
+        },
+        {
+          "name": "create_target",
+          "durationMs": 204.53020000003744
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 108.95230000000447
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 929.0223000000115
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000295",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 373524.3024,
+      "endTime": 374552.7071,
+      "durationMs": 1028.4047000000137,
+      "outcome": "success",
+      "rollAssigned": "55",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.4257000000216,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 96.84109999996144,
+          "rowsAffected": 54
+        },
+        {
+          "name": "close_source",
+          "durationMs": 105.70329999999376
+        },
+        {
+          "name": "create_target",
+          "durationMs": 407.62489999999525
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 109.48580000002403
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 822.0807999999961
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000296",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 375467.8638,
+      "endTime": 377212.5973,
+      "durationMs": 1744.7335000000312,
+      "outcome": "success",
+      "rollAssigned": "56",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 101.34259999997448,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 1026.6278000000166,
+          "rowsAffected": 55
+        },
+        {
+          "name": "close_source",
+          "durationMs": 99.63990000000922
+        },
+        {
+          "name": "create_target",
+          "durationMs": 107.5286999999662
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 104.3978000000352
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1439.5368000000017
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000297",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 377835.5701,
+      "endTime": 378741.5262,
+      "durationMs": 905.9561000000103,
+      "outcome": "success",
+      "rollAssigned": "57",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 99.73379999998724,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 135.4372999999905,
+          "rowsAffected": 56
+        },
+        {
+          "name": "close_source",
+          "durationMs": 170.17190000001574
+        },
+        {
+          "name": "create_target",
+          "durationMs": 206.59579999995185
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 100.91280000004917
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 712.8515999999945
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000298",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 379667.971,
+      "endTime": 381040.5705,
+      "durationMs": 1372.599499999953,
+      "outcome": "success",
+      "rollAssigned": "58",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 424.1792000000132,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 114.50920000002952,
+          "rowsAffected": 57
+        },
+        {
+          "name": "close_source",
+          "durationMs": 414.3454999999958
+        },
+        {
+          "name": "create_target",
+          "durationMs": 140.62020000000484
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 76.76499999995576
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1170.4190999999992
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000299",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 382326.5265,
+      "endTime": 383452.3945,
+      "durationMs": 1125.8680000000168,
+      "outcome": "success",
+      "rollAssigned": "59",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 507.70350000000326,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 103.62169999995967,
+          "rowsAffected": 58
+        },
+        {
+          "name": "close_source",
+          "durationMs": 98.00090000004275
+        },
+        {
+          "name": "create_target",
+          "durationMs": 52.81899999995949
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 149.11680000001797
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 911.2618999999831
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000300",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 384787.0654,
+      "endTime": 385715.1931,
+      "durationMs": 928.1276999999536,
+      "outcome": "success",
+      "rollAssigned": "60",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 98.14259999996284,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 104.46730000001844,
+          "rowsAffected": 59
+        },
+        {
+          "name": "close_source",
+          "durationMs": 100.77939999999944
+        },
+        {
+          "name": "create_target",
+          "durationMs": 99.2497999999905
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 112.00469999999041
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 514.6437999999616
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000301",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 386424.2636,
+      "endTime": 387370.5809,
+      "durationMs": 946.3172999999952,
+      "outcome": "success",
+      "rollAssigned": "61",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 102.24849999998696,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 114.45149999996647,
+          "rowsAffected": 60
+        },
+        {
+          "name": "close_source",
+          "durationMs": 195.5564000000013
+        },
+        {
+          "name": "create_target",
+          "durationMs": 180.9381000000285
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 148.10289999999804
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 741.2973999999813
+        }
+      ]
+    },
+    {
+      "studentId": "seed_stu_000302",
+      "attemptNumber": 1,
+      "workerId": -1,
+      "startTime": 388291.393,
+      "endTime": 390113.8832,
+      "durationMs": 1822.4902000000002,
+      "outcome": "success",
+      "rollAssigned": "62",
+      "subPhases": [
+        {
+          "name": "verify_source",
+          "durationMs": 389.8364999999758,
+          "rowsAffected": 1
+        },
+        {
+          "name": "load_used_rolls",
+          "durationMs": 416.3324000000139,
+          "rowsAffected": 61
+        },
+        {
+          "name": "close_source",
+          "durationMs": 211.70819999999367
+        },
+        {
+          "name": "create_target",
+          "durationMs": 203.17680000001565
+        },
+        {
+          "name": "create_audit",
+          "durationMs": 198.4551999999676
+        },
+        {
+          "name": "txn_total",
+          "durationMs": 1419.5090999999666
+        }
+      ]
+    }
+  ]
+}

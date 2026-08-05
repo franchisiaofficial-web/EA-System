@@ -1,0 +1,571 @@
+﻿# Certified Phase 3.2 run log (post-implementation). Pre-fix reproduction evidence lives in ../promotion-phase3-precondition/failure-breakdown.md. The stale pre-implementation block (mutexFailures=120 artifact) was removed on 2026-08-05.
+=== RUN workers-1 ===
+timestamp=2026-08-05T05:48:54.482Z
+PROMOTION_WORKERS=1
+SCOPE=seed_cls_2526_g04
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=25 passedOut=0 failed=0
+  [progress] processed=50 promoted=50 passedOut=0 failed=0
+  [progress] processed=75 promoted=75 passedOut=0 failed=0
+  [progress] processed=100 promoted=100 passedOut=0 failed=0
+--- RUN SUMMARY ---
+eligible=120 processed=120 promoted=120 passedOut=0 skipped=0 failed=0 retryable=0
+durationMs=164584 wallMs=164586 studentsPerSec=0.73
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=210 waitMinMs=78 waitAvgMs=104 waitMaxMs=409 waitP95Ms=108 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=90
+POST-STATE: ay2526_active=1337 ay2627_active=223 passed_out_records=0 students_passed_out=0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T05:51:40.942Z | run=workers-1 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g05_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T05:51:41.145Z | run=workers-1
+=== RUN workers-3 ===
+timestamp=2026-08-05T05:52:18.960Z
+PROMOTION_WORKERS=3
+SCOPE=seed_cls_2526_g04
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=25 passedOut=0 failed=0
+  [progress] processed=50 promoted=50 passedOut=0 failed=0
+  [progress] processed=75 promoted=75 passedOut=0 failed=0
+  [progress] processed=100 promoted=100 passedOut=0 failed=0
+--- RUN SUMMARY ---
+eligible=120 processed=120 promoted=120 passedOut=0 skipped=0 failed=0 retryable=0
+durationMs=77006 wallMs=77007 studentsPerSec=1.56
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=210 waitMinMs=94 waitAvgMs=387 waitMaxMs=1023 waitP95Ms=719 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=90
+POST-STATE: ay2526_active=1337 ay2627_active=223 passed_out_records=0 students_passed_out=0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T05:53:37.678Z | run=workers-3 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g05_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T05:53:37.882Z | run=workers-3
+=== RUN workers-6 ===
+timestamp=2026-08-05T05:54:05.987Z
+PROMOTION_WORKERS=6
+SCOPE=seed_cls_2526_g04
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=25 passedOut=0 failed=0
+  [progress] processed=50 promoted=50 passedOut=0 failed=0
+  [progress] processed=75 promoted=75 passedOut=0 failed=0
+  [progress] processed=100 promoted=100 passedOut=0 failed=0
+--- RUN SUMMARY ---
+eligible=120 processed=120 promoted=120 passedOut=0 skipped=0 failed=0 retryable=0
+durationMs=67173 wallMs=67174 studentsPerSec=1.79
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=210 waitMinMs=101 waitAvgMs=1149 waitMaxMs=1866 waitP95Ms=1842 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=90
+POST-STATE: ay2526_active=1337 ay2627_active=223 passed_out_records=0 students_passed_out=0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T05:55:15.167Z | run=workers-6 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g05_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T05:55:15.372Z | run=workers-6
+=== RUN workers-12 ===
+timestamp=2026-08-05T05:55:41.943Z
+PROMOTION_WORKERS=12
+SCOPE=seed_cls_2526_g04
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=25 passedOut=0 failed=0
+  [progress] processed=50 promoted=50 passedOut=0 failed=0
+  [progress] processed=75 promoted=75 passedOut=0 failed=0
+  [progress] processed=100 promoted=100 passedOut=0 failed=0
+--- RUN SUMMARY ---
+eligible=120 processed=120 promoted=120 passedOut=0 skipped=0 failed=0 retryable=0
+durationMs=66868 wallMs=66868 studentsPerSec=1.79
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=208 waitMinMs=99 waitAvgMs=1160 waitMaxMs=2156 waitP95Ms=1740 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=88
+POST-STATE: ay2526_active=1337 ay2627_active=223 passed_out_records=0 students_passed_out=0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T05:56:50.503Z | run=workers-12 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g05_a | assigned_rolls=120 | unique_rolls=120 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T05:56:50.706Z | run=workers-12
+=== RUN full-school-w6 ===
+timestamp=2026-08-05T05:58:13.447Z
+PROMOTION_WORKERS=6
+SCOPE=FULL SCHOOL
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+=== RUN passout-g12-w6 ===
+timestamp=2026-08-05T06:04:47.955Z
+PROMOTION_WORKERS=6
+SCOPE=seed_cls_2526_g12
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=25 passedOut=0 failed=0
+  [progress] processed=50 promoted=50 passedOut=0 failed=0
+  [progress] processed=75 promoted=75 passedOut=0 failed=0
+  [progress] processed=100 promoted=100 passedOut=0 failed=0
+--- RUN SUMMARY ---
+eligible=119 processed=119 promoted=119 passedOut=0 skipped=0 failed=0 retryable=0
+durationMs=67071 wallMs=67071 studentsPerSec=1.77
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=209 waitMinMs=101 waitAvgMs=1155 waitMaxMs=1945 waitP95Ms=1844 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=90
+POST-STATE: ay2526_active=1338 ay2627_active=222 passed_out_records=0 students_passed_out=0
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T06:05:56.713Z | run=passout-g12-w6 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g14_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g13_a | assigned_rolls=120 | unique_rolls=120 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T06:05:56.918Z | run=passout-g12-w6
+=== RUN passout-g14-w6 ===
+timestamp=2026-08-05T06:06:48.032Z
+PROMOTION_WORKERS=6
+SCOPE=seed_cls_2526_g14
+PRE-STATE: ay2526_active=1457 ay2627_active=103 passed_out_records=0 students_passed_out=0
+run started ΓÇö heartbeat every 25 students
+  [progress] processed=25 promoted=0 passedOut=25 failed=0
+  [progress] processed=50 promoted=0 passedOut=50 failed=0
+  [progress] processed=75 promoted=0 passedOut=75 failed=0
+  [progress] processed=100 promoted=0 passedOut=100 failed=0
+--- RUN SUMMARY ---
+eligible=120 processed=120 promoted=0 passedOut=120 skipped=0 failed=0 retryable=0
+durationMs=17612 wallMs=17614 studentsPerSec=6.81
+failureReasons=[]
+--- LOCK STATS (application timestamps: before acquire -> after acquire) ---
+acquisitions=0 waitMinMs=0 waitAvgMs=0 waitMaxMs=0 waitP95Ms=0 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=0
+POST-STATE: ay2526_active=1337 ay2627_active=103 passed_out_records=120 students_passed_out=120
+--- DUPLICATE ROLL CHECK: SQL EXECUTED ---
+SELECT
+    section_id,
+    COUNT(roll_number) AS assigned_rolls,
+    COUNT(DISTINCT roll_number) AS unique_rolls
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NOT NULL
+GROUP BY section_id;
+--- RAW DATABASE OUTPUT @ 2026-08-05T06:07:07.477Z | run=passout-g14-w6 ---
+fixture_sec_b_g01_a | assigned_rolls=1 | unique_rolls=1 | OK
+seed_sec_2526_g00_a | assigned_rolls=3 | unique_rolls=3 | OK
+seed_sec_2526_g01_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g01_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g02_a | assigned_rolls=8 | unique_rolls=8 | OK
+seed_sec_2526_g02_b | assigned_rolls=2 | unique_rolls=2 | OK
+seed_sec_2526_g03_a | assigned_rolls=35 | unique_rolls=35 | OK
+seed_sec_2526_g03_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g03_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g04_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g05_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g06_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g07_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g08_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g09_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g10_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g11_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g12_c | assigned_rolls=39 | unique_rolls=39 | OK
+seed_sec_2526_g13_a | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_b | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2526_g13_c | assigned_rolls=40 | unique_rolls=40 | OK
+seed_sec_2627_g01_a | assigned_rolls=37 | unique_rolls=37 | OK
+seed_sec_2627_g02_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g03_a | assigned_rolls=30 | unique_rolls=30 | OK
+seed_sec_2627_g04_a | assigned_rolls=5 | unique_rolls=5 | OK
+seed_sec_2627_g13_a | assigned_rolls=1 | unique_rolls=1 | OK
+DUPLICATE-ROLL PASS=true (assigned_rolls == unique_rolls for EVERY section: yes)
+--- NULL ROLL CHECK: SQL EXECUTED ---
+SELECT
+COUNT(*)
+FROM enrollments
+WHERE
+status='ACTIVE'
+AND roll_number IS NULL;
+NULL ROLL COUNT (raw): 0 @ 2026-08-05T06:07:07.680Z | run=passout-g14-w6
+=== JOB REGRESSION 2026-08-05T06:11:44.903Z ===
+PROMOTION_WORKERS=6
+RUN_CLASS=seed_cls_2526_g04
+PRE: ay2526=1457 ay2627=103 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+--- 1) create class-scoped PromotionJob (goes through global scheduler) ---
+created: cmsfovwmj00000ku8ipncti2x status= PENDING duplicate= false
+--- 2) poll until terminal ---
+poll 0: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 5: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 10: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 15: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 20: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 25: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+[PromotionJob cmsfovwmj00000ku8ipncti2x] completed in 72394ms (120 eligible)
+--- 3) final state (75s) ---
+status: COMPLETED | eligible: 120 | processed: 120 | promoted: 120 | passedOut: 0 | failed: 0 | error: null | durationMs: 72191
+batches: [{"id":"cmsfovxvn00010ku8g1sjsxow","transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"passedOut":0,"failed":0}]
+processed==promoted+passedOut+failed: true | eligible==processed: true | single batch COMPLETED: true
+--- LOCK STATS (through JOB path) ---
+acquisitions=216 waitMinMs=98 waitAvgMs=1100 waitMaxMs=2254 waitP95Ms=2167 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=96
+--- 4) idempotent re-run (same class after COMPLETED: 0 double-promotions) ---
+rerun created: cmsfoxiuf009e0ku8x4r2jcco duplicate= false
+[PromotionJob cmsfoxiuf009e0ku8x4r2jcco] completed in 2254ms (0 eligible)
+rerun final: COMPLETED eligible= 0 processed= 0 promoted= 0 failed= 0
+idempotent re-run ok (0 double-promotions): true
+--- 5) retry route branch (retry ONLY failed batches; expect NOTHING_TO_RETRY / 409) ---
+FAILED batches in job: 0
+retry branch taken: 409 NOTHING_TO_RETRY (no failed batches)
+--- 6) raw duplicate-roll + NULL-roll + tenants + audit (post-run) ---
+DUPLICATE-ROLL PASS=true
+NULL ROLL COUNT=0
+audit_logs (entity=enrollment action=promote) created during job: 120
+POST: ay2526=1337 ay2627=223 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+tenant isolation: other school total enrollments untouched=1
+promotion_job row (raw): {"status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0,"durationMs":72191}
+promotion_job_batches rows (raw): {"transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0}
+JOB REGRESSION FAILED
+=== JOB REGRESSION 2026-08-05T06:15:51.123Z ===
+PROMOTION_WORKERS=6
+RUN_CLASS=seed_cls_2526_g04
+PRE: ay2526=1457 ay2627=103 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+--- 1) create class-scoped PromotionJob (goes through global scheduler) ---
+created: cmsfp16kl0000fku8mosa3dtm status= PENDING duplicate= false
+--- 2) poll until terminal ---
+poll 0: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 5: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 10: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 15: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 20: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+poll 25: status=RUNNING processed=0/120 promoted=0 batch=Grade 2 ΓåÆ Grade 3
+[PromotionJob cmsfp16kl0000fku8mosa3dtm] completed in 74846ms (120 eligible)
+--- 3) final state (77s) ---
+status: COMPLETED | eligible: 120 | processed: 120 | promoted: 120 | passedOut: 0 | failed: 0 | error: null | durationMs: 74641
+batches: [{"id":"cmsfp17tv0001fku8n6bisp77","transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"passedOut":0,"failed":0}]
+processed==promoted+passedOut+failed: true | eligible==processed: true | single batch COMPLETED: true
+--- LOCK STATS (through JOB path) ---
+acquisitions=217 waitMinMs=101 waitAvgMs=1130 waitMaxMs=2115 waitP95Ms=1640 lockTimeouts=0 deadlocks=0 mutexFailures=0 retryAttempts=97
+--- 4) idempotent re-run (same class after COMPLETED: 0 double-promotions) ---
+rerun created: cmsfp2uaq009ffku8tkdaaram duplicate= false
+[PromotionJob cmsfp2uaq009ffku8tkdaaram] completed in 2254ms (0 eligible)
+rerun final: COMPLETED eligible= 0 processed= 0 promoted= 0 failed= 0
+idempotent re-run ok (0 double-promotions): true
+--- 5) retry route branch (retry ONLY failed batches; expect NOTHING_TO_RETRY / 409) ---
+FAILED batches in job: 0
+retry branch taken: 409 NOTHING_TO_RETRY (no failed batches)
+--- 6) raw duplicate-roll + NULL-roll + tenants + audit (post-run) ---
+DUPLICATE-ROLL PASS=true
+NULL ROLL COUNT=0
+audit_logs (entity=enrollment action=promote) created during job: 120
+POST: ay2526=1337 ay2627=223 passed_out_records=0 students_passed_out=0 attendance=46927 guardians=3132 otherSchoolActive=1
+tenant isolation: other school total enrollments untouched=1
+promotion_job row (raw): {"status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0,"durationMs":74641}
+promotion_job_batches rows (raw): {"transition":"Grade 2 ΓåÆ Grade 3","status":"COMPLETED","eligible":120,"processed":120,"promoted":120,"failed":0}
+JOB REGRESSION PASSED

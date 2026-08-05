@@ -1,0 +1,7 @@
+=== TASK 1 — RETRY PATH PROFILING ===
+Started: 2026-08-04T02:11:28.651Z
+PROMOTION_PROFILE=true
+Before: 2526_active=1457 2627_active=103 passedOutRecords=0
+
+=== EXECUTING (with full retry-path instrumentation) ===
+
