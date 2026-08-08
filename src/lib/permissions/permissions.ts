@@ -1,7 +1,7 @@
 import type { Role } from '@/generated/prisma/client';
 
 type Action =
-  'create' | 'read' | 'update' | 'delete' | 'approve' | 'export' | 'manage';
+  'create' | 'read' | 'update' | 'delete' | 'approve' | 'export' | 'archive' | 'restore' | 'manage';
 
 type Resource =
   | 'schools'
@@ -9,6 +9,7 @@ type Resource =
   | 'students'
   | 'parents'
   | 'teachers'
+  | 'staff'
   | 'attendance'
   | 'academics'
   | 'exams'
@@ -64,6 +65,15 @@ const SUPER_ADMIN: RolePermissions = {
     create: true,
     update: true,
     delete: true,
+    export: true,
+  },
+  staff: {
+    manage: true,
+    read: true,
+    create: true,
+    update: true,
+    archive: true,
+    restore: true,
     export: true,
   },
   attendance: {
@@ -202,6 +212,15 @@ const SCHOOL_ADMIN: RolePermissions = {
     delete: true,
     export: true,
   },
+  staff: {
+    manage: true,
+    read: true,
+    create: true,
+    update: true,
+    archive: true,
+    restore: true,
+    export: true,
+  },
   attendance: {
     manage: true,
     read: true,
@@ -316,6 +335,12 @@ const PRINCIPAL: RolePermissions = {
   students: { read: true, create: true, update: true, export: true },
   parents: { read: true, create: true, update: true, export: true },
   teachers: { read: true, create: true, update: true, export: true },
+  staff: {
+    read: true,
+    create: true,
+    update: true,
+    export: true,
+  },
   attendance: { read: true, create: true, update: true, export: true },
   academics: { read: true, create: true, update: true },
   exams: {
@@ -378,6 +403,7 @@ const VICE_PRINCIPAL: RolePermissions = {
   students: { read: true, create: true, update: true },
   parents: { read: true },
   teachers: { read: true },
+  staff: { read: true },
   attendance: { read: true, create: true, update: true, export: true },
   academics: { read: true, create: true, update: true },
   exams: { read: true, create: true, update: true, export: true },
@@ -422,6 +448,7 @@ const VICE_PRINCIPAL: RolePermissions = {
 const TEACHER: RolePermissions = {
   students: { read: true },
   parents: { read: true },
+  payroll: { read: true },
   attendance: { read: true, create: true, update: true },
   academics: { read: true, create: true, update: true },
   exams: { read: true, create: true, update: true },
@@ -437,6 +464,7 @@ const TEACHER: RolePermissions = {
 const CLASS_TEACHER: RolePermissions = {
   students: { read: true, update: true },
   parents: { read: true },
+  payroll: { read: true },
   attendance: { read: true, create: true, update: true, export: true },
   academics: { read: true, create: true, update: true },
   exams: { read: true, create: true, update: true },
@@ -453,6 +481,7 @@ const ACCOUNTANT: RolePermissions = {
   students: { read: true },
   parents: { read: true },
   teachers: { read: true },
+  staff: { read: true },
   finance: {
     manage: true,
     read: true,
@@ -461,11 +490,7 @@ const ACCOUNTANT: RolePermissions = {
     export: true,
   },
   payroll: {
-    manage: true,
     read: true,
-    create: true,
-    update: true,
-    approve: true,
     export: true,
   },
   reports: { read: true, export: true },
@@ -481,14 +506,19 @@ const HR: RolePermissions = {
     delete: true,
     export: true,
   },
-  parents: { read: true },
-  students: { read: true },
-  payroll: {
-    manage: true,
+  staff: {
     read: true,
     create: true,
     update: true,
+    archive: true,
     export: true,
+  },
+  parents: { read: true },
+  students: { read: true },
+  payroll: {
+    read: true,
+    create: true,
+    update: true,
   },
   reports: { read: true, export: true },
 };
@@ -496,6 +526,8 @@ const HR: RolePermissions = {
 const LIBRARIAN: RolePermissions = {
   students: { read: true },
   teachers: { read: true },
+  staff: { read: true },
+  payroll: { read: true },
   library: {
     manage: true,
     read: true,
@@ -509,6 +541,8 @@ const TRANSPORT_MANAGER: RolePermissions = {
   students: { read: true },
   parents: { read: true },
   teachers: { read: true },
+  staff: { read: true },
+  payroll: { read: true },
   transport: {
     manage: true,
     read: true,
@@ -521,18 +555,22 @@ const TRANSPORT_MANAGER: RolePermissions = {
 const DRIVER: RolePermissions = {
   transport: { read: true },
   communication: { read: true },
+  payroll: { read: true },
 };
 
 const NON_TEACHING: RolePermissions = {
   students: { read: true },
   parents: { read: true },
   teachers: { read: true },
+  staff: { read: true },
+  payroll: { read: true },
   communication: { read: true, create: true },
 };
 
 const CAFETERIA_STAFF: RolePermissions = {
   students: { read: true },
   communication: { read: true },
+  payroll: { read: true },
 };
 
 const STUDENT: RolePermissions = {
@@ -611,6 +649,8 @@ export function getRolePermissions(
     'delete',
     'approve',
     'export',
+    'archive',
+    'restore',
     'manage',
   ];
 
