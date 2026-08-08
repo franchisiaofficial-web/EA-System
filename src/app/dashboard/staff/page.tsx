@@ -11,6 +11,10 @@ export default async function StaffPage() {
     <StaffList
       canCreate={hasPermission(authCtx.role, 'staff', 'create')}
       canUpdate={hasPermission(authCtx.role, 'staff', 'update')}
+      canArchive={hasPermission(authCtx.role, 'staff', 'archive')}
+      canRestore={hasPermission(authCtx.role, 'staff', 'restore')}
+      canDeactivate={hasPermission(authCtx.role, 'staff', 'deactivate')}
+      canReactivate={hasPermission(authCtx.role, 'staff', 'reactivate')}
     />
   );
 }

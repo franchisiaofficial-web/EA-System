@@ -1,5 +1,6 @@
-import { withRls } from '@/lib/prisma/rls-middleware';
+import { withRls, type PrismaTransactionClient } from '@/lib/prisma/rls-middleware';
 import { toRequestContext, type AuthContext } from '@/lib/auth/context';
+import { AuthorizationError } from '@/lib/permissions/guards';
 import { Prisma } from '@/generated/prisma/client';
 import type { Membership, User } from '@/generated/prisma/client';
 
@@ -493,4 +494,197 @@ export async function updateStaffMember(
 
     return { user, membership, profile };
   });
+}
+
+// --------------------------------------------
+// Lifecycle (Staff Domain Phase 1.5)
+// --------------------------------------------
+// State transitions (architecture §5, delete policy §15.2):
+//   archive    : ACTIVE | SUSPENDED → REMOVED  (+ StaffProfile.isDeleted = true)
+//   restore    : REMOVED → ACTIVE              (+ StaffProfile.isDeleted = false)
+//   deactivate : ACTIVE → SUSPENDED            (session revocation)
+//   reactivate : SUSPENDED → ACTIVE
+// Rules:
+//   - Every mutation verifies the target belongs to authCtx.schoolId
+//     (findFirst({ id, schoolId }) — never findUnique({ id })), per 5B / §16.
+//   - Every transition is audited in the SAME transaction (rollback-safe).
+//   - Archive + Deactivate revoke the target's sessions immediately.
+//   - Archived/suspended members are already excluded from auth
+//     (resolveAuthUser filters memberships WHERE status = 'ACTIVE') and from
+//     the teacher selection reader (/api/teachers filters status = 'ACTIVE').
+//   - No schema change: lifecycle metadata (archivedAt/archivedBy/archiveReason)
+//     is captured in the audit-log before/after JSON (architecture §5/§15.2).
+
+export interface LifecycleResult {
+  membershipId: string;
+  staffProfileId: string | null;
+  userId: string;
+  previousStatus: StaffStatus;
+  newStatus: StaffStatus;
+  reason?: string;
+}
+
+type LifecycleAction =
+  | 'staff_archived'
+  | 'staff_restored'
+  | 'staff_deactivated'
+  | 'staff_reactivated';
+
+const LIFECYCLE_TRANSITIONS: Record<
+  LifecycleAction,
+  { from: StaffStatus[]; to: StaffStatus; setsDeleted: boolean; revokeSessions: boolean }
+> = {
+  staff_archived: { from: ['ACTIVE', 'SUSPENDED'], to: 'REMOVED', setsDeleted: true, revokeSessions: true },
+  staff_restored: { from: ['REMOVED'], to: 'ACTIVE', setsDeleted: false, revokeSessions: false },
+  staff_deactivated: { from: ['ACTIVE'], to: 'SUSPENDED', setsDeleted: false, revokeSessions: true },
+  staff_reactivated: { from: ['SUSPENDED'], to: 'ACTIVE', setsDeleted: false, revokeSessions: false },
+};
+
+interface LifecycleTarget {
+  membershipId: string;
+  userId: string;
+  staffProfileId: string | null;
+  currentStatus: StaffStatus;
+}
+
+async function assertLifecycleTarget(
+  tx: PrismaTransactionClient,
+  authCtx: AuthContext,
+  id: string
+): Promise<LifecycleTarget> {
+  const m = await tx.membership.findFirst({
+    where: { id, schoolId: authCtx.schoolId },
+    select: { id: true, userId: true, status: true, staffProfile: { select: { id: true } } },
+  });
+  if (!m) {
+    throw new AuthorizationError('Member not found in this school');
+  }
+  return {
+    membershipId: m.id,
+    userId: m.userId,
+    staffProfileId: m.staffProfile?.id ?? null,
+    currentStatus: m.status,
+  };
+}
+
+async function writeLifecycleAudit(
+  tx: PrismaTransactionClient,
+  authCtx: AuthContext,
+  action: LifecycleAction,
+  target: LifecycleTarget,
+  previousStatus: StaffStatus,
+  newStatus: StaffStatus,
+  reason?: string
+): Promise<void> {
+  const now = new Date();
+  await tx.auditLog.create({
+    data: {
+      userId: authCtx.userId,
+      schoolId: authCtx.schoolId,
+      action,
+      entity: 'staff_profile',
+      recordId: target.membershipId,
+      before: {
+        status: previousStatus,
+        staffProfileId: target.staffProfileId,
+        membershipId: target.membershipId,
+      } as Prisma.InputJsonValue,
+      after: {
+        staffProfileId: target.staffProfileId,
+        membershipId: target.membershipId,
+        schoolId: authCtx.schoolId,
+        actorMembershipId: authCtx.membershipId,
+        previousStatus,
+        newStatus,
+        reason: reason ?? null,
+        timestamp: now.toISOString(),
+      } as Prisma.InputJsonValue,
+    },
+  });
+}
+
+async function runLifecycleTransition(
+  authCtx: AuthContext,
+  id: string,
+  action: LifecycleAction,
+  reason?: string
+): Promise<LifecycleResult> {
+  const spec = LIFECYCLE_TRANSITIONS[action];
+  const ctx = toRequestContext(authCtx);
+
+  return withRls(ctx, async (tx) => {
+    const target = await assertLifecycleTarget(tx, authCtx, id);
+    if (!spec.from.includes(target.currentStatus)) {
+      throw new StaffConflictError(
+        `Cannot ${action.replace('staff_', '')} a member in status ${target.currentStatus}`
+      );
+    }
+
+    const membership = await tx.membership.update({
+      where: { id: target.membershipId },
+      data: { status: spec.to },
+      select: { id: true, userId: true, status: true },
+    });
+
+    if (target.staffProfileId && (spec.setsDeleted || spec.from.includes('REMOVED'))) {
+      await tx.staffProfile.update({
+        where: { id: target.staffProfileId },
+        data: { isDeleted: spec.setsDeleted },
+      });
+    }
+
+    if (spec.revokeSessions) {
+      await tx.session.deleteMany({
+        where: { userId: target.userId },
+      });
+    }
+
+    await writeLifecycleAudit(
+      tx,
+      authCtx,
+      action,
+      target,
+      target.currentStatus,
+      spec.to,
+      reason
+    );
+
+    return {
+      membershipId: membership.id,
+      staffProfileId: target.staffProfileId,
+      userId: membership.userId,
+      previousStatus: target.currentStatus,
+      newStatus: membership.status,
+      reason,
+    };
+  });
+}
+
+export async function archiveStaff(
+  authCtx: AuthContext,
+  id: string,
+  input: { reason: string }
+): Promise<LifecycleResult> {
+  return runLifecycleTransition(authCtx, id, 'staff_archived', input.reason);
+}
+
+export async function restoreStaff(
+  authCtx: AuthContext,
+  id: string
+): Promise<LifecycleResult> {
+  return runLifecycleTransition(authCtx, id, 'staff_restored');
+}
+
+export async function deactivateStaff(
+  authCtx: AuthContext,
+  id: string
+): Promise<LifecycleResult> {
+  return runLifecycleTransition(authCtx, id, 'staff_deactivated');
+}
+
+export async function reactivateStaff(
+  authCtx: AuthContext,
+  id: string
+): Promise<LifecycleResult> {
+  return runLifecycleTransition(authCtx, id, 'staff_reactivated');
 }

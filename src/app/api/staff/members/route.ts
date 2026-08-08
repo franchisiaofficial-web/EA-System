@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     const pageSize = Math.min(100, Math.max(1, parseInt(sp.get('pageSize') || '10')));
     const search = sp.get('search') || '';
     const roleParam = sp.get('role') || '';
-    const statusParam = sp.get('status') || 'ACTIVE';
+    const statusParam = sp.get('status') || 'ALL';
 
     const result = await listStaffMembers(authCtx, {
       page,

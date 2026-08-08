@@ -1,7 +1,7 @@
 import type { Role } from '@/generated/prisma/client';
 
 type Action =
-  'create' | 'read' | 'update' | 'delete' | 'approve' | 'export' | 'archive' | 'restore' | 'manage';
+  'create' | 'read' | 'update' | 'delete' | 'approve' | 'export' | 'archive' | 'restore' | 'deactivate' | 'reactivate' | 'manage';
 
 type Resource =
   | 'schools'
@@ -74,6 +74,8 @@ const SUPER_ADMIN: RolePermissions = {
     update: true,
     archive: true,
     restore: true,
+    deactivate: true,
+    reactivate: true,
     export: true,
   },
   attendance: {
@@ -219,6 +221,8 @@ const SCHOOL_ADMIN: RolePermissions = {
     update: true,
     archive: true,
     restore: true,
+    deactivate: true,
+    reactivate: true,
     export: true,
   },
   attendance: {
@@ -511,6 +515,8 @@ const HR: RolePermissions = {
     create: true,
     update: true,
     archive: true,
+    deactivate: true,
+    reactivate: true,
     export: true,
   },
   parents: { read: true },
@@ -651,6 +657,8 @@ export function getRolePermissions(
     'export',
     'archive',
     'restore',
+    'deactivate',
+    'reactivate',
     'manage',
   ];
 

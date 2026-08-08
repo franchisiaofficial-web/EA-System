@@ -30,23 +30,23 @@ const PAYROLL = 'payroll';
 
 const checks: Check[] = [];
 
-// ---- Staff resource matrix (permission-matrix-v1 §2) ----
-const staffRoles: { role: string; read: boolean; create: boolean; update: boolean; archive: boolean; restore: boolean; export: boolean; manage: boolean; note?: string }[] = [
-  { role: 'SUPER_ADMIN', read: true, create: true, update: true, archive: true, restore: true, export: true, manage: true },
-  { role: 'SCHOOL_ADMIN', read: true, create: true, update: true, archive: true, restore: true, export: true, manage: true },
-  { role: 'HR', read: true, create: true, update: true, archive: true, restore: false, export: true, manage: false, note: 'manage shorthand; restore is SCHOOL_ADMIN-only per delete policy' },
-  { role: 'PRINCIPAL', read: true, create: true, update: true, archive: false, restore: false, export: true, manage: false },
-  { role: 'VICE_PRINCIPAL', read: true, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'ACCOUNTANT', read: true, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'LIBRARIAN', read: true, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'TRANSPORT_MANAGER', read: true, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'NON_TEACHING', read: true, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'TEACHER', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'CLASS_TEACHER', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'DRIVER', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'CAFETERIA_STAFF', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'STUDENT', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
-  { role: 'PARENT', read: false, create: false, update: false, archive: false, restore: false, export: false, manage: false },
+// ---- Staff resource matrix (permission-matrix-v1 §2 + Phase 1.5 lifecycle actions) ----
+const staffRoles: { role: string; read: boolean; create: boolean; update: boolean; archive: boolean; restore: boolean; deactivate: boolean; reactivate: boolean; export: boolean; manage: boolean; note?: string }[] = [
+  { role: 'SUPER_ADMIN', read: true, create: true, update: true, archive: true, restore: true, deactivate: true, reactivate: true, export: true, manage: true },
+  { role: 'SCHOOL_ADMIN', read: true, create: true, update: true, archive: true, restore: true, deactivate: true, reactivate: true, export: true, manage: true },
+  { role: 'HR', read: true, create: true, update: true, archive: true, restore: false, deactivate: true, reactivate: true, export: true, manage: false, note: 'manage shorthand; restore is SCHOOL_ADMIN-only per delete policy' },
+  { role: 'PRINCIPAL', read: true, create: true, update: true, archive: false, restore: false, deactivate: false, reactivate: false, export: true, manage: false },
+  { role: 'VICE_PRINCIPAL', read: true, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'ACCOUNTANT', read: true, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'LIBRARIAN', read: true, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'TRANSPORT_MANAGER', read: true, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'NON_TEACHING', read: true, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'TEACHER', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'CLASS_TEACHER', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'DRIVER', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'CAFETERIA_STAFF', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'STUDENT', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
+  { role: 'PARENT', read: false, create: false, update: false, archive: false, restore: false, deactivate: false, reactivate: false, export: false, manage: false },
 ];
 
 for (const r of staffRoles) {
@@ -55,6 +55,8 @@ for (const r of staffRoles) {
   checks.push({ role: r.role, resource: STAFF, action: 'update', expected: r.update, note: r.note });
   checks.push({ role: r.role, resource: STAFF, action: 'archive', expected: r.archive, note: r.note });
   checks.push({ role: r.role, resource: STAFF, action: 'restore', expected: r.restore, note: r.note });
+  checks.push({ role: r.role, resource: STAFF, action: 'deactivate', expected: r.deactivate, note: r.note });
+  checks.push({ role: r.role, resource: STAFF, action: 'reactivate', expected: r.reactivate, note: r.note });
   checks.push({ role: r.role, resource: STAFF, action: 'export', expected: r.export, note: r.note });
   checks.push({ role: r.role, resource: STAFF, action: 'manage', expected: r.manage, note: r.note });
 }
